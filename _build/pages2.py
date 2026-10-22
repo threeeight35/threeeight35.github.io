@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pages import *
+from legal import *
 
 def pending(msg): return f'<div class="banner banner-hold" role="note"><strong>{L("Status:", "ملاحظة:")}</strong> {esc(msg)}</div>'
 
@@ -9,8 +10,8 @@ def qa(h, body_html): return f'<section class="qa"><h2>{esc(h)}</h2>{body_html}<
 def build_packages():
     cur = "patient-packages/"
     p = dict(path=cur, id="SUP-09", kind="Packages & pricing", title=L("Medical Travel Coordination Packages | threeeight35°", "باقات تنسيق السفر العلاجي | threeeight35°"),
-             desc=L("Coordination package prices from threeeight35°: Essential Care A$4,950, Executive Wellness & Recovery A$9,900, VIP Bespoke from A$14,900. Includes accommodation and Istanbul transfers; treatment and flights are separate.",
-                    "أسعار باقات التنسيق من threeeight35°: الرعاية الأساسية A$4,950، والعافية والتعافي التنفيذية A$9,900، والرحلة المخصصة VIP ابتداءً من A$14,900. تشمل الإقامة والتنقلات في إسطنبول، ويُدفع العلاج والطيران بشكل منفصل."),
+             desc=L("Essential Care A$4,950, Executive Wellness & Recovery A$9,900, VIP from A$14,900. Includes accommodation and Istanbul transfers; treatment and flights extra.",
+                    "الرعاية الأساسية A$4,950، والعافية والتعافي التنفيذية A$9,900، والرحلة المخصصة VIP ابتداءً من A$14,900. تشمل الإقامة والتنقلات؛ العلاج والطيران منفصلان."),
              indexable=True, status="Business-confirmed package pricing; legal/consumer-law review recommended; payment/cancellation/refund terms withheld pending legal review")
     three = L('''<div class="cards3"><article class="card"><span class="card-num" aria-hidden="true">1</span><h3>Your treatment</h3><p>Quoted by and paid directly to the independent clinic or hospital. threeeight35° does not publish, determine or collect medical treatment fees.</p></article>
 <article class="card"><span class="card-num" aria-hidden="true">2</span><h3>Your threeeight35° package</h3><p>Paid to threeeight35°. The fixed package price covers coordination, accommodation and private transfers in Istanbul for the nights and guests shown for your package.</p></article>
@@ -146,7 +147,7 @@ def build_faqs():
 FORM_CONSENT = "I understand that threeeight35° is a medical travel coordination service and not a healthcare provider, and I have read the Privacy Policy. I have not included medical records, test results, passport or payment details in this form."
 def build_contact():
     cur = "contact/"
-    p = dict(path=cur, id="SUP-04", kind="Contact / Enquiry", title=L("Contact & Confidential Enquiry | threeeight35° Medical Travel Agency", "التواصل والاستفسار السرّي | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-04", kind="Contact / Enquiry", title=L("Contact & Confidential Enquiry | threeeight35°", "التواصل والاستفسار السرّي | وكالة threeeight35° للسفر العلاجي"),
              desc=L("Contact the threeeight35° Australia desk, UAE desk or Istanbul hub, or send a confidential medical travel enquiry. No medical records through the form.",
                     "تواصل مع مكتب threeeight35° في الإمارات أو أستراليا أو مركز إسطنبول، أو أرسل استفساراً سرّياً عن السفر العلاجي. دون إرسال سجلات طبية عبر النموذج."),
              indexable=True, status="Form delivery: endpoint configured, live test pending; consent wording: LEGAL INPUT REQUIRED")
@@ -188,48 +189,29 @@ def build_contact():
     add(p, main, "contact", crumbs=[(L("Home", "الرئيسية"), ""), (L("Contact & Enquiries", "التواصل والاستفسارات"), cur)])
 
 # ---------------- Legal & trust ----------------
+def legal_page(cur, doc_en, doc_ar):
+    """Render a legal document (list of (heading, html)) with its last-updated date and links resolved for this page."""
+    links = dict(EMAIL=EMAIL, ABN=ABN, OVERSEAS=rel(cur, "privacy-overseas-health-information-disclosure/"),
+                 PACKAGES=rel(cur, "patient-packages/"), CONTACT=rel(cur, "contact/"), PRIVACY=rel(cur, "privacy/"))
+    body = "".join(qa(h, html_.format(**links)) for h, html_ in L(doc_en, doc_ar))
+    return f'<p class="small">{L("Last updated", "آخر تحديث")}: {L(*LEGAL_UPDATED)}</p>' + body
+
 def build_privacy():
     cur = "privacy/"
-    p = dict(path=cur, id="SUP-05", kind="Privacy", title=L("Privacy Information | threeeight35° Medical Travel Agency", "معلومات الخصوصية | وكالة threeeight35° للسفر العلاجي"),
-             desc=L("How threeeight35° approaches privacy: data minimisation, no medical records through the public form, and a separate private workflow for health information.",
-                    "نهج threeeight35° في الخصوصية: تقليل البيانات إلى الحد الأدنى، وعدم إرسال سجلات طبية عبر النموذج العام، وإجراءات خاصة منفصلة للمعلومات الصحية."),
-             indexable=False, robots="noindex,follow", status="CONDITIONAL — final Australian privacy/legal review pending (APP 8, retention, consistency)")
-    if not is_ar():
-        body = f'''{pending("This is a summary of our privacy approach. The full Privacy Policy is being finalised and will replace this page.")}
-{qa("What do we collect through the website enquiry form?", "<p>Only what is necessary for an initial enquiry: your name, email address, country of residence, preferred contact method, a phone number if you choose WhatsApp, SMS or a phone call as your contact method, the treatment category (and optionally procedure) you are exploring, and an optional general message. We practise data minimisation.</p>")}
-{qa("Should I send medical records through the website?", "<p>No. We do not ask patients to submit medical records or clinical photographs through public website forms, and the form asks you not to include medical records, test results, passport or payment details.</p>")}
-{qa("How is health information handled after my enquiry?", f"<p>After the initial enquiry, any health information needed for preliminary provider review follows an approved private health-information and overseas-disclosure workflow, with your authorisation. Where appropriate, relevant health information may then be provided to independent healthcare professionals in Türkiye. See <a href=\"{rel(cur,'privacy-overseas-health-information-disclosure/')}\">Privacy &amp; Overseas Health-Information Disclosure</a>.</p>")}
-{qa("Who can access personal and health information?", "<p>We handle personal and health information with care and restrict access to authorised personnel.</p>")}
-{qa("Who do I contact about privacy?", f'<p>Email <a href="mailto:{EMAIL}">{EMAIL}</a>. threeeight35° Medical Travel Agency, ABN {ABN}.</p>')}'''
-    else:
-        body = f'''{pending("هذا ملخص لنهجنا في الخصوصية. يجري حالياً إعداد سياسة الخصوصية الكاملة، وستحل محل هذه الصفحة.")}
-{qa("ما البيانات التي نجمعها عبر نموذج الاستفسار على الموقع؟", "<p>ما يلزم للاستفسار الأولي فقط: اسمك وبريدك الإلكتروني وبلد إقامتك ووسيلة التواصل المفضّلة، ورقم هاتفك إذا اخترت التواصل عبر واتساب أو الرسائل النصية أو المكالمات الهاتفية، وفئة العلاج التي تستكشفها (والإجراء المحدد اختيارياً)، ورسالة عامة اختيارية. ونلتزم بتقليل البيانات إلى الحد الأدنى.</p>")}
-{qa("هل أرسل سجلاتي الطبية عبر الموقع؟", "<p>لا. لا نطلب من المرضى إرسال سجلات طبية أو صور سريرية عبر نماذج الموقع العامة، ويطلب منك النموذج عدم إدراج سجلات طبية أو نتائج فحوصات أو بيانات جواز سفر أو دفع.</p>")}
-{qa("كيف تُعالَج المعلومات الصحية بعد استفساري؟", f"<p>بعد الاستفسار الأولي، تمرّ أي معلومات صحية مطلوبة للتقييم الأولي من مقدّم الرعاية عبر إجراءات خاصة معتمدة لحماية المعلومات الصحية والإفصاح عنها خارج البلاد، وذلك بموافقتك. وعند الاقتضاء، قد تُقدَّم المعلومات الصحية ذات الصلة بعد ذلك إلى أخصائيي رعاية صحية مستقلين في تركيا. اطّلع على <a href=\"{rel(cur,'privacy-overseas-health-information-disclosure/')}\" hreflang=\"en-AU\">الخصوصية والإفصاح عن المعلومات الصحية خارج البلاد (بالإنجليزية)</a>.</p>")}
-{qa("من يمكنه الاطّلاع على المعلومات الشخصية والصحية؟", "<p>نتعامل مع المعلومات الشخصية والصحية بعناية، ونقصر الوصول إليها على الموظفين المخوّلين.</p>")}
-{qa("بمن أتواصل بشأن الخصوصية؟", f'<p>راسلنا على <a href="mailto:{EMAIL}">{EMAIL}</a>. وكالة threeeight35° للسفر العلاجي، رقم الأعمال الأسترالي (ABN) {ABN}.</p>')}'''
-    main = pagehead("", L("Privacy Information", "معلومات الخصوصية")) + f'<section class="section"><div class="container prose">{body}</div></section>'
-    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Privacy", "الخصوصية"), cur)])
+    p = dict(path=cur, id="SUP-05", kind="Privacy", title=L("Privacy Policy | threeeight35° Medical Travel Agency", "سياسة الخصوصية | وكالة threeeight35° للسفر العلاجي"),
+             desc=L("How threeeight35° collects, uses, discloses and protects personal and health information, including overseas disclosure, retention and your rights.",
+                    "كيف تجمع threeeight35° المعلومات الشخصية والصحية وتستخدمها وتفصح عنها وتحميها، بما في ذلك الإفصاح خارج البلاد ومدة الاحتفاظ وحقوقك."),
+             indexable=True, status="Full policy drafted 22 Oct 2026 (Australian Privacy Principles); lawyer check recommended")
+    main = pagehead("", L("Privacy Policy", "سياسة الخصوصية")) + f'<section class="section"><div class="container prose">{legal_page(cur, PRIVACY_EN, PRIVACY_AR)}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Privacy Policy", "سياسة الخصوصية"), cur)])
 
 def build_terms():
     cur = "terms/"
     p = dict(path=cur, id="SUP-08", kind="Terms", title=L("Terms & Conditions | threeeight35° Medical Travel Agency", "الشروط والأحكام | وكالة threeeight35° للسفر العلاجي"),
-             desc=L("Terms for threeeight35° medical travel coordination services. Medical treatment and flights are paid separately from coordination packages.",
-                    "شروط خدمات تنسيق السفر العلاجي من threeeight35°. يُدفع العلاج الطبي وتذاكر الطيران بشكل منفصل عن باقات التنسيق."),
-             indexable=False, robots="noindex,follow", status="LEGAL INPUT REQUIRED — payment, cancellation and refund terms withheld")
-    if not is_ar():
-        body = f'''{pending("Full Terms & Conditions, including payment, cancellation and refund terms, are being finalised. Only the following confirmed points are published now.")}
-{qa("Who provides medical treatment?", "<p>Independent clinics, hospitals and licensed healthcare professionals provide all medical assessment and treatment. threeeight35° is a coordination service and not a healthcare provider.</p>")}
-{qa("Who do I pay for what?", "<p>Medical treatment is quoted by and paid directly to the independent clinic or hospital. The threeeight35° coordination package fee is paid to threeeight35° and covers non-clinical coordination, accommodation and private transfers in Istanbul for the nights and guests shown for your package. You book and pay for your own flights. Extra nights you choose to add are paid directly to the hotel; a longer stay advised by your treating clinician is quoted separately.</p>")}
-{qa("What do I receive before I proceed?", "<p>A written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, any extras quoted separately and the provider's treatment quotation.</p>")}
-{qa("Business details", f'<p>threeeight35° Medical Travel Agency · ABN {ABN} · <a href="mailto:{EMAIL}">{EMAIL}</a></p>')}'''
-    else:
-        body = f'''{pending("يجري حالياً إعداد الشروط والأحكام الكاملة، بما فيها شروط الدفع والإلغاء والاسترداد. ولا يُنشر الآن سوى النقاط المؤكَّدة التالية. وفي حال وجود أي اختلاف، تُعتمد النسخة الإنجليزية.")}
-{qa("من يقدّم العلاج الطبي؟", "<p>تقدّم العيادات والمستشفيات المستقلة وأخصائيو الرعاية الصحية المرخّصون جميع التقييمات والعلاجات الطبية. وthreeeight35° خدمة تنسيق وليست مقدّم رعاية صحية.</p>")}
-{qa("لمن أدفع، ومقابل ماذا؟", "<p>يُسعَّر العلاج الطبي ويُدفع مباشرةً إلى العيادة أو المستشفى المستقل. وتُدفع رسوم باقة التنسيق إلى threeeight35°، وتغطي التنسيق غير السريري والإقامة والتنقلات الخاصة في إسطنبول لعدد الليالي والضيوف الموضّح لباقتك. وتحجز رحلات الطيران وتدفع ثمنها بنفسك. تُدفع الليالي الإضافية التي تختارها مباشرةً إلى الفندق، أما الإقامة الأطول التي ينصح بها طبيبك المعالج فتُسعَّر بشكل منفصل.</p>")}
-{qa("ماذا أستلم قبل المتابعة؟", "<p>عرضاً مكتوباً ومفصّلاً يوضّح باقة التنسيق التي اخترتها، وما هو مشمول وغير مشمول، وأي إضافات مسعّرة بشكل منفصل، وعرض سعر العلاج من مقدّم الرعاية.</p>")}
-{qa("بيانات النشاط التجاري", f'<p>وكالة threeeight35° للسفر العلاجي · رقم الأعمال الأسترالي (ABN) {ABN} · <a href="mailto:{EMAIL}">{EMAIL}</a></p>')}'''
-    main = pagehead("", L("Terms & Conditions", "الشروط والأحكام")) + f'<section class="section"><div class="container prose">{body}</div></section>'
+             desc=L("Terms for threeeight35° medical travel coordination: our role, package inclusions, 50% deposit and payment timing, your responsibilities and consumer rights.",
+                    "شروط خدمات تنسيق السفر العلاجي من threeeight35°: دورنا وما تشمله الباقات والعربون ومواعيد الدفع ومسؤولياتك وحقوقك كمستهلك."),
+             indexable=True, status="Full terms drafted 22 Oct 2026; refund policy provided with each written proposal; lawyer check recommended")
+    main = pagehead("", L("Terms & Conditions", "الشروط والأحكام")) + f'<section class="section"><div class="container prose">{legal_page(cur, TERMS_EN, TERMS_AR)}</div></section>'
     add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Terms & Conditions", "الشروط والأحكام"), cur)])
 
 def build_disclaimer():

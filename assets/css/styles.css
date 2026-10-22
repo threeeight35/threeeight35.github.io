@@ -301,3 +301,8 @@ a:hover{color:var(--bronze-d)}
 [dir=rtl] .skip{left:auto;right:-999px;border-radius:0 0 0 .5rem}
 [dir=rtl] .skip:focus{left:auto;right:0}
 [dir=rtl] .hp{left:auto;right:-9999px}
+
+/* treatment-specific planning lists */
+.plain-list{padding-left:1.2rem;margin:0}
+.plain-list li{margin:.4rem 0}
+[dir=rtl] .plain-list{padding-left:0;padding-right:1.2rem}

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from components import *
+from treatment_guides import GUIDES
 
 PAGES = []   # dicts: path, html, indexable, id, title, kind, status
 # ---- CENTRAL INDEXING GATE -------------------------------------------------------------
@@ -23,7 +24,6 @@ def outstanding_review(p):
     if i == "SUP-06": return "Derived copy; legal review recommended; editorial approval required"
     if i == "SUP-09": return "Legal/consumer-law review recommended before publication; derived page metadata"
     if i == "SUP-04": return "Form consent wording awaiting legal approval; send a live test enquiry before clearing"
-    if i in ("SUP-05", "SUP-08"): return "Legal review pending"
     return ""
 
 def add(p, main, active="", crumbs=None, hero=False, extra_ld=None):
@@ -55,7 +55,7 @@ def prose(html_, cls=""):
 # ======================= HOME =======================
 def build_home():
     cur = ""
-    p = dict(path="", id="SUP-01", kind="Agency home", title=L("threeeight35° Medical Travel Agency | Your Health Journey, Beyond Borders.", "وكالة threeeight35° للسفر العلاجي | رحلتك الصحية، بلا حدود."),
+    p = dict(path="", id="SUP-01", kind="Agency home", title=L("threeeight35° | Medical Travel Coordination for Türkiye", "وكالة threeeight35° للسفر العلاجي | رحلتك الصحية، بلا حدود."),
              desc=L("Personalised medical travel coordination connecting patients from Australia, the UAE and other markets with independent healthcare providers in Türkiye.",
                     "تنسيق شخصي للسفر العلاجي يربط المرضى من الإمارات وأستراليا والأسواق الأخرى بمقدّمي رعاية صحية مستقلين في تركيا."),
              indexable=True, status="Business identity verified; clinical review not applicable to this page; technical QA pending")
@@ -106,7 +106,7 @@ EN_ONLY_NOTE_AR = '<p class="small en-only-note">صفحات العلاجات ا�
 def build_directory():
     cur = "treatments/"
     p = dict(path=cur, id="SUP-02", kind="Treatments directory", title=L("Treatments Catalogue | threeeight35° Medical Travel Agency", "دليل العلاجات | وكالة threeeight35° للسفر العلاجي"),
-             desc=L("Browse 8 medical categories and 70 treatment pages for people planning treatment in Türkiye from Australia. Coordination by threeeight35°; care by independent providers.",
+             desc=L("Browse 8 medical categories and 70 treatment pages for planning treatment in Türkiye. Coordination by threeeight35°; care by independent providers.",
                     "تصفّح 8 فئات طبية و70 صفحة علاجية للتخطيط للعلاج في تركيا. التنسيق من threeeight35°، والرعاية من مقدّمي رعاية صحية مستقلين."),
              indexable=True, status="Technical QA pending")
     blocks = []
@@ -221,7 +221,7 @@ def build_treatment(sid):
     title = f["SEO title"].replace("│", "|")
     notes = []
     if sid == "AES-14":
-        title = "Body Contouring Surgery: Which Procedures Are Different? | threeeight35°"
+        title = "Body Contouring Surgery in Türkiye | threeeight35°"
         notes.append("V11 SEO title truncated (…'in'); corrected to standard pattern")
     if t["held"]:
         desc = f"{t['label']} in Türkiye: ask threeeight35° about medical travel coordination. threeeight35° coordinates medical travel and does not provide clinical care."
@@ -262,6 +262,9 @@ def build_treatment(sid):
             blocks.append(f'<section class="tsec"><h2>What happens after the results?</h2><p>{esc("The provider should explain how results are delivered, which findings require further assessment and what records should be taken to an Australian GP or relevant specialist. A check-up cannot promise a diagnosis or the comprehensive exclusion of disease.")}</p></section>')
         if "Does this page need recovery or fitness-to-fly advice?" in secs:
             blocks.append(f'<section class="tsec"><h2>Do I need to plan around travel restrictions?</h2><p>{esc("Travel restrictions are only discussed where a specific test or procedure creates one. Your treating provider advises on any that apply to you.")}</p></section>')
+        for h, body in GUIDES.get(sid, []):   # treatment-specific planning content (treatment_guides.py)
+            inner = f"<p>{esc(body)}</p>" if isinstance(body, str) else '<ul class="plain-list">' + "".join(f"<li>{esc(b)}</li>" for b in body) + "</ul>"
+            blocks.append(f'<section class="tsec"><h2>{esc(h)}</h2>{inner}</section>')
         blocks.append(f'<section class="tsec"><h2>{"What affects the cost?" if "What affects the cost?" in secs else "How is the cost of treatment quoted?"}</h2><p>{esc(cost_text(sid, secs))}</p><p>threeeight35° coordination packages are priced separately — see <a href="{rel(cur,"patient-packages/")}">Patient Packages</a>.</p></section>')
     else:
         blocks.append(f'<section class="tsec"><h2>What you can do now</h2><p>You can read how medical travel coordination works from Australia, or ask us a general coordination question. We will not provide clinical advice, and any clinical question is for an independent treating specialist.</p></section>')
