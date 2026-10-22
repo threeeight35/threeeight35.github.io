@@ -306,3 +306,24 @@ a:hover{color:var(--bronze-d)}
 .plain-list{padding-left:1.2rem;margin:0}
 .plain-list li{margin:.4rem 0}
 [dir=rtl] .plain-list{padding-left:0;padding-right:1.2rem}
+
+/* language button beside the menu button on phones and tablets (the desktop header shows its own) */
+.lang-switch-mobile{margin-inline-start:auto;margin-inline-end:-.4rem}
+@media (min-width:1060px){.lang-switch-mobile{display:none}}
+
+/* ---------- floating WhatsApp button (every page) ---------- */
+.wa-float{position:fixed;z-index:60;inset-inline-end:1rem;bottom:calc(1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column-reverse;align-items:flex-end}
+.wa-btn{list-style:none;display:flex;align-items:center;justify-content:center;gap:.5rem;width:56px;height:56px;border-radius:99px;background:#25d366;color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(11,31,59,.28);font:700 .95rem/1 var(--sans)}
+.wa-btn::-webkit-details-marker{display:none}
+.wa-btn:hover{background:#1ebe5a}
+.wa-btn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.wa-label{display:none}
+.wa-menu{margin-bottom:.75rem;background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 40px rgba(11,31,59,.2);padding:.9rem;width:min(280px,calc(100vw - 2rem))}
+.wa-title{margin:0 0 .5rem;font-weight:700;font-size:.9rem}
+.wa-link{display:flex;flex-direction:column;padding:.65rem .75rem;border-radius:.6rem;text-decoration:none;color:var(--navy);min-height:48px;justify-content:center}
+.wa-link:hover,.wa-link:focus-visible{background:var(--cream-l)}
+.wa-desk{font-weight:600;font-size:.92rem}
+.wa-num{font-size:.85rem;color:var(--muted)}
+[dir=rtl] .wa-num{text-align:end}
+@media (min-width:760px){.wa-btn{width:auto;padding:0 1.2rem 0 1rem}.wa-label{display:inline}.wa-float{inset-inline-end:1.5rem;bottom:1.5rem}}
+@media print{.wa-float{display:none}}

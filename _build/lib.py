@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib, html, json, os, re, glob
+from urllib.parse import quote
 from PIL import Image
 from content import *
 from content_ar import *
@@ -196,12 +197,25 @@ def header(cur, active):
 <a class="brand" href="{rel(cur, "")}" aria-label="{att(SITE)} — {L("home", "الصفحة الرئيسية")}"><span class="brand-mark">threeeight35°</span><span class="brand-sub">{L("Medical Travel Agency", SITE_SUB_AR)}</span></a>
 <nav class="nav" aria-label="{L("Primary", "القائمة الرئيسية")}">{"".join(links)}</nav>
 <div class="header-cta">{lang_switch(cur, "lang-switch")}{vid}<a class="btn btn-navy" href="{rel(cur, "contact/#enquiry")}">{L("Enquire", "استفسر")}</a></div>
+{lang_switch(cur, "lang-switch lang-switch-mobile")}
 <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="{L("Open menu", "فتح القائمة")}"><span></span><span></span><span></span></button>
 </div>
 <nav class="mobile-nav" id="mobile-nav" aria-label="{L("Mobile", "قائمة الجوال")}" hidden>
 <div class="container">{mob}<p class="eyebrow mnav-h">{L("Medical categories", "الفئات الطبية")}</p>{mob_cats}{lang_switch(cur, "mnav-link mnav-lang")}<a class="btn btn-navy btn-block" href="{rel(cur, "contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك")}</a></div>
 </nav>
 </header>'''
+
+def wa_float():
+    """Floating WhatsApp button (every page): opens a small menu so the visitor picks the Australia or UAE desk.
+    Built on <details>, so it opens and closes without JavaScript; main.js only adds close-on-outside-tap."""
+    greet = quote(L("Hello threeeight35°, I'd like to ask about medical travel coordination.", "مرحباً threeeight35°، أودّ الاستفسار عن تنسيق السفر العلاجي."))
+    desks = [(L("Australia desk", "مكتب أستراليا"), PHONE_AU), (L("UAE desk", "مكتب الإمارات"), PHONE_UAE)]
+    links = "".join(f'<a class="wa-link" href="https://wa.me/{n.replace("+", "").replace(" ", "")}?text={greet}" rel="noopener noreferrer" target="_blank">'
+                    f'<span class="wa-desk">{d}</span><span class="wa-num" dir="ltr">{n}</span><span class="sr-only">{L(" (opens WhatsApp in a new tab)", " (يفتح واتساب في علامة تبويب جديدة)")}</span></a>' for d, n in desks)
+    icon = ('<svg class="wa-icon" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/>'
+            '<path fill="currentColor" d="M16.6 14.2c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3z"/></svg>')
+    return (f'<details class="wa-float"><summary class="wa-btn" aria-label="{L("Chat with us on WhatsApp", "تواصل معنا عبر واتساب")}">{icon}<span class="wa-label">WhatsApp</span></summary>'
+            f'<div class="wa-menu"><p class="wa-title">{L("Chat with us on WhatsApp", "تواصل معنا عبر واتساب")}</p>{links}</div></details>')
 
 def footer(cur):
     soc = "".join(f'<li><a href="{u}" rel="noopener noreferrer" target="_blank" aria-label="{att(SITE.split(" ")[0])} {L("on", "على")} {n} {L("(opens in a new tab)", "(يفتح في علامة تبويب جديدة)")}">{n}</a></li>' for n, u in SOCIAL)
@@ -232,6 +246,7 @@ def footer(cur):
 <div class="footer-base"><p>{L("© 2026 threeeight35° Medical Travel Agency. All rights reserved.", "© 2026 وكالة threeeight35° للسفر العلاجي. جميع الحقوق محفوظة.")}</p><p>{L("ABN", "رقم الأعمال الأسترالي (ABN)")} {ABN}</p></div>
 </div>
 </footer>
+{wa_float()}
 <script src="{asset(cur, "assets/js/form-config.js")}"></script>
 <script src="{asset(cur, "assets/js/main.js")}" defer></script>
 </body>

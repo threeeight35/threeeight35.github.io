@@ -32,6 +32,13 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) { close(); dbtn.focus(); } });
   }
 
+  /* floating WhatsApp menu: close when tapping elsewhere or pressing Escape */
+  var wa = $(".wa-float");
+  if (wa) {
+    document.addEventListener("click", function (e) { if (wa.open && !wa.contains(e.target)) wa.open = false; });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && wa.open) { wa.open = false; $(".wa-btn", wa).focus(); } });
+  }
+
   /* treatment directory search */
   var input = $("[data-dir-search]");
   if (input) {
