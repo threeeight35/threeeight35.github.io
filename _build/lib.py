@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import html, json, os, re, glob
+import hashlib, html, json, os, re, glob
 from PIL import Image
 from content import *
 
@@ -18,6 +18,11 @@ def rel(cur, target):
     return out if out else "./"
 
 def abs_url(path): return BASE + path
+
+def asset(cur, target):
+    """rel() plus a content-hash query string, so browsers fetch CSS/JS again whenever the file changes"""
+    with open(os.path.join(ROOT, target), "rb") as fh:
+        return rel(cur, target) + "?v=" + hashlib.md5(fh.read()).hexdigest()[:8]
 
 # ---------- images ----------
 _dim = {}
@@ -73,8 +78,9 @@ for cid, groups in GROUPS.items():
             NAME2ID[LABELS.get(sid, rec_name(r)).lower()] = sid
 NAME2ID['body contouring']='AES-14'; NAME2ID['gynecomastia surgery']='AES-17'
 assert len(TREAT) == 70
-for sid, t in TREAT.items():  # URL integrity vs v11
-    assert t["url"] == BASE + t["dir"], (sid, t["url"], BASE + t["dir"])
+V11_BASE = "https://threeeight35.com/medical-travel-agency/"   # site address in the v11 spec; the site now lives at BASE
+for sid, t in TREAT.items():  # URL path integrity vs v11
+    assert t["url"] == V11_BASE + t["dir"], (sid, t["url"], V11_BASE + t["dir"])
 
 def related_ids(sid):
     names = [n.strip() for n in TREAT[sid]["rec"]["fields"].get("Related pages", "").split(",") if n.strip()]
@@ -132,7 +138,10 @@ def head(p):
 <meta name="twitter:description" content="{att(p["desc"])}">
 <meta name="twitter:image" content="{og_img}">
 <meta name="twitter:image:alt" content="{att(og_alt)}">
-{fonts}{pre}<link rel="stylesheet" href="{rel(cur, "assets/css/styles.css")}">
+{fonts}{pre}<link rel="stylesheet" href="{asset(cur, "assets/css/styles.css")}">
+<link rel="icon" href="{rel(cur, "favicon.ico")}" sizes="48x48">
+<link rel="icon" type="image/png" href="{rel(cur, "assets/img/brand/icon-192.png")}" sizes="192x192">
+<link rel="apple-touch-icon" href="{rel(cur, "assets/img/brand/apple-touch-icon.png")}">
 {ld}
 </head>'''
 
@@ -168,7 +177,7 @@ def footer(cur):
     cats = "".join(f'<li><a href="{rel(cur, cat_dir(c[0]))}">{esc(c[2])}</a></li>' for c in CATS)
     nav = [("Home", ""), ("Treatments Catalogue", "treatments/"), ("Medical Travel Packages", "patient-packages/"), ("How It Works", "how-it-works/"),
            ("About Us", "about/"), ("FAQs", "faqs/"), ("Contact & Enquiries", "contact/")]
-    legal = [("Privacy Policy", "privacy/"), ("Terms & Conditions", "terms/"), ("Medical Information Disclaimer", "medical-disclaimer/"), ("Editorial & Medical Review Policy", "editorial-policy/")]
+    legal = [("Privacy Policy", "privacy/"), ("Terms & Conditions", "terms/"), ("Medical Information Disclaimer", "medical-disclaimer/"), ("Editorial Policy", "editorial-policy/")]
     ln = lambda L: "".join(f'<li><a href="{rel(cur, t)}">{esc(l)}</a></li>' for l, t in L)
     return f'''<footer class="footer">
 <div class="container">
@@ -190,8 +199,8 @@ def footer(cur):
 <div class="footer-base"><p>© 2026 threeeight35° Medical Travel Agency. All rights reserved.</p><p>ABN {ABN}</p></div>
 </div>
 </footer>
-<script src="{rel(cur, "assets/js/form-config.js")}"></script>
-<script src="{rel(cur, "assets/js/main.js")}" defer></script>
+<script src="{asset(cur, "assets/js/form-config.js")}"></script>
+<script src="{asset(cur, "assets/js/main.js")}" defer></script>
 </body>
 </html>'''
 
@@ -214,8 +223,11 @@ def webpage_ld(p, crumbs):
 
 ORG_LD = {"@context": "https://schema.org", "@type": "Organization", "@id": BASE + "#organization", "name": SITE, "url": BASE,
           "email": EMAIL, "telephone": PHONE_AU, "slogan": "Your Health Journey, Beyond Borders.",
+          "logo": {"@type": "ImageObject", "url": abs_url("assets/img/brand/logo.png"), "width": 1259, "height": 290},
           "description": "Medical travel coordination service connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye. Not a healthcare provider.",
           "identifier": {"@type": "PropertyValue", "propertyID": "ABN", "value": ABN},
+          "areaServed": [{"@type": "Country", "name": "Australia", "identifier": "AU"}, {"@type": "Country", "name": "United Arab Emirates", "identifier": "AE"}],
+          "knowsLanguage": ["en", "ar", "tr"],
           "sameAs": [u for _, u in SOCIAL], "founder": {"@id": BASE + "about/#founder"},
           "contactPoint": [{"@type": "ContactPoint", "contactType": "customer support", "telephone": PHONE_AU, "email": EMAIL, "areaServed": "AU"},
                            {"@type": "ContactPoint", "contactType": "customer support", "telephone": PHONE_UAE, "email": EMAIL, "areaServed": "AE"}]}

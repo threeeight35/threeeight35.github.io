@@ -9,21 +9,39 @@ def qa(h, body_html): return f'<section class="qa"><h2>{esc(h)}</h2>{body_html}<
 def build_packages():
     cur = "patient-packages/"
     p = dict(path=cur, id="SUP-09", kind="Packages & pricing", title="Medical Travel Coordination Packages | threeeight35°",
-             desc="Coordination package prices from threeeight35°: Essential Care A$4,950, Executive Wellness & Recovery A$9,900, VIP Bespoke from A$14,900. Treatment and travel costs are separate.",
+             desc="Coordination package prices from threeeight35°: Essential Care A$4,950, Executive Wellness & Recovery A$9,900, VIP Bespoke from A$14,900. Includes accommodation and Istanbul transfers; treatment and flights are separate.",
              indexable=True, status="Business-confirmed package pricing; legal/consumer-law review recommended; payment/cancellation/refund terms withheld pending legal review")
     three = '''<div class="cards3"><article class="card"><span class="card-num" aria-hidden="true">1</span><h3>Your treatment</h3><p>Quoted by and paid directly to the independent clinic or hospital. threeeight35° does not publish, determine or collect medical treatment fees.</p></article>
-<article class="card"><span class="card-num" aria-hidden="true">2</span><h3>Your threeeight35° package</h3><p>The medical-travel coordination package fee paid to threeeight35°. The package price covers the defined non-clinical coordination services listed for that package.</p></article>
-<article class="card"><span class="card-num" aria-hidden="true">3</span><h3>Your travel</h3><p>Accommodation and private transport are arranged by threeeight35° and itemised separately. They are not represented as included in the coordination package price unless expressly confirmed in writing.</p></article></div>'''
+<article class="card"><span class="card-num" aria-hidden="true">2</span><h3>Your threeeight35° package</h3><p>Paid to threeeight35°. The fixed package price covers coordination, accommodation and private transfers in Istanbul for the nights and guests shown for your package.</p></article>
+<article class="card"><span class="card-num" aria-hidden="true">3</span><h3>Your flights and any extras</h3><p>You book and pay for your own flights. Extra nights you choose to add are paid directly to the hotel; a longer stay advised by your treating clinician is quoted separately.</p></article></div>'''
     main = pagehead("TAILORED COORDINATION PACKAGES", "Medical Travel Coordination Packages",
-                    "Choose the level of coordination that fits your journey. threeeight35° package prices cover our non-clinical medical-travel coordination services. Your medical treatment and travel costs are separate.")
+                    "Choose the level of coordination that fits your journey. threeeight35° package prices include our non-clinical coordination, your accommodation and private transfers in Istanbul. Medical treatment and flights are paid separately.")
     main += section("WHO YOU PAY, AND FOR WHAT", "Three separate parts of your journey cost", "", three, tone="tone-cream")
     main += section("PACKAGES", "Choose your coordination package", "All prices are in Australian dollars (AUD).", package_cards(cur) +
-        '<div class="prose narrow"><p>Before you proceed you receive a written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, separately itemised travel arrangements and the independent provider\'s treatment quotation. A treatment fee is never combined with a threeeight35° package price into a single advertised treatment price.</p></div>')
+        '<div class="prose narrow"><p>Before you proceed you receive a written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, any extras quoted separately and the independent provider\'s treatment quotation. A treatment fee is never combined with a threeeight35° package price into a single advertised treatment price.</p></div>')
     main += accommodation_section(cur)
     main += section("", "Questions about packages", "",
         f'<div class="prose"><p>See our <a href="{rel(cur,"faqs/")}">FAQs</a>, read how <a href="{rel(cur,"how-it-works/")}">the journey works</a> or <a href="{rel(cur,"contact/#enquiry")}">make an enquiry</a>. Full payment, cancellation and refund terms are being finalised and will be published in the <a href="{rel(cur,"terms/")}">Terms &amp; Conditions</a>.</p></div>')
     main += enquiry_cta(cur)
-    add(p, main, "packages", crumbs=[("Home", ""), ("Patient Packages", cur)])
+    add(p, main, "packages", crumbs=[("Home", ""), ("Patient Packages", cur)], extra_ld=[service_ld(cur)])
+
+def service_ld(cur):
+    offers = []
+    for pk in PACKAGES:
+        amount = "".join(c for c in pk["price"] if c.isdigit())
+        o = {"@type": "Offer", "name": pk["name"], "url": abs_url(cur), "priceCurrency": "AUD",
+             "description": f"Medical travel coordination, accommodation for {pk['nights']} for {pk['guests']}, and private transfers in Istanbul. Medical treatment and flights are not included."}
+        if pk["price"].startswith("From"):
+            o["priceSpecification"] = {"@type": "PriceSpecification", "minPrice": amount, "priceCurrency": "AUD"}
+        else:
+            o["price"] = amount
+        offers.append(o)
+    return {"@context": "https://schema.org", "@type": "Service", "@id": abs_url(cur) + "#service",
+            "name": "Medical travel coordination", "serviceType": "Medical travel coordination",
+            "description": "Non-clinical coordination of medical travel to Türkiye, including accommodation and private transfers in Istanbul. threeeight35° is not a healthcare provider; treatment is provided and charged by independent clinics and hospitals.",
+            "provider": {"@id": BASE + "#organization"},
+            "areaServed": [{"@type": "Country", "name": "Australia"}, {"@type": "Country", "name": "United Arab Emirates"}],
+            "offers": offers}
 
 # ---------------- How it works ----------------
 def build_how():
@@ -61,7 +79,7 @@ def build_about():
     main += section("", "Our Vision", "", '<div class="prose"><p>To be a respected name in international medical travel coordination, known for a standard of transparency and care that lets patients cross borders for treatment with well-informed confidence.</p></div>')
     main += section("", "Our Core Values", "", vh, tone="tone-cream")
     main += f'<section class="section" id="founder"><div class="container">{founder_block(cur)}</div></section>'
-    main += f'''<section class="section tone-cream"><div class="container prose"><h2>Where to go next</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">Contact / Confidential Enquiry</a></li><li><a href="{rel(cur,"treatments/")}">Treatments Catalogue</a></li><li><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical Travel to Türkiye from Australia</a></li><li><a href="{rel(cur,"privacy/")}">Privacy Policy</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">Medical Information Disclaimer</a></li><li><a href="{rel(cur,"editorial-policy/")}">Editorial &amp; Medical Review Policy</a></li></ul></div></section>'''
+    main += f'''<section class="section tone-cream"><div class="container prose"><h2>Where to go next</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">Contact / Confidential Enquiry</a></li><li><a href="{rel(cur,"treatments/")}">Treatments Catalogue</a></li><li><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical Travel to Türkiye from Australia</a></li><li><a href="{rel(cur,"privacy/")}">Privacy Policy</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">Medical Information Disclaimer</a></li><li><a href="{rel(cur,"editorial-policy/")}">Editorial Policy</a></li></ul></div></section>'''
     fnd = {"@context": "https://schema.org", "@type": "Person", "@id": BASE + "about/#founder", "name": "Hommam Azizieh", "jobTitle": "Founder",
            "image": abs_url("assets/img/founder-hommam-azizieh-843.jpg"), "knowsLanguage": ["English", "Arabic", "Turkish"],
            "worksFor": {"@id": BASE + "#organization"}}
@@ -71,10 +89,11 @@ def build_about():
 FAQS = [
  ("Is threeeight35° a healthcare provider?", "No. threeeight35° Medical Travel Agency is a medical travel and journey coordination service. Clinical assessment, diagnosis, treatment recommendations, informed consent and medical care are provided independently by licensed healthcare professionals in Türkiye."),
  ("Does threeeight35° recommend a treatment or tell me whether I am suitable?", "No. We do not diagnose, prescribe or recommend treatment. Suitability is decided by the treating healthcare professional after individual assessment."),
- ("How much do your packages cost?", "Essential Care is a fixed A$4,950 Medical Travel Coordination Package. Executive Wellness & Recovery is a fixed A$9,900 Medical Travel Coordination Package. VIP Bespoke Health Journey is from A$14,900, with the final coordination package price confirmed in writing after the scope of the journey is established."),
- ("Do the package prices include my medical treatment?", "No. Treatment and travel costs are separate. Medical treatment is quoted by and paid directly to the independent clinic or hospital. threeeight35° does not publish, determine or collect medical treatment fees."),
- ("Are accommodation and private transport included?", "Accommodation and private transport are arranged and itemised separately. A service forms part of your package only where it is expressly confirmed in your written proposal."),
- ("Do you publish treatment prices?", "No. Treatment prices are quoted by the independent provider after assessment. Your written proposal shows your coordination package, separately itemised travel arrangements and the provider's treatment quotation before you proceed."),
+ ("How much do your packages cost?", "Essential Care is a fixed A$4,950 Medical Travel Coordination Package. Executive Wellness & Recovery is a fixed A$9,900 Medical Travel Coordination Package. VIP Bespoke Health Journey is from A$14,900, with the final coordination package price confirmed in writing after the scope of the journey is established. Every package includes accommodation and private transfers in Istanbul."),
+ ("Do the package prices include my medical treatment?", "No. Medical treatment is quoted by and paid directly to the independent clinic or hospital. threeeight35° does not publish, determine or collect medical treatment fees."),
+ ("Are accommodation and private transport included?", "Yes. Every package includes accommodation and private transfers in Istanbul between the airport, your hotel and clinic appointments. Essential Care covers 4–7 nights for you and 1 guest (2 people in total), Executive Wellness & Recovery covers 8–10 nights for you and up to 2 guests (3 people in total), and VIP Bespoke Health Journey covers 14 nights for you and up to 5 guests (6 people in total). International flights are not included. Extra nights you choose to add are paid directly to the hotel; a longer stay advised by your treating clinician is quoted separately. For additional guests, please contact us."),
+ ("Can I arrange my own accommodation or transport?", "Yes. Tell us what you would prefer to arrange yourself and we will discuss it with you and quote a final package fee."),
+ ("Do you publish treatment prices?", "No. Treatment prices are quoted by the independent provider after assessment. Your written proposal shows your coordination package, any extras quoted separately and the provider's treatment quotation before you proceed."),
  ("Should I send medical records through the enquiry form?", "No. Please do not include medical records, test results, passport or payment details in the website form. After your initial enquiry, any health information needed for preliminary provider review follows a private health-information and overseas-disclosure workflow."),
  ("How soon can I fly home after treatment?", "There is no universal safe timeframe. The treating clinician determines travel timing from the procedure, your individual recovery and required post-treatment reviews."),
  ("What happens after I return to Australia?", "Follow-up coordination continues after you return home. Before you travel, confirm which records you will bring home and the plan for any concerns after returning to Australia. Where ongoing care may be needed, discussing your plans with an Australian healthcare professional can help."),
@@ -98,7 +117,7 @@ def build_contact():
     cur = "contact/"
     p = dict(path=cur, id="SUP-04", kind="Contact / Enquiry", title="Contact & Confidential Enquiry | threeeight35° Medical Travel Agency",
              desc="Contact the threeeight35° Australia desk, UAE desk or Istanbul hub, or send a confidential medical travel enquiry. No medical records through the form.",
-             indexable=True, status="Form delivery: TECHNICAL CONFIGURATION REQUIRED; consent wording: LEGAL INPUT REQUIRED")
+             indexable=True, status="Form delivery: endpoint configured, live test pending; consent wording: LEGAL INPUT REQUIRED")
     cats = "".join(f'<option value="{att(c[2])}">{esc(c[2])}</option>' for c in CATS)
     procs = "".join(f'<optgroup label="{att(CATMAP[cid][2])}">' + "".join(f'<option value="{att(TREAT[s]["label"])}" data-cat="{att(CATMAP[cid][2])}">{esc(TREAT[s]["label"])}</option>' for _, ids in GROUPS[cid] for s in ids) + "</optgroup>" for cid in [c[0] for c in CATS])
     form = f'''<section class="section" id="enquiry"><div class="container form-wrap"><div class="form-intro"><p class="eyebrow">MEDICAL TRAVEL ENQUIRY</p><h2>Send a confidential enquiry</h2>
@@ -110,7 +129,8 @@ def build_contact():
 <div class="field"><label for="f-name">Full name *</label><input id="f-name" name="full_name" type="text" autocomplete="name" required maxlength="120"><p class="err" id="e-f-name" hidden></p></div>
 <div class="field"><label for="f-email">Email address *</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160"><p class="err" id="e-f-email" hidden></p></div>
 <div class="field"><label for="f-country">Country of residence *</label><input id="f-country" name="country" type="text" autocomplete="country-name" required maxlength="80"><p class="err" id="e-f-country" hidden></p></div>
-<div class="field"><label for="f-contact">Preferred contact method *</label><select id="f-contact" name="preferred_contact" required><option value="">Select…</option><option>Email</option><option>WhatsApp</option><option>Phone</option></select><p class="err" id="e-f-contact" hidden></p></div>
+<div class="field"><label for="f-contact">Preferred contact method *</label><select id="f-contact" name="preferred_contact" required><option value="">Select…</option><option>Email</option><option>WhatsApp</option><option>SMS</option><option>Phone call</option></select><p class="err" id="e-f-contact" hidden></p></div>
+<div class="field" id="phone-field" hidden><label for="f-phone">Phone number *</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" disabled data-describedby="phone-help" aria-describedby="phone-help"><p id="phone-help" class="help">Include your country code, for example +61 4XX XXX XXX or +971 5X XXX XXXX.</p><p class="err" id="e-f-phone" hidden></p></div>
 <div class="field"><label for="f-cat">Treatment category *</label><select id="f-cat" name="treatment_category" required><option value="">Select…</option>{cats}<option>Not sure yet</option></select><p class="err" id="e-f-cat" hidden></p></div>
 <div class="field"><label for="f-proc">Specific procedure <span class="opt">(optional)</span></label><select id="f-proc" name="specific_procedure"><option value="">Not sure yet / not listed</option>{procs}</select></div>
 <div class="field field-wide"><label for="f-msg">Message <span class="opt">(optional)</span></label><textarea id="f-msg" name="message" rows="5" maxlength="1500" aria-describedby="msg-help"></textarea>
@@ -132,8 +152,8 @@ def build_privacy():
     p = dict(path=cur, id="SUP-05", kind="Privacy", title="Privacy Information | threeeight35° Medical Travel Agency",
              desc="How threeeight35° approaches privacy: data minimisation, no medical records through the public form, and a separate private workflow for health information.",
              indexable=False, robots="noindex,follow", status="CONDITIONAL — final Australian privacy/legal review pending (APP 8, retention, consistency)")
-    body = f'''{pending("This is a summary of our privacy approach. The full Privacy Policy is being finalised following Australian privacy and legal review and will replace this page.")}
-{qa("What do we collect through the website enquiry form?", "<p>Only what is necessary for an initial enquiry: your name, email address, country of residence, preferred contact method, the treatment category (and optionally procedure) you are exploring, and an optional general message. We practise data minimisation.</p>")}
+    body = f'''{pending("This is a summary of our privacy approach. The full Privacy Policy is being finalised and will replace this page.")}
+{qa("What do we collect through the website enquiry form?", "<p>Only what is necessary for an initial enquiry: your name, email address, country of residence, preferred contact method, a phone number if you choose WhatsApp, SMS or a phone call as your contact method, the treatment category (and optionally procedure) you are exploring, and an optional general message. We practise data minimisation.</p>")}
 {qa("Should I send medical records through the website?", "<p>No. We do not ask patients to submit medical records or clinical photographs through public website forms, and the form asks you not to include medical records, test results, passport or payment details.</p>")}
 {qa("How is health information handled after my enquiry?", f"<p>After the initial enquiry, any health information needed for preliminary provider review follows an approved private health-information and overseas-disclosure workflow, with your authorisation. Where appropriate, relevant health information may then be provided to independent healthcare professionals in Türkiye. See <a href=\"{rel(cur,'privacy-overseas-health-information-disclosure/')}\">Privacy &amp; Overseas Health-Information Disclosure</a>.</p>")}
 {qa("Who can access personal and health information?", "<p>We handle personal and health information with care and restrict access to authorised personnel.</p>")}
@@ -144,12 +164,12 @@ def build_privacy():
 def build_terms():
     cur = "terms/"
     p = dict(path=cur, id="SUP-08", kind="Terms", title="Terms & Conditions | threeeight35° Medical Travel Agency",
-             desc="Terms for threeeight35° medical travel coordination services. Treatment, coordination package fees and travel costs are separate.",
+             desc="Terms for threeeight35° medical travel coordination services. Medical treatment and flights are paid separately from coordination packages.",
              indexable=False, robots="noindex,follow", status="LEGAL INPUT REQUIRED — payment, cancellation and refund terms withheld")
-    body = f'''{pending("Full Terms & Conditions, including payment, cancellation and refund terms, are being finalised following legal review. Only the following confirmed points are published now.")}
+    body = f'''{pending("Full Terms & Conditions, including payment, cancellation and refund terms, are being finalised. Only the following confirmed points are published now.")}
 {qa("Who provides medical treatment?", "<p>Independent clinics, hospitals and licensed healthcare professionals provide all medical assessment and treatment. threeeight35° is a coordination service and not a healthcare provider.</p>")}
-{qa("Who do I pay for what?", "<p>Medical treatment is quoted by and paid directly to the independent clinic or hospital. The threeeight35° coordination package fee is paid to threeeight35° for the defined non-clinical coordination services in your package. Accommodation and private transport are arranged and itemised separately, and are not included in the coordination package price unless expressly confirmed in writing.</p>")}
-{qa("What do I receive before I proceed?", "<p>A written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, separately itemised travel arrangements and the provider's treatment quotation.</p>")}
+{qa("Who do I pay for what?", "<p>Medical treatment is quoted by and paid directly to the independent clinic or hospital. The threeeight35° coordination package fee is paid to threeeight35° and covers non-clinical coordination, accommodation and private transfers in Istanbul for the nights and guests shown for your package. You book and pay for your own flights. Extra nights you choose to add are paid directly to the hotel; a longer stay advised by your treating clinician is quoted separately.</p>")}
+{qa("What do I receive before I proceed?", "<p>A written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, any extras quoted separately and the provider's treatment quotation.</p>")}
 {qa("Business details", f'<p>threeeight35° Medical Travel Agency · ABN {ABN} · <a href="mailto:{EMAIL}">{EMAIL}</a></p>')}'''
     main = pagehead("", "Terms & Conditions") + f'<section class="section"><div class="container prose">{body}</div></section>'
     add(p, main, "", crumbs=[("Home", ""), ("Terms & Conditions", cur)])
@@ -169,16 +189,15 @@ def build_disclaimer():
 
 def build_editorial():
     cur = "editorial-policy/"
-    p = dict(path=cur, id="SUP-07", kind="Editorial & medical review policy", title="Editorial & Medical Review Policy | threeeight35°",
-             desc="How threeeight35° plans, reviews and gates its medical-travel content: clinician review, sources, business confirmation and legal review.",
+    p = dict(path=cur, id="SUP-07", kind="Editorial policy", title="Editorial Policy | threeeight35°",
+             desc="How threeeight35° prepares its medical-travel content: publishing rules, sources, and how provider and package facts are confirmed.",
              indexable=True, status="Derived from Version 11 publishing rules; editorial approval required")
     body = f'''{qa("Our publishing rules", "<ul><li>threeeight35° is a medical-travel coordination agency, not the treating healthcare provider.</li><li>We do not invent prices, provider credentials, accreditation, recovery promises, minimum stays, medication, tests, hotel inclusions, transfers or outcomes.</li><li>Pages use answer-first questions, descriptive internal links and a clear path to the category, the Australia guide and contact.</li><li>Public copy uses Australian English. We use Türkiye editorially; Turkey may appear naturally as a search-language variant.</li></ul>")}
-{qa("Review gates", "<p>Each page moves through: Draft, Editorial Approved, Clinical Review Passed, Business Confirmed, Legal Cleared where applicable, Technical QA Passed, then Published. Clinical statements are published only after review by a qualified clinician, and the reviewer's name, credentials, jurisdiction, date and content version are recorded.</p>")}
+{qa("Clinical content", "<p>threeeight35° does not publish clinical advice. Our treatment pages cover planning and coordination only. Diagnosis, suitability, risks, recovery and treatment decisions come from your treating healthcare professional after an individual assessment.</p>")}
 {qa("Sources", "<p>Authoritative sources are mapped to substantive medical claims at claim level. A category bibliography is not treated as a substitute for claim-level support.</p>")}
-{qa("Current status", "<p>Clinical review of treatment-specific content is pending. Until a qualified clinician has signed off a page, treatment pages carry only coordination information and say so. Pages on topics that need specialist scope are marked under review.</p>")}
 {qa("Provider and package facts", "<p>Provider-specific facts, prices, inclusions, accommodation, transfers, tests, medicines, stay durations and follow-up promises are verified in writing before publication.</p>")}'''
-    main = pagehead("", "Editorial & Medical Review Policy") + f'<section class="section"><div class="container prose">{body}</div></section>'
-    add(p, main, "", crumbs=[("Home", ""), ("Editorial & Medical Review Policy", cur)])
+    main = pagehead("", "Editorial Policy") + f'<section class="section"><div class="container prose">{body}</div></section>'
+    add(p, main, "", crumbs=[("Home", ""), ("Editorial Policy", cur)])
 
 # ---------------- GEO hub + spokes ----------------
 SMART = "https://www.smartraveller.gov.au/travel-essentials/travel-health/medical-tourism"
@@ -199,11 +218,10 @@ SPOKES = [
   [("What should I plan for before I travel?", "<p>Confirm the plan for concerns after returning to Australia, and check that your insurance covers complications and medical evacuation.</p>"),
    ("What if I need urgent help in Türkiye?", "<p>In a medical emergency in Türkiye, call 112. This emergency service is separate from threeeight35° contact details.</p>")]),
  ("GEO-AU-07", "comparing-medical-treatment-quotations/", "Comparing Medical Treatment Quotations", "How to compare written treatment quotations and what threeeight35° does and does not price.",
-  [("What should a written quotation show?", "<p>Your complete proposal, including confirmed inclusions and exclusions, is provided in writing before you proceed. It shows your coordination package, separately itemised travel arrangements and the independent provider's treatment quotation.</p>"),
-   ("Why can't I compare a package price with a treatment price?", "<p>They are different things. Treatment is quoted by and paid directly to the independent clinic or hospital; the threeeight35° package fee covers non-clinical coordination; travel is itemised separately. A treatment fee is not combined with a package price into one advertised price.</p>")]),
+  [("What should a written quotation show?", "<p>Your complete proposal, including confirmed inclusions and exclusions, is provided in writing before you proceed. It shows your coordination package, any extras quoted separately and the independent provider's treatment quotation.</p>"),
+   ("Why can't I compare a package price with a treatment price?", "<p>They are different things. Treatment is quoted by and paid directly to the independent clinic or hospital; the threeeight35° package fee covers coordination, accommodation and Istanbul transfers; flights are booked separately. A treatment fee is not combined with a package price into one advertised price.</p>")]),
  ("GEO-AU-08", "privacy-overseas-health-information-disclosure/", "Privacy & Overseas Health-Information Disclosure", "How health information is handled after your initial enquiry, and why it is kept out of the public web form.",
-  [("Why is health information kept out of the website form?", "<p>The public form is for initial enquiries only and is designed for data minimisation. After your enquiry, any health information needed for preliminary provider review follows an approved private health-information and overseas-disclosure workflow, with your authorisation.</p>"),
-   ("Is this process legally certified?", "<p>Not yet. The workflow is documented, but final Australian privacy and legal review is still pending. This page will be updated when it is complete.</p>")]),
+  [("Why is health information kept out of the website form?", "<p>The public form is for initial enquiries only and is designed for data minimisation. After your enquiry, any health information needed for preliminary provider review follows an approved private health-information and overseas-disclosure workflow, with your authorisation.</p>")]),
 ]
 def build_geo():
     cur = "medical-travel-turkiye-from-australia/"
@@ -218,7 +236,7 @@ def build_geo():
 {qa("When can I fly home?", f'<p>There is no universal safe timeframe. The treating clinician must determine travel timing from the procedure, individual recovery and required post-treatment reviews. See <a href="{rel(cur,"flying-home-after-medical-treatment/")}">Flying Home After Medical Treatment</a>.</p>')}
 {qa("What does it cost, and who do I pay?", f'<p>{esc(DISCLOSURE)} See <a href="{rel(cur,"patient-packages/")}">Patient Packages</a>.</p>')}
 {qa("What does the Australian Government say?", f'<p>Smartraveller advises researching the destination health system, making sure travel insurance covers complications and medical evacuation, and notes that basic travel insurance policies rarely cover medical tourism. <a href="{SMART}" rel="noopener noreferrer" target="_blank">Read the Smartraveller guidance</a>.</p>')}'''
-    main = pagehead("AUSTRALIA TO TÜRKIYE", "Medical Travel to Türkiye from Australia", "A practical guide for Australians researching treatment in Türkiye (often searched as Turkey). We coordinate the journey; independent providers deliver all clinical care.")
+    main = pagehead("AUSTRALIA TO TÜRKİYE", "Medical Travel to Türkiye from Australia", "A practical guide for Australians researching treatment in Türkiye. We coordinate the journey; independent providers deliver all clinical care.")
     main += f'<section class="section"><div class="container prose">{body}</div></section>'
     main += f'<section class="section tone-cream"><div class="container two-col"><div><h2>Guides in this series</h2><ul class="linklist">{spokes}</ul></div><div><h2>Treatment categories</h2><ul class="linklist">{cats}</ul></div></div></section>'
     main += enquiry_cta(cur)
@@ -228,7 +246,7 @@ def build_geo():
         pp = dict(path=c2, id=sid, kind="GEO support guide", title=f"{name} | threeeight35°", desc=intro, indexable=False, robots="noindex,follow",
                   status="Spoke drafted from Version 11 statements (v11 lists the name only); editorial approval required; noindex until approved")
         b = "".join(qa(h, x) for h, x in qas)
-        m = pagehead("AUSTRALIA TO TÜRKIYE GUIDE", name, intro)
-        m += f'<section class="section"><div class="container prose">{pending("This guide is in editorial review. It contains only confirmed coordination information.")}{b}<p><a href="{rel(c2,"medical-travel-turkiye-from-australia/")}">← Medical Travel to Türkiye from Australia</a></p></div></section>'
+        m = pagehead("AUSTRALIA TO TÜRKİYE GUIDE", name, intro)
+        m += f'<section class="section"><div class="container prose">{b}<p><a href="{rel(c2,"medical-travel-turkiye-from-australia/")}">← Medical Travel to Türkiye from Australia</a></p></div></section>'
         m += enquiry_cta(c2)
         add(pp, m, "", crumbs=[("Home", ""), ("Medical Travel to Türkiye from Australia", "medical-travel-turkiye-from-australia/"), (name, slug)])

@@ -139,6 +139,11 @@ a:hover{color:var(--bronze-d)}
 .price{font-family:var(--serif);font-size:2.4rem;font-weight:700;margin:.2rem 0 .6rem}
 .pkg-note{font-size:.9rem;color:var(--muted)}
 .disclosure{font-size:.85rem;line-height:1.55;background:var(--cream-l);border-left:3px solid var(--bronze);padding:.8rem 1rem;border-radius:0 .6rem .6rem 0;color:var(--navy)}
+.disclosure-pkgs{max-width:52rem;margin:0 auto 1.5rem}
+.pkg-incl-h{font-weight:700;font-size:.85rem;margin:.4rem 0 .2rem}
+.pkg-incl{list-style:none;padding:0;margin:0 0 1rem}
+.pkg-incl li{position:relative;padding-left:1.6rem;margin:.35rem 0;font-size:.93rem}
+.pkg-incl li::before{content:"✓";position:absolute;left:0;color:var(--bronze-d);font-weight:700}
 .pkg-meta{padding-left:1.1rem;font-size:.92rem;color:var(--muted)}
 .pkg .btn{margin-top:auto}
 
@@ -239,7 +244,7 @@ a:hover{color:var(--bronze-d)}
 @media (min-width:640px){.form{grid-template-columns:1fr 1fr}.field-wide{grid-column:1/-1}}
 .field label{display:block;font-weight:600;font-size:.92rem;margin-bottom:.35rem}
 .opt{font-weight:400;color:var(--muted)}
-.field input[type=text],.field input[type=email],.field select,.field textarea{width:100%;min-height:50px;padding:.75rem .9rem;border:1.5px solid #8a96a8;border-radius:.7rem;font:inherit;color:var(--navy);background:#fff}
+.field input[type=text],.field input[type=email],.field input[type=tel],.field select,.field textarea{width:100%;min-height:50px;padding:.75rem .9rem;border:1.5px solid #8a96a8;border-radius:.7rem;font:inherit;color:var(--navy);background:#fff}
 .field textarea{min-height:130px;resize:vertical}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);outline:3px solid rgba(172,128,79,.55);outline-offset:1px}
 .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#a4262c}

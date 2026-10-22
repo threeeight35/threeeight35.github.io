@@ -60,6 +60,17 @@
   }
   cat.addEventListener("change", filterProcs); filterProcs();
 
+  /* phone number: shown and required only for WhatsApp, SMS or phone-call contact */
+  var contact = $("#f-contact"), phone = $("#f-phone"), phoneField = $("#phone-field");
+  var phoneLabels = { "WhatsApp": "WhatsApp number *", "SMS": "Mobile number for SMS *", "Phone call": "Phone number *" };
+  function togglePhone() {
+    var label = phoneLabels[contact.value];
+    phoneField.hidden = !label; phone.disabled = !label; phone.required = !!label;
+    if (label) $("label", phoneField).textContent = label;
+    else setErr("f-phone", "");
+  }
+  contact.addEventListener("change", togglePhone); togglePhone();
+
   if (cfg.turnstileSiteKey) {
     var s = document.createElement("script"); s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"; s.async = true; s.defer = true;
     document.head.appendChild(s);
@@ -69,9 +80,9 @@
 
   function setErr(id, msg) {
     var f = $("#" + id), e = $("#e-" + id);
-    var field = f.closest(".field");
-    if (msg) { e.textContent = msg; e.hidden = false; field.classList.add("invalid"); f.setAttribute("aria-invalid", "true"); f.setAttribute("aria-describedby", "e-" + id); }
-    else { e.hidden = true; e.textContent = ""; field.classList.remove("invalid"); f.removeAttribute("aria-invalid"); f.removeAttribute("aria-describedby"); }
+    var field = f.closest(".field"), help = f.getAttribute("data-describedby");
+    if (msg) { e.textContent = msg; e.hidden = false; field.classList.add("invalid"); f.setAttribute("aria-invalid", "true"); f.setAttribute("aria-describedby", (help ? help + " " : "") + "e-" + id); }
+    else { e.hidden = true; e.textContent = ""; field.classList.remove("invalid"); f.removeAttribute("aria-invalid"); if (help) f.setAttribute("aria-describedby", help); else f.removeAttribute("aria-describedby"); }
     return !msg;
   }
   function validate() {
@@ -82,6 +93,7 @@
     chk("f-email", function () { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email); }, "Please enter a valid email address.");
     chk("f-country", function () { return $("#f-country").value.trim().length >= 2; }, "Please enter your country of residence.");
     chk("f-contact", function () { return !!$("#f-contact").value; }, "Please choose a preferred contact method.");
+    if (!phone.disabled) chk("f-phone", function () { var v = phone.value.trim(), d = v.replace(/\D/g, ""); return /^\+?[\d\s().-]+$/.test(v) && d.length >= 8 && d.length <= 15; }, "Please enter a phone number we can reach you on, including your country code.");
     chk("f-cat", function () { return !!cat.value; }, "Please choose a treatment category, or “Not sure yet”.");
     chk("f-consent", function () { return $("#f-consent").checked; }, "Please confirm the privacy acknowledgement to continue.");
     if (first) first.focus();
@@ -103,7 +115,7 @@
     submit.disabled = true; submit.textContent = "Sending…";
     fetch(cfg.endpoint, { method: cfg.method || "POST", body: JSON.stringify(Object.fromEntries(new FormData(form).entries())), headers: { "Content-Type": "application/json", Accept: "application/json" } })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r; })
-      .then(function () { form.reset(); filterProcs(); show("ok", "<strong>Thank you — your enquiry has been received.</strong> A coordinator will respond using your preferred contact method."); })
+      .then(function () { form.reset(); filterProcs(); togglePhone(); show("ok", "<strong>Thank you — your enquiry has been received.</strong> A coordinator will respond using your preferred contact method."); })
       .catch(function () { show("bad", "<strong>Your enquiry could not be sent.</strong> Please try again, or email " + mail + " or call " + cfg.fallbackPhoneAU + "."); })
       .then(function () { submit.disabled = false; submit.textContent = "Send enquiry"; });
   });

@@ -1,5 +1,4 @@
-# NOTE: crawlers only read robots.txt at https://threeeight35.com/robots.txt. Merge these lines into the root file.
 User-agent: *
-Allow: /medical-travel-agency/
+Allow: /
 
-Sitemap: https://threeeight35.com/medical-travel-agency/sitemap.xml
+Sitemap: https://threeeight35.com/sitemap.xml

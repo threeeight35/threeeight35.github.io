@@ -1,0 +1,10 @@
+# macOS Finder metadata
+.DS_Store
+
+# Local tooling (Claude Code preview config, Python bytecode)
+.claude/
+__pycache__/
+
+# Duplicate copies created by iCloud Drive sync (e.g. "index 2.html", "dental 2/")
+* [0-9].*
+* [0-9]/
