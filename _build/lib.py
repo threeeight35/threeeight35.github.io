@@ -165,9 +165,6 @@ def head(p):
 <meta name="twitter:image" content="{og_img}">
 <meta name="twitter:image:alt" content="{att(og_alt)}">
 {fonts}{pre}<link rel="stylesheet" href="{asset(cur, "assets/css/styles.css")}">
-<link rel="icon" href="{rel(cur, "favicon.ico")}" sizes="48x48">
-<link rel="icon" type="image/png" href="{rel(cur, "assets/img/brand/icon-192.png")}" sizes="192x192">
-<link rel="apple-touch-icon" href="{rel(cur, "assets/img/brand/apple-touch-icon.png")}">
 {ld}
 </head>'''
 
