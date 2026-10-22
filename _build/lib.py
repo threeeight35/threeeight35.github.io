@@ -2,6 +2,7 @@
 import hashlib, html, json, os, re, glob
 from PIL import Image
 from content import *
+from content_ar import *
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 IMGDIR = os.path.join(ROOT, "assets", "img")
@@ -10,14 +11,33 @@ def typo(s): return s.replace("'", "’")
 def esc(s): return typo(html.escape(s, quote=False))
 def att(s): return html.escape(s, quote=True)
 
-def rel(cur, target):
-    """relative URL from page dir `cur` ('' or 'a/b/') to site-relative `target` ('' , 'x/', 'x/#id', 'assets/..')"""
-    depth = len([p for p in cur.strip("/").split("/") if p])
+# ---------- language ----------
+# The core pages are built twice: in English at their usual path and in Arabic under ar/.
+# Builders keep using English logical paths; L(english, arabic) picks the text for the language being built,
+# and rel() points links at the Arabic version of a page whenever one exists.
+_LANG = {"code": "en"}
+def set_lang(code): _LANG["code"] = code
+def is_ar(): return _LANG["code"] == "ar"
+def L(en, ar): return ar if is_ar() else en
+AR_PAGES = {"", "treatments/", "patient-packages/", "how-it-works/", "about/", "faqs/", "contact/",
+            "privacy/", "terms/", "medical-disclaimer/"} | {f"treatments/{c[1]}/" for c in CATS}
+def arrow(): return L("→", "←")
+def ltr(s): return L(s, f'<span dir="ltr">{s}</span>')   # keeps phone numbers in left-to-right order on Arabic pages
+def cat_name(cid): return L(next(c[2] for c in CATS if c[0] == cid), CAT_AR[cid][0])
+
+def rel(cur, target, lang_map=True):
+    """relative URL from page dir `cur` ('' or 'a/b/') to site-relative `target` ('' , 'x/', 'x/#id', 'assets/..').
+    `cur` is always the English logical path; on Arabic pages the real directory is one level deeper (ar/)."""
+    depth = len([p for p in cur.strip("/").split("/") if p]) + (1 if is_ar() else 0)
+    if lang_map and is_ar() and target.split("#")[0] in AR_PAGES:
+        target = "ar/" + target
     pre = "../" * depth
     out = pre + target
     return out if out else "./"
 
 def abs_url(path): return BASE + path
+def page_url(path):   # absolute URL of a page in the language being built
+    return abs_url(("ar/" if is_ar() and path.split("#")[0] in AR_PAGES else "") + path)
 
 def asset(cur, target):
     """rel() plus a content-hash query string, so browsers fetch CSS/JS again whenever the file changes"""
@@ -104,7 +124,13 @@ def head(p):
     can = abs_url(p.get("canon", cur))
     robots = p.get("robots", "index,follow,max-image-preview:large")
     og_img = abs_url("assets/img/16_health_journey_istanbul-og-1200x630.jpg")
-    og_alt = "Sunset over the Istanbul skyline and waterway, with domed mosques and a ferry below an aeroplane in the sky."
+    og_alt = L("Sunset over the Istanbul skyline and waterway, with domed mosques and a ferry below an aeroplane in the sky.",
+               "غروب الشمس فوق أفق إسطنبول ومضيق البوسفور، مع مساجد بقباب وعبّارة وطائرة في السماء.")
+    en_path = p.get("en_path")
+    alts = ""
+    if en_path is not None and en_path in AR_PAGES:   # page exists in both languages: tell search engines about each version
+        alts = (f'<link rel="alternate" hreflang="en-AU" href="{abs_url(en_path)}">\n<link rel="alternate" hreflang="ar" href="{abs_url("ar/" + en_path)}">\n'
+                f'<link rel="alternate" hreflang="x-default" href="{abs_url(en_path)}">\n')
     pre = ""
     if p.get("hero"):
         ws = widths("16_health_journey_istanbul")
@@ -114,7 +140,7 @@ def head(p):
                     for f in ("plus-jakarta-sans-latin-400-normal.woff2", "playfair-display-latin-600-normal.woff2"))
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False, separators=(",", ":"))}</script>' for j in p.get("jsonld", []))
     return f'''<!DOCTYPE html>
-<html lang="en-AU">
+{L('<html lang="en-AU">', '<html lang="ar" dir="rtl">')}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -122,10 +148,10 @@ def head(p):
 <meta name="description" content="{att(p["desc"])}">
 <meta name="robots" content="{robots}">
 <link rel="canonical" href="{can}">
-<meta name="theme-color" content="#0b1f3b">
+{alts}<meta name="theme-color" content="#0b1f3b">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{att(SITE)}">
-<meta property="og:locale" content="en_AU">
+<meta property="og:locale" content="{L("en_AU", "ar_AE")}">
 <meta property="og:title" content="{att(p.get("og_title", p["title"]))}">
 <meta property="og:description" content="{att(p["desc"])}">
 <meta property="og:url" content="{can}">
@@ -145,58 +171,68 @@ def head(p):
 {ld}
 </head>'''
 
+def lang_switch(cur, cls):
+    """Link to this page in the other language (English pages without an Arabic version link to the Arabic home page)."""
+    if is_ar():
+        return f'<a class="{cls}" href="{rel(cur, cur, lang_map=False)}" lang="en" hreflang="en-AU">English</a>'
+    target = "ar/" + (cur if cur in AR_PAGES else "")
+    return f'<a class="{cls}" href="{rel(cur, target, lang_map=False)}" lang="ar" hreflang="ar">العربية</a>'
+
 def header(cur, active):
     links = []
     for label, tgt, key in NAV:
+        label = L(label, NAV_AR[key])
         if key == "treatments":
-            items = "".join(f'<li><a href="{rel(cur, cat_dir(c[0]))}">{esc(c[2])}</a></li>' for c in CATS)
-            links.append(f'''<div class="nav-drop"><a class="nav-link{" active" if active==key else ""}" href="{rel(cur, tgt)}">Treatments</a>
-<button class="nav-drop-btn" type="button" aria-expanded="false" aria-controls="nav-treat-menu"><span class="sr-only">Show treatment categories</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-<div class="nav-menu" id="nav-treat-menu" hidden><p class="eyebrow">8 medical categories</p><ul>{items}</ul><a class="menu-all" href="{rel(cur, tgt)}">View the full treatments catalogue →</a></div></div>''')
+            items = "".join(f'<li><a href="{rel(cur, cat_dir(c[0]))}">{esc(cat_name(c[0]))}</a></li>' for c in CATS)
+            links.append(f'''<div class="nav-drop"><a class="nav-link{" active" if active==key else ""}" href="{rel(cur, tgt)}">{label}</a>
+<button class="nav-drop-btn" type="button" aria-expanded="false" aria-controls="nav-treat-menu"><span class="sr-only">{L("Show treatment categories", "عرض فئات العلاج")}</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div class="nav-menu" id="nav-treat-menu" hidden><p class="eyebrow">{L("8 medical categories", "8 فئات طبية")}</p><ul>{items}</ul><a class="menu-all" href="{rel(cur, tgt)}">{L("View the full treatments catalogue", "عرض دليل العلاجات الكامل")} {arrow()}</a></div></div>''')
         else:
             links.append(f'<a class="nav-link{" active" if active==key else ""}" href="{rel(cur, tgt)}"{" aria-current=\"page\"" if active==key else ""}>{label}</a>')
-    mob = "".join(f'<a class="mnav-link" href="{rel(cur, t)}">{l}</a>' for l, t, k in NAV)
-    mob_cats = "".join(f'<a class="mnav-sub" href="{rel(cur, cat_dir(c[0]))}">{esc(c[2])}</a>' for c in CATS)
-    vid = f'<a class="btn btn-ghost" href="{VIDEO_CONSULT_URL}">Book Consultation</a>' if VIDEO_CONSULT_URL else ""
+    mob = "".join(f'<a class="mnav-link" href="{rel(cur, t)}">{L(l, NAV_AR[k])}</a>' for l, t, k in NAV)
+    mob_cats = "".join(f'<a class="mnav-sub" href="{rel(cur, cat_dir(c[0]))}">{esc(cat_name(c[0]))}</a>' for c in CATS)
+    vid = f'<a class="btn btn-ghost" href="{VIDEO_CONSULT_URL}">{L("Book Consultation", "احجز استشارة")}</a>' if VIDEO_CONSULT_URL else ""
     return f'''<body>
-<a class="skip" href="#main">Skip to main content</a>
+<a class="skip" href="#main">{L("Skip to main content", "انتقل إلى المحتوى الرئيسي")}</a>
 <header class="header" id="top">
 <div class="container header-inner">
-<a class="brand" href="{rel(cur, "")}" aria-label="{att(SITE)} — home"><span class="brand-mark">threeeight35°</span><span class="brand-sub">Medical Travel Agency</span></a>
-<nav class="nav" aria-label="Primary">{"".join(links)}</nav>
-<div class="header-cta">{vid}<a class="btn btn-navy" href="{rel(cur, "contact/#enquiry")}">Enquire</a></div>
-<button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu"><span></span><span></span><span></span></button>
+<a class="brand" href="{rel(cur, "")}" aria-label="{att(SITE)} — {L("home", "الصفحة الرئيسية")}"><span class="brand-mark">threeeight35°</span><span class="brand-sub">{L("Medical Travel Agency", SITE_SUB_AR)}</span></a>
+<nav class="nav" aria-label="{L("Primary", "القائمة الرئيسية")}">{"".join(links)}</nav>
+<div class="header-cta">{lang_switch(cur, "lang-switch")}{vid}<a class="btn btn-navy" href="{rel(cur, "contact/#enquiry")}">{L("Enquire", "استفسر")}</a></div>
+<button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="{L("Open menu", "فتح القائمة")}"><span></span><span></span><span></span></button>
 </div>
-<nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
-<div class="container">{mob}<p class="eyebrow mnav-h">Medical categories</p>{mob_cats}<a class="btn btn-navy btn-block" href="{rel(cur, "contact/#enquiry")}">Make an Enquiry</a></div>
+<nav class="mobile-nav" id="mobile-nav" aria-label="{L("Mobile", "قائمة الجوال")}" hidden>
+<div class="container">{mob}<p class="eyebrow mnav-h">{L("Medical categories", "الفئات الطبية")}</p>{mob_cats}{lang_switch(cur, "mnav-link mnav-lang")}<a class="btn btn-navy btn-block" href="{rel(cur, "contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك")}</a></div>
 </nav>
 </header>'''
 
 def footer(cur):
-    soc = "".join(f'<li><a href="{u}" rel="noopener noreferrer" target="_blank" aria-label="{att(SITE.split(" ")[0])} on {n} (opens in a new tab)">{n}</a></li>' for n, u in SOCIAL)
-    cats = "".join(f'<li><a href="{rel(cur, cat_dir(c[0]))}">{esc(c[2])}</a></li>' for c in CATS)
-    nav = [("Home", ""), ("Treatments Catalogue", "treatments/"), ("Medical Travel Packages", "patient-packages/"), ("How It Works", "how-it-works/"),
-           ("About Us", "about/"), ("FAQs", "faqs/"), ("Contact & Enquiries", "contact/")]
-    legal = [("Privacy Policy", "privacy/"), ("Terms & Conditions", "terms/"), ("Medical Information Disclaimer", "medical-disclaimer/"), ("Editorial Policy", "editorial-policy/")]
-    ln = lambda L: "".join(f'<li><a href="{rel(cur, t)}">{esc(l)}</a></li>' for l, t in L)
+    soc = "".join(f'<li><a href="{u}" rel="noopener noreferrer" target="_blank" aria-label="{att(SITE.split(" ")[0])} {L("on", "على")} {n} {L("(opens in a new tab)", "(يفتح في علامة تبويب جديدة)")}">{n}</a></li>' for n, u in SOCIAL)
+    cats = "".join(f'<li><a href="{rel(cur, cat_dir(c[0]))}">{esc(cat_name(c[0]))}</a></li>' for c in CATS)
+    nav = [(L("Home", "الرئيسية"), ""), (L("Treatments Catalogue", "دليل العلاجات"), "treatments/"), (L("Medical Travel Packages", "باقات السفر العلاجي"), "patient-packages/"),
+           (L("How It Works", "كيف نعمل"), "how-it-works/"), (L("About Us", "من نحن"), "about/"), (L("FAQs", "الأسئلة الشائعة"), "faqs/"), (L("Contact & Enquiries", "التواصل والاستفسارات"), "contact/")]
+    legal = [(L("Privacy Policy", "سياسة الخصوصية"), "privacy/"), (L("Terms & Conditions", "الشروط والأحكام"), "terms/"),
+             (L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية"), "medical-disclaimer/"), (L("Editorial Policy", "السياسة التحريرية (بالإنجليزية)"), "editorial-policy/")]
+    ln = lambda items: "".join(f'<li><a href="{rel(cur, t)}">{esc(l)}</a></li>' for l, t in items)
+    notice = L(esc(NOTICE), f"<strong>{NOTICE_AR_TITLE}:</strong> {NOTICE_AR_BODY}")
     return f'''<footer class="footer">
 <div class="container">
 <div class="footer-grid">
-<div class="footer-brand"><p class="brand-mark brand-mark-lg">threeeight35°</p><p class="brand-sub">Medical Travel Agency</p>
-<p class="footer-tag">Your Health Journey, Beyond Borders.</p>
-<p class="footer-desc">Personalised medical travel coordination connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye.</p>
-<p class="eyebrow eyebrow-on-dark">AUSTRALIA · UAE · TÜRKİYE</p></div>
-<div><h2 class="footer-h">Navigate</h2><ul>{ln(nav)}</ul></div>
-<div><h2 class="footer-h">Medical categories</h2><ul>{cats}</ul></div>
-<div><h2 class="footer-h">Compliance &amp; legal</h2><ul>{ln(legal)}</ul>
-<h2 class="footer-h footer-h2">Contact</h2><ul class="contact-list">
+<div class="footer-brand"><p class="brand-mark brand-mark-lg">threeeight35°</p><p class="brand-sub">{L("Medical Travel Agency", SITE_SUB_AR)}</p>
+<p class="footer-tag">{L("Your Health Journey, Beyond Borders.", "رحلتك الصحية، بلا حدود.")}</p>
+<p class="footer-desc">{L("Personalised medical travel coordination connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye.", "تنسيق شخصي للسفر العلاجي يربط المرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى بمقدّمي رعاية صحية مستقلين في تركيا.")}</p>
+<p class="eyebrow eyebrow-on-dark">{L("AUSTRALIA · UAE · TÜRKİYE", "أستراليا · الإمارات · تركيا")}</p></div>
+<div><h2 class="footer-h">{L("Navigate", "التصفح")}</h2><ul>{ln(nav)}</ul></div>
+<div><h2 class="footer-h">{L("Medical categories", "الفئات الطبية")}</h2><ul>{cats}</ul></div>
+<div><h2 class="footer-h">{L("Compliance &amp; legal", "الامتثال والشؤون القانونية")}</h2><ul>{ln(legal)}</ul>
+<h2 class="footer-h footer-h2">{L("Contact", "التواصل")}</h2><ul class="contact-list">
 <li><a href="mailto:{EMAIL}">{EMAIL}</a></li>
-<li>Australia: <a href="tel:{PHONE_AU.replace(" ","")}">{PHONE_AU}</a></li>
-<li>United Arab Emirates: <a href="tel:{PHONE_UAE.replace(" ","")}">{PHONE_UAE}</a></li></ul>
-<h2 class="footer-h footer-h2">Follow</h2><ul class="social-list">{soc}</ul></div>
+<li>{L("Australia", "أستراليا")}: <a href="tel:{PHONE_AU.replace(" ","")}">{ltr(PHONE_AU)}</a></li>
+<li>{L("United Arab Emirates", "الإمارات العربية المتحدة")}: <a href="tel:{PHONE_UAE.replace(" ","")}">{ltr(PHONE_UAE)}</a></li></ul>
+<h2 class="footer-h footer-h2">{L("Follow", "تابعنا")}</h2><ul class="social-list">{soc}</ul></div>
 </div>
-<div class="footer-notice" role="note"><p>{esc(NOTICE)}</p></div>
-<div class="footer-base"><p>© 2026 threeeight35° Medical Travel Agency. All rights reserved.</p><p>ABN {ABN}</p></div>
+<div class="footer-notice" role="note"><p>{notice}</p></div>
+<div class="footer-base"><p>{L("© 2026 threeeight35° Medical Travel Agency. All rights reserved.", "© 2026 وكالة threeeight35° للسفر العلاجي. جميع الحقوق محفوظة.")}</p><p>{L("ABN", "رقم الأعمال الأسترالي (ABN)")} {ABN}</p></div>
 </div>
 </footer>
 <script src="{asset(cur, "assets/js/form-config.js")}"></script>
@@ -209,15 +245,15 @@ def breadcrumb_html(cur, crumbs):
     for i, (n, pth) in enumerate(crumbs):
         if i == len(crumbs) - 1: items.append(f'<li aria-current="page">{esc(n)}</li>')
         else: items.append(f'<li><a href="{rel(cur, pth)}">{esc(n)}</a></li>')
-    return f'<nav class="crumbs" aria-label="Breadcrumb"><ol>{"".join(items)}</ol></nav>'
+    return f'<nav class="crumbs" aria-label="{L("Breadcrumb", "مسار التنقل")}"><ol>{"".join(items)}</ol></nav>'
 
 def breadcrumb_ld(crumbs):
     return {"@context": "https://schema.org", "@type": "BreadcrumbList",
-            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": abs_url(p)} for i, (n, p) in enumerate(crumbs)]}
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": page_url(p)} for i, (n, p) in enumerate(crumbs)]}
 
 def webpage_ld(p, crumbs):
     return {"@context": "https://schema.org", "@type": "WebPage", "@id": abs_url(p.get("canon", p["path"])) + "#webpage",
-            "url": abs_url(p.get("canon", p["path"])), "name": p["title"], "description": p["desc"], "inLanguage": "en-AU",
+            "url": abs_url(p.get("canon", p["path"])), "name": p["title"], "description": p["desc"], "inLanguage": L("en-AU", "ar"),
             "isPartOf": {"@type": "WebSite", "@id": BASE + "#website", "name": SITE, "url": BASE},
             "publisher": {"@id": BASE + "#organization"}}
 

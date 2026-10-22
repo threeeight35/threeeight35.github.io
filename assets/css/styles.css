@@ -275,3 +275,29 @@ a:hover{color:var(--bronze-d)}
 .footer-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;font-size:.85rem;margin-top:1.5rem;color:var(--bronze-l)}
 .footer-base p{margin:0}
 .social-list{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem}
+
+/* ---------- language switch ---------- */
+.lang-switch{font-weight:600;font-size:.9rem;color:var(--navy);text-decoration:none;padding:.4rem .6rem;border:1.5px solid var(--line);border-radius:.6rem;min-height:44px;display:inline-flex;align-items:center}
+.lang-switch:hover{border-color:var(--bronze)}
+.lang-switch:lang(ar),.mnav-lang:lang(ar){font-family:"Noto Sans Arabic","Segoe UI","Geeza Pro",Tahoma,Arial,sans-serif}
+.en-only-note{margin:0 0 1.5rem}
+
+/* ---------- Arabic (right-to-left) ---------- */
+/* No Arabic web font is downloaded: devices use their own Arabic system fonts (Geeza Pro / SF Arabic on Apple, Segoe UI on Windows, Noto on Android). */
+:root[lang=ar]{--sans:"Noto Sans Arabic","Segoe UI","Geeza Pro",Tahoma,Arial,sans-serif;--serif:"Noto Naskh Arabic","Geeza Pro","Segoe UI",Tahoma,serif}
+:root[lang=ar] body *{letter-spacing:normal}   /* letter-spacing breaks the joins between Arabic letters */
+:root[lang=ar] h1,:root[lang=ar] h2,:root[lang=ar] h3,:root[lang=ar] h4{line-height:1.45}
+:root[lang=ar] .brand-mark{font-family:"Playfair Display",Georgia,"Times New Roman",serif}
+[dir=rtl] .nav-menu{left:auto;right:-1rem}
+[dir=rtl] .disclosure{border-left:0;border-right:3px solid var(--bronze);border-radius:.6rem 0 0 .6rem}
+[dir=rtl] .banner{border-left:1px solid var(--bronze-l);border-right:4px solid var(--bronze)}
+[dir=rtl] .pkg-incl li,[dir=rtl] .check{padding-left:0;padding-right:1.6rem}
+[dir=rtl] .pkg-incl li::before,[dir=rtl] .check::before{left:auto;right:0}
+[dir=rtl] .pkg-meta{padding-left:0;padding-right:1.1rem}
+[dir=rtl] .faq summary::after{right:auto;left:.25rem}
+[dir=rtl] .crumbs li+li::before{content:"‹";margin-right:0;margin-left:.35rem}
+[dir=rtl] .tag{margin-left:0;margin-right:.5rem}
+[dir=rtl] .faq summary{padding:1.1rem 0 1.1rem 2rem}
+[dir=rtl] .skip{left:auto;right:-999px;border-radius:0 0 0 .5rem}
+[dir=rtl] .skip:focus{left:auto;right:0}
+[dir=rtl] .hp{left:auto;right:-9999px}

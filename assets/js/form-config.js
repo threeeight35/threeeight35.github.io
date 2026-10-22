@@ -6,5 +6,6 @@ window.T35_FORM = {
   method: "POST",
   turnstileSiteKey: "",      // optional: Cloudflare Turnstile PUBLIC site key (spam control). Leave empty if the service provides its own.
   fallbackEmail: "hello@threeeight35.com",
-  fallbackPhoneAU: "+61 426 499 822"
+  fallbackPhoneAU: "+61 426 499 822",
+  fallbackPhoneUAE: "+971 544 144 203"   // shown on the Arabic pages
 };

@@ -8,7 +8,7 @@ from lib import *
 out = ROOT
 OLD_PREFIX = "medical-travel-agency/"   # the site's address before it moved to the domain root
 # clear generated html (keep assets, _build)
-for d in ["treatments","patient-packages","how-it-works","about","faqs","contact","privacy","terms","medical-disclaimer","editorial-policy","medical-travel-turkiye-from-australia",OLD_PREFIX.strip("/")]+[s[1].strip("/") for s in SPOKES]:
+for d in ["treatments","patient-packages","how-it-works","about","faqs","contact","privacy","terms","medical-disclaimer","editorial-policy","medical-travel-turkiye-from-australia",OLD_PREFIX.strip("/"),"ar"]+[s[1].strip("/") for s in SPOKES]:
     shutil.rmtree(os.path.join(out, d), ignore_errors=True)
 for f in ("index.html","404.html","sitemap.xml","robots.txt","llms.txt"):
     if os.path.exists(os.path.join(out, f)): os.remove(os.path.join(out, f))
@@ -18,6 +18,15 @@ for c in CATS: build_category(c)
 for sid in TREAT: build_treatment(sid)
 build_packages(); build_how(); build_about(); build_faqs(); build_contact()
 build_privacy(); build_terms(); build_disclaimer(); build_editorial(); build_geo()
+
+# Arabic versions of the core pages (lib.AR_PAGES), written under ar/
+set_lang("ar")
+build_home(); build_directory()
+for c in CATS: build_category(c)
+build_packages(); build_how(); build_about(); build_faqs(); build_contact()
+build_privacy(); build_terms(); build_disclaimer()
+set_lang("en")
+assert {p["en_path"] for p in PAGES if p["path"].startswith("ar/")} == AR_PAGES
 
 paths = set()
 for p in PAGES:
@@ -47,6 +56,7 @@ open(os.path.join(out, ".nojekyll"), "w").write("")
 # Redirects from the site's former address (https://threeeight35.com/medical-travel-agency/...) to the same page at the domain root.
 # GitHub Pages has no server-side redirects; an instant refresh plus canonical is treated by search engines as a permanent redirect.
 for p in PAGES:
+    if p["path"].startswith("ar/"): continue   # Arabic pages are new; they never had an old address
     new = BASE + p["path"]
     d = os.path.join(out, OLD_PREFIX.strip("/"), p["path"]); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(
@@ -87,6 +97,9 @@ llms += ["",
          f"- Email: {EMAIL}", f"- Australia: {PHONE_AU}", f"- United Arab Emirates: {PHONE_UAE}", f"- ABN: {ABN}", "",
          "## Key pages"]
 llms += [f"- [{name}]({BASE}{path}): {note}" for path, name, note in KEY_PAGES if path in cleared]
+if "ar/" in cleared:
+    llms += ["", "## العربية (Arabic)",
+             f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue and category pages, privacy, terms and medical disclaimer"]
 open(os.path.join(out, "llms.txt"), "w", encoding="utf-8").write("\n".join(llms) + "\n")
 
 # register
