@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from components import *
 from treatment_guides import GUIDES, GUIDE_META
+from treatments_ar import FOCUS_AR, UND_END_AR, CONFIRM_AR, GUIDES_AR, GUIDE_META_AR
 
 PAGES = []   # dicts: path, html, indexable, id, title, kind, status
 # ---- CENTRAL INDEXING GATE -------------------------------------------------------------
@@ -100,8 +101,8 @@ def tag(t):
     return ""
 
 def treat_label(sid): return L(TREAT[sid]["label"], TREAT_AR[sid])
-def treat_link_attrs(): return L("", ' hreflang="en-AU"')   # individual treatment pages exist in English only
-EN_ONLY_NOTE_AR = '<p class="small en-only-note">صفحات العلاجات الفردية متاحة حالياً باللغة الإنجليزية.</p>'
+def treat_link_attrs(): return ""
+EN_ONLY_NOTE_AR = ""
 
 def build_directory():
     cur = "treatments/"
@@ -159,7 +160,7 @@ def build_category(c):
             t = TREAT[s]
             focus = ""
             m = re.search(r"should be researched in the context of (.*?)\. The final clinical plan", t["rec"]["pre"])
-            if m and not t["held"] and not is_ar(): focus = m.group(1)
+            if m and not t["held"]: focus = L(m.group(1), FOCUS_AR.get(s, ""))
             if t["held"]: focus = L("Coordination enquiries only", "استفسارات التنسيق فقط")
             elif t["hub"]: focus = L("Guide to the specific options under this broader term", "دليل للخيارات المحددة ضمن هذا المصطلح العام")
             elif focus: focus = focus[0].upper() + focus[1:]
@@ -230,6 +231,7 @@ def treatment_meta(t, v11):
     return f"{t['label']} in Türkiye: what to confirm before you travel and how threeeight35° coordinates your trip."
 
 def build_treatment(sid):
+    if is_ar(): return build_treatment_ar(sid)
     t = TREAT[sid]; r = t["rec"]; f = r["fields"]; secs = dict(r["secs"]); cid = t["cid"]; cat = CATMAP[cid]
     cur = t["dir"]
     title = f["SEO title"].replace("│", "|")
@@ -299,5 +301,70 @@ def build_treatment(sid):
     main += enquiry_cta(cur)
     crumbs = [("Home", ""), ("Treatments", "treatments/"), (cat[2], cat_dir(cid)), (t["label"], cur)]
     add(p, main, "treatments", crumbs=crumbs)
+
+def build_treatment_ar(sid):
+    """Arabic treatment page: same structure as build_treatment, with text from treatments_ar.py."""
+    t = TREAT[sid]; r = t["rec"]; f = r["fields"]; secs = dict(r["secs"]); cid = t["cid"]
+    cur = t["dir"]; name = TREAT_AR[sid]; cat_ar = cat_name(cid); focus = FOCUS_AR.get(sid, "")
+    if t["held"]:
+        desc = f"{name} في تركيا: استفسر من threeeight35° عن تنسيق السفر العلاجي. threeeight35° تنسّق السفر العلاجي ولا تقدّم رعاية سريرية."
+        lead = f"لا ننشر معلومات علاجية عن {name} على موقعنا. ولا يزال بإمكانك الاستفسار عن تنسيق السفر العلاجي لهذا العلاج."
+    else:
+        desc = GUIDE_META_AR.get(sid) or next(d for d in (f"{name} في تركيا: {focus}. ما يجب تأكيده قبل السفر وكيف تنسّق threeeight35° رحلتك.",
+                                                         f"{name} في تركيا: {focus}. ما يجب تأكيده قبل السفر.", f"{name} في تركيا: ما يجب تأكيده قبل السفر.") if len(d) <= 160)
+        lead = (f"{name} موضوع عام وليس إجراءً واحداً موحّداً. تساعدك هذه الصفحة على التمييز بين الخيارات المحددة التي تندرج تحته." if t["hub"] else
+                f"عند البحث في {name} في تركيا، من المهم فهم {focus}. ويجب أن تستند الخطة السريرية النهائية إلى تقييم فردي من أخصائي الرعاية الصحية المعالج.")
+    p = dict(path=cur, id=r["id"], kind=f["Page type"], title=f"{name} في تركيا | threeeight35°", desc=desc, indexable=True,
+             status=f["Publication status"], notes="Arabic version")
+    rows = [("الفئة", f'<a href="{rel(cur, cat_dir(cid))}">{esc(cat_ar)}</a>'),
+            ("دور الصفحة", "دليل لموضوع أشمل" if t["hub"] else ("استفسارات التنسيق فقط" if t["held"] else "نظرة عامة على التخطيط والتنسيق")),
+            ("رسوم العلاج", "لا تنشرها threeeight35°. تُسعَّر وتُدفع مباشرةً إلى العيادة أو المستشفى المستقل."),
+            ("القرارات السريرية", "يتخذها أخصائي الرعاية الصحية المعالج بعد تقييم فردي."),
+            ("دور threeeight35°", "تنسيق غير سريري للسفر والتواصل.")]
+    sec = lambda h, body: f'<section class="tsec"><h2>{h}</h2>{body}</section>'
+    blocks = [sec("نظرة سريعة", '<dl class="glance">' + "".join(f"<div><dt>{a}</dt><dd>{b}</dd></div>" for a, b in rows) + "</dl>")]
+    if not t["held"]:
+        u = secs.get("What should this page help a patient understand?", "")
+        kind = ("dental" if "staged care" in u else "eye" if "ophthalmic" in u or "eye procedure" in u else "fertility" if "fertility pathway" in u
+                else "checkup" if "abnormal findings" in u else "surgical")
+        blocks.append(sec("ما يجب فهمه قبل أن تقرّر", f"<p>قبل أن تقرّر، من المفيد أن تفهم: {focus}{UND_END_AR[kind]}</p>"))
+        if "What legal or regulatory issues need review?" in secs:
+            blocks.append(sec("الاعتبارات القانونية والأخلاقية", "<p>قد تنطوي موضوعات الخصوبة والأجنة والأمشاج والفحص الجيني على متطلبات قانونية وأخلاقية ومتطلبات موافقة تختلف من بلد إلى آخر. تأكّد من هذه المتطلبات مع مقدّم الرعاية المعالج قبل السفر.</p>"))
+        c = secs.get("What should be confirmed before travelling?", "")
+        ck = ("dental" if c.startswith("Confirm the diagnosis") else "eye" if c.startswith("Confirm what examinations") else
+              "fertility" if c.startswith("Confirm required records") else "surgical" if c else None)
+        if ck: blocks.append(sec("ما يجب تأكيده قبل السفر", f"<p>{CONFIRM_AR[ck]}</p>"))
+        if "When can a patient fly home?" in secs:
+            blocks.append(sec("متى يمكنني السفر عائداً إلى بلدي؟", "<p>لا توجد مدة زمنية آمنة تنطبق على الجميع. يجب أن يحدّد الطبيب المعالج توقيت السفر بناءً على الإجراء وتعافيك الشخصي ومواعيد المتابعة اللازمة بعد العلاج.</p>"))
+        if "When can a patient travel home?" in secs:
+            blocks.append(sec("متى يمكنني السفر عائداً؟", "<p>يجب أن يتبع توقيت السفر نصيحة طبيب العيون المعالج ونتائج الفحص الفردية. ولا يمكن تحديد مدة عامة للقدرة على السفر دون دعم سريري خاص بالعلاج.</p>"))
+        if "What happens after the results?" in secs:
+            blocks.append(sec("ماذا يحدث بعد ظهور النتائج؟", "<p>ينبغي أن يوضّح مقدّم الرعاية كيف تُسلَّم النتائج، وأي النتائج تتطلب تقييماً إضافياً، وما السجلات التي يجب أخذها إلى طبيبك أو الأخصائي المناسب في بلدك. ولا يمكن لأي فحص أن يعد بتشخيص أو باستبعاد شامل للأمراض.</p>"))
+        if "Does this page need recovery or fitness-to-fly advice?" in secs:
+            blocks.append(sec("هل أحتاج إلى التخطيط وفق قيود على السفر؟", "<p>لا تُناقَش قيود السفر إلا عندما يفرضها فحص أو إجراء معيّن. ويقدّم لك مقدّم الرعاية المعالج النصيحة بشأن أي قيود تنطبق عليك.</p>"))
+        for h, body in GUIDES_AR.get(sid, []):
+            blocks.append(sec(esc(h), f"<p>{esc(body)}</p>" if isinstance(body, str) else '<ul class="plain-list">' + "".join(f"<li>{esc(b)}</li>" for b in body) + "</ul>"))
+        if "What affects the cost?" in secs:
+            cost_h, cost_p = "ما الذي يؤثر على التكلفة؟", ("قد تختلف التكلفة بحسب نطاق العلاج والفحوصات التشخيصية والمواد والعمل المخبري وعدد الأسنان أو مواضع العلاج وعدد المراحل. "
+                              "ويقدّم مقدّم الرعاية عرض سعر العلاج الطبي مباشرةً، ولا تنشر threeeight35° رسوم العلاج ولا تتقاضاها. ويقدّم مقدّم الرعاية عرض السعر كتابياً بعد التقييم.")
+        else:
+            cost_h, cost_p = "كيف يُسعَّر العلاج؟", ("لا تنشر threeeight35° أسعار العلاج. ويُسعَّر العلاج الطبي والرسوم السريرية ويُدفعان مباشرةً إلى العيادة أو المستشفى المستقل، "
+                              "وينبغي أن تحصل على عرض سعر مكتوب من مقدّم الرعاية بعد التقييم. وتُؤكَّد العوامل التي تؤثر على عرض السعر مع مقدّم الرعاية وفق خطتك الفردية.")
+        blocks.append(sec(cost_h, f'<p>{cost_p}</p><p>تُسعَّر باقات التنسيق من threeeight35° بشكل منفصل، اطّلع على <a href="{rel(cur,"patient-packages/")}">الباقات</a>.</p>'))
+    else:
+        blocks.append(sec("ما يمكنك فعله الآن", f'<p>يمكنك قراءة <a href="{rel(cur,"how-it-works/")}">كيف يعمل تنسيق السفر العلاجي</a>، أو طرح سؤال عام عن التنسيق. لن نقدّم أي استشارة سريرية، وأي سؤال سريري يُوجَّه إلى أخصائي معالج مستقل.</p>'))
+    blocks.append(sec("كيف تندرج threeeight35° في رحلتك؟", f'<p>تنسّق threeeight35° التواصل وتخطيط السفر ومكوّنات الرحلة المؤكَّدة حول الرعاية التي يقدّمها مقدّمو رعاية صحية مستقلون. أما التشخيص وتحديد الملاءمة والموافقة المستنيرة والعلاج وقرارات المتابعة السريرية فهي من مسؤولية أخصائيي الرعاية الصحية المعالجين. اقرأ المزيد <a href="{rel(cur,"about/")}">عن threeeight35°</a> وعن <a href="{rel(cur,"how-it-works/")}">كيف تسير الرحلة</a>.</p>'))
+    rel_ids, _ = related_ids(sid)
+    rl = "".join(f'<li><a href="{rel(cur, TREAT[s]["dir"])}">{esc(TREAT_AR[s])}</a></li>' for s in rel_ids)
+    blocks.append(sec("صفحات ذات صلة", f'<ul class="linklist">{rl}<li><a href="{rel(cur, cat_dir(cid))}">جميع صفحات {esc(cat_ar)}</a></li></ul>'))
+    blocks.append(f'<p class="disclaimer-small">تقدّم هذه الصفحة معلومات عامة عن تنسيق السفر العلاجي فقط. ولا تشخّص أي حالة، ولا توصي بعلاج لشخص بعينه، ولا تغني عن استشارة أخصائي رعاية صحية مؤهّل. <a href="{rel(cur,"medical-disclaimer/")}">إخلاء المسؤولية الطبية</a></p>')
+    aside = f'''<aside class="tside" aria-label="الخطوات التالية"><div class="side-card"><h2>استفسر عن التنسيق</h2><p>أخبرنا بما تبحث عنه، ونحن نساعدك في الجانب العملي من الرحلة.</p>
+<a class="btn btn-navy btn-block" href="{rel(cur,"contact/#enquiry")}">أرسل استفسارك</a>
+<p class="small">يُرجى عدم إرسال سجلات طبية عبر نموذج الاستفسار.</p>
+<ul class="linklist"><li><a href="{rel(cur, cat_dir(cid))}">{esc(cat_ar)}</a></li><li><a href="{rel(cur,"patient-packages/")}">الباقات</a></li></ul></div></aside>'''
+    main = f'''<section class="page-head tpage-head"><div class="container"><p class="eyebrow">{esc(cat_ar)}</p><h1>{esc(name)} في تركيا</h1><p class="lead">{esc(lead)}</p></div></section>
+<div class="container tlayout"><article class="tmain">{"".join(blocks)}</article>{aside}</div>'''
+    main += enquiry_cta(cur)
+    add(p, main, "treatments", crumbs=[("الرئيسية", ""), ("العلاجات", "treatments/"), (cat_ar, cat_dir(cid)), (name, cur)])
 
 INDEX_TREATMENTS = False   # clinical gate: flip to True only when Clinical Review Passed (see README)

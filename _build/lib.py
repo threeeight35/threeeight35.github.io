@@ -99,6 +99,7 @@ for cid, groups in GROUPS.items():
             NAME2ID[LABELS.get(sid, rec_name(r)).lower()] = sid
 NAME2ID['body contouring']='AES-14'; NAME2ID['gynecomastia surgery']='AES-17'
 assert len(TREAT) == 70
+AR_PAGES |= {t["dir"] for t in TREAT.values()}   # Arabic treatment pages (pages.build_treatment_ar)
 V11_BASE = "https://threeeight35.com/medical-travel-agency/"   # site address in the v11 spec; the site now lives at BASE
 for sid, t in TREAT.items():  # URL path integrity vs v11
     assert t["url"] == V11_BASE + t["dir"], (sid, t["url"], V11_BASE + t["dir"])

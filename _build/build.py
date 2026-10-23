@@ -23,6 +23,7 @@ build_privacy(); build_terms(); build_disclaimer(); build_editorial(); build_geo
 set_lang("ar")
 build_home(); build_directory()
 for c in CATS: build_category(c)
+for sid in TREAT: build_treatment(sid)
 build_packages(); build_how(); build_about(); build_faqs(); build_contact()
 build_privacy(); build_terms(); build_disclaimer()
 set_lang("en")
@@ -99,7 +100,7 @@ llms += ["",
 llms += [f"- [{name}]({BASE}{path}): {note}" for path, name, note in KEY_PAGES if path in cleared]
 if "ar/" in cleared:
     llms += ["", "## العربية (Arabic)",
-             f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue and category pages, privacy, terms and medical disclaimer"]
+             f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms and medical disclaimer"]
 open(os.path.join(out, "llms.txt"), "w", encoding="utf-8").write("\n".join(llms) + "\n")
 
 # register
@@ -110,5 +111,5 @@ with open(os.path.join(out, "_build", "pages-register.csv"), "w", newline="", en
 # self-check: robots meta in generated HTML must equal register and sitemap
 for p in PAGES:
     assert ('content="index,follow' in p["html"]) == p["indexable"], p["path"]
-assert len(PAGES) - len(urls) == len(HELD_FROM_INDEX)
+assert len(PAGES) - len(urls) == sum(p["id"].removesuffix("-AR") in HELD_FROM_INDEX for p in PAGES)   # held pages, in both languages
 print("pages:", len(PAGES), "indexable:", len(urls))
