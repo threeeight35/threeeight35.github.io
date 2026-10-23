@@ -25,7 +25,7 @@ build_home(); build_directory()
 for c in CATS: build_category(c)
 for sid in TREAT: build_treatment(sid)
 build_packages(); build_how(); build_about(); build_faqs(); build_contact()
-build_privacy(); build_terms(); build_disclaimer()
+build_privacy(); build_terms(); build_disclaimer(); build_editorial()
 set_lang("en")
 assert {p["en_path"] for p in PAGES if p["path"].startswith("ar/")} == AR_PAGES
 
@@ -100,7 +100,7 @@ llms += ["",
 llms += [f"- [{name}]({BASE}{path}): {note}" for path, name, note in KEY_PAGES if path in cleared]
 if "ar/" in cleared:
     llms += ["", "## العربية (Arabic)",
-             f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms and medical disclaimer"]
+             f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms, medical disclaimer and editorial policy"]
 open(os.path.join(out, "llms.txt"), "w", encoding="utf-8").write("\n".join(llms) + "\n")
 
 # register

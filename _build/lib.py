@@ -21,7 +21,7 @@ def set_lang(code): _LANG["code"] = code
 def is_ar(): return _LANG["code"] == "ar"
 def L(en, ar): return ar if is_ar() else en
 AR_PAGES = {"", "treatments/", "patient-packages/", "how-it-works/", "about/", "faqs/", "contact/",
-            "privacy/", "terms/", "medical-disclaimer/"} | {f"treatments/{c[1]}/" for c in CATS}
+            "privacy/", "terms/", "medical-disclaimer/", "editorial-policy/"} | {f"treatments/{c[1]}/" for c in CATS}
 def arrow(): return L("→", "←")
 def ltr(s): return L(s, f'<span dir="ltr">{s}</span>')   # keeps phone numbers in left-to-right order on Arabic pages
 def cat_name(cid): return L(next(c[2] for c in CATS if c[0] == cid), CAT_AR[cid][0])
@@ -228,7 +228,7 @@ def footer(cur):
     nav = [(L("Home", "الرئيسية"), ""), (L("Treatments Catalogue", "دليل العلاجات"), "treatments/"), (L("Medical Travel Packages", "باقات السفر العلاجي"), "patient-packages/"),
            (L("How It Works", "كيف نعمل"), "how-it-works/"), (L("About Us", "من نحن"), "about/"), (L("FAQs", "الأسئلة الشائعة"), "faqs/"), (L("Contact & Enquiries", "التواصل والاستفسارات"), "contact/")]
     legal = [(L("Privacy Policy", "سياسة الخصوصية"), "privacy/"), (L("Terms & Conditions", "الشروط والأحكام"), "terms/"),
-             (L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية"), "medical-disclaimer/"), (L("Editorial Policy", "السياسة التحريرية (بالإنجليزية)"), "editorial-policy/")]
+             (L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية"), "medical-disclaimer/"), (L("Editorial Policy", "السياسة التحريرية"), "editorial-policy/")]
     ln = lambda items: "".join(f'<li><a href="{rel(cur, t)}">{esc(l)}</a></li>' for l, t in items)
     notice = L(esc(NOTICE), f"<strong>{NOTICE_AR_TITLE}:</strong> {NOTICE_AR_BODY}")
     return f'''<footer class="footer">

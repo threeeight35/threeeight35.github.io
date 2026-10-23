@@ -109,7 +109,7 @@ f'''<section class="section"><div class="container prose"><h2>من نحن</h2>
     main += section("", L("Our Core Values", "قيمنا الأساسية"), "", vh, tone="tone-cream")
     main += f'<section class="section" id="founder"><div class="container">{founder_block(cur)}</div></section>'
     main += L(f'''<section class="section tone-cream"><div class="container prose"><h2>Where to go next</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">Contact / Confidential Enquiry</a></li><li><a href="{rel(cur,"treatments/")}">Treatments Catalogue</a></li><li><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical Travel to Türkiye from Australia</a></li><li><a href="{rel(cur,"privacy/")}">Privacy Policy</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">Medical Information Disclaimer</a></li><li><a href="{rel(cur,"editorial-policy/")}">Editorial Policy</a></li></ul></div></section>''',
-              f'''<section class="section tone-cream"><div class="container prose"><h2>إلى أين بعد ذلك؟</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">التواصل والاستفسار السرّي</a></li><li><a href="{rel(cur,"treatments/")}">دليل العلاجات</a></li><li><a href="{rel(cur,"patient-packages/")}">الباقات</a></li><li><a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">إخلاء المسؤولية الطبية</a></li></ul></div></section>''')
+              f'''<section class="section tone-cream"><div class="container prose"><h2>إلى أين بعد ذلك؟</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">التواصل والاستفسار السرّي</a></li><li><a href="{rel(cur,"treatments/")}">دليل العلاجات</a></li><li><a href="{rel(cur,"patient-packages/")}">الباقات</a></li><li><a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">إخلاء المسؤولية الطبية</a></li><li><a href="{rel(cur,"editorial-policy/")}">السياسة التحريرية</a></li></ul></div></section>''')
     fnd = {"@context": "https://schema.org", "@type": "Person", "@id": BASE + "about/#founder", "name": "Hommam Azizieh", "jobTitle": "Founder",
            "image": abs_url("assets/img/founder-hommam-azizieh-843.jpg"), "knowsLanguage": ["English", "Arabic", "Turkish"],
            "worksFor": {"@id": BASE + "#organization"}}
@@ -237,15 +237,21 @@ def build_disclaimer():
 
 def build_editorial():
     cur = "editorial-policy/"
-    p = dict(path=cur, id="SUP-07", kind="Editorial policy", title="Editorial Policy | threeeight35°",
-             desc="How threeeight35° prepares its medical-travel content: publishing rules, sources, and how provider and package facts are confirmed.",
+    p = dict(path=cur, id="SUP-07", kind="Editorial policy", title=L("Editorial Policy | threeeight35°", "السياسة التحريرية | threeeight35°"),
+             desc=L("How threeeight35° prepares its medical-travel content: publishing rules, sources, and how provider and package facts are confirmed.",
+                    "كيف تُعدّ threeeight35° محتوى السفر العلاجي: قواعد النشر والمصادر وكيفية التحقق من معلومات مقدّمي الرعاية والباقات."),
              indexable=True, status="Derived from Version 11 publishing rules; editorial approval required")
     body = f'''{qa("Our publishing rules", "<ul><li>threeeight35° is a medical-travel coordination agency, not the treating healthcare provider.</li><li>We do not invent prices, provider credentials, accreditation, recovery promises, minimum stays, medication, tests, hotel inclusions, transfers or outcomes.</li><li>Pages use answer-first questions, descriptive internal links and a clear path to the category, the Australia guide and contact.</li><li>Public copy uses Australian English. We use Türkiye editorially; Turkey may appear naturally as a search-language variant.</li></ul>")}
 {qa("Clinical content", "<p>threeeight35° does not publish clinical advice. Our treatment pages cover planning and coordination only. Diagnosis, suitability, risks, recovery and treatment decisions come from your treating healthcare professional after an individual assessment.</p>")}
 {qa("Sources", "<p>Authoritative sources are mapped to substantive medical claims at claim level. A category bibliography is not treated as a substitute for claim-level support.</p>")}
 {qa("Provider and package facts", "<p>Provider-specific facts, prices, inclusions, accommodation, transfers, tests, medicines, stay durations and follow-up promises are verified in writing before publication.</p>")}'''
-    main = pagehead("", "Editorial Policy") + f'<section class="section"><div class="container prose">{body}</div></section>'
-    add(p, main, "", crumbs=[("Home", ""), ("Editorial Policy", cur)])
+    if is_ar():
+        body = f'''{qa("قواعد النشر لدينا", "<ul><li>threeeight35° وكالة لتنسيق السفر العلاجي، وليست مقدّم الرعاية الصحية المعالج.</li><li>لا نختلق الأسعار أو مؤهلات مقدّمي الرعاية أو الاعتمادات أو وعود التعافي أو الحد الأدنى لمدة الإقامة أو الأدوية أو الفحوصات أو ما تشمله الإقامة الفندقية أو التنقلات أو النتائج.</li><li>تبدأ الصفحات بالإجابة عن السؤال مباشرةً، وتستخدم روابط داخلية واضحة، وتوفّر مساراً واضحاً إلى الفئة المعنية وصفحة التواصل.</li><li>يستخدم المحتوى الإنجليزي الإنجليزية الأسترالية، ويستخدم المحتوى العربي اللغة العربية الفصحى المعاصرة واسم «تركيا».</li></ul>")}
+{qa("المحتوى السريري", "<p>لا تنشر threeeight35° أي استشارات سريرية. وتقتصر صفحات العلاج لدينا على التخطيط والتنسيق. أما التشخيص وتحديد الملاءمة والمخاطر والتعافي وقرارات العلاج فتأتي من أخصائي الرعاية الصحية المعالج بعد تقييم فردي.</p>")}
+{qa("المصادر", "<p>تُربط المصادر الموثوقة بكل معلومة طبية جوهرية على حدة. ولا تُعدّ قائمة المراجع العامة للفئة بديلاً عن توثيق كل معلومة.</p>")}
+{qa("معلومات مقدّمي الرعاية والباقات", "<p>نتحقق كتابياً قبل النشر من المعلومات الخاصة بمقدّمي الرعاية، والأسعار، وما تشمله الخدمات، والإقامة، والتنقلات، والفحوصات، والأدوية، ومدد الإقامة، ووعود المتابعة.</p>")}'''
+    main = pagehead("", L("Editorial Policy", "السياسة التحريرية")) + f'<section class="section"><div class="container prose">{body}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Editorial Policy", "السياسة التحريرية"), cur)])
 
 # ---------------- GEO hub + spokes ----------------
 SMART = "https://www.smartraveller.gov.au/travel-essentials/travel-health/medical-tourism"
