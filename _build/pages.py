@@ -2,6 +2,7 @@
 from components import *
 from treatment_guides import GUIDES, GUIDE_META
 from treatments_ar import FOCUS_AR, UND_END_AR, CONFIRM_AR, GUIDES_AR, GUIDE_META_AR
+from treatments_tr import FOCUS_TR, UND_END_TR, CONFIRM_TR, GUIDES_TR, GUIDE_META_TR
 
 PAGES = []   # dicts: path, html, indexable, id, title, kind, status
 # ---- CENTRAL INDEXING GATE -------------------------------------------------------------
@@ -30,7 +31,7 @@ def outstanding_review(p):
 def add(p, main, active="", crumbs=None, hero=False, extra_ld=None):
     cur = p["path"]
     p["en_path"] = cur
-    if is_ar(): p["canon"] = "ar/" + cur
+    if lang() != "en": p["canon"] = prefix() + cur
     p["indexable"] = p["id"] not in HELD_FROM_INDEX
     p["robots"] = "index,follow,max-image-preview:large" if p["indexable"] else "noindex,follow"
     p["gate"] = gate_reason(p)
@@ -42,7 +43,7 @@ def add(p, main, active="", crumbs=None, hero=False, extra_ld=None):
     bc = breadcrumb_html(cur, crumbs) if crumbs and len(crumbs) > 1 else ""
     html_ = head(p) + header(cur, active) + f'\n<main id="main" tabindex="-1" data-cms-id="{p["id"]}">{bc}{main}</main>\n' + footer(cur)
     p["html"] = html_
-    if is_ar(): p["path"] = "ar/" + cur; p["id"] += "-AR"; p["kind"] += " (Arabic)"
+    if lang() != "en": p["path"] = prefix() + cur; p["id"] += "-" + lang().upper(); p["kind"] += f" ({LANG_INFO[lang()]['name']})"
     PAGES.append(p)
 
 def pagehead(eyebrow, h1, lead="", cls=""):
@@ -56,80 +57,80 @@ def prose(html_, cls=""):
 # ======================= HOME =======================
 def build_home():
     cur = ""
-    p = dict(path="", id="SUP-01", kind="Agency home", title=L("threeeight35° | Medical Travel Coordination for Türkiye", "وكالة threeeight35° للسفر العلاجي | رحلتك الصحية، بلا حدود."),
+    p = dict(path="", id="SUP-01", kind="Agency home", title=L("threeeight35° | Medical Travel Coordination for Türkiye", "وكالة threeeight35° للسفر العلاجي | رحلتك الصحية، بلا حدود.", "threeeight35° | Türkiye'de Tıbbi Seyahat Koordinasyonu"),
              desc=L("Personalised medical travel coordination connecting patients from Australia, the UAE and other markets with independent healthcare providers in Türkiye.",
-                    "تنسيق شخصي للسفر العلاجي يربط المرضى من الإمارات وأستراليا والأسواق الأخرى بمقدّمي رعاية صحية مستقلين في تركيا."),
+                    "تنسيق شخصي للسفر العلاجي يربط المرضى من الإمارات وأستراليا والأسواق الأخرى بمقدّمي رعاية صحية مستقلين في تركيا.", "Avustralya, BAE ve diğer pazarlardaki hastaları Türkiye'deki bağımsız sağlık kuruluşlarıyla buluşturan kişiye özel tıbbi seyahat koordinasyonu."),
              indexable=True, status="Business identity verified; clinical review not applicable to this page; technical QA pending")
     hero_img = img(cur, "16_health_journey_istanbul",
-                   L("Sunset over the Istanbul skyline and waterway, with domed mosques and a ferry below an aeroplane in the sky.", "غروب الشمس فوق أفق إسطنبول ومضيق البوسفور، مع مساجد بقباب وعبّارة وطائرة في السماء."),
+                   L("Sunset over the Istanbul skyline and waterway, with domed mosques and a ferry below an aeroplane in the sky.", "غروب الشمس فوق أفق إسطنبول ومضيق البوسفور، مع مساجد بقباب وعبّارة وطائرة في السماء.", "İstanbul silueti ve Boğaz üzerinde gün batımı; kubbeli camiler, bir vapur ve gökyüzünde bir uçak."),
                    "(min-width: 960px) 52vw, 100vw", cls="hero-img", eager=True, fetch=True, pick=1440)
-    vid = f'<a class="btn btn-outline-light" href="{VIDEO_CONSULT_URL}">{L("Schedule Video Consultation", "احجز استشارة عبر الفيديو")}</a>' if VIDEO_CONSULT_URL else ""
+    vid = f'<a class="btn btn-outline-light" href="{VIDEO_CONSULT_URL}">{L("Schedule Video Consultation", "احجز استشارة عبر الفيديو", "Görüntülü Görüşme Planlayın")}</a>' if VIDEO_CONSULT_URL else ""
     main = f'''<section class="hero"><div class="hero-copy"><div class="hero-copy-in">
-<p class="eyebrow eyebrow-on-dark">{L("AUSTRALIA · UAE · TÜRKİYE", "أستراليا · الإمارات · تركيا")}</p>
-<h1>{L("Your Health Journey, <span>Beyond Borders.</span>", "رحلتك الصحية، <span>بلا حدود.</span>")}</h1>
-<p class="hero-sub">{L("Personalised medical travel coordination connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye.", "تنسيق شخصي للسفر العلاجي يربط المرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى بمقدّمي رعاية صحية مستقلين في تركيا.")}</p>
-<p class="hero-line">{L("Precisely coordinated. Transparently guided.", "تنسيق دقيق. وإرشاد بشفافية.")}</p>
-<div class="btn-row"><a class="btn btn-gold" href="{rel(cur,"contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك")}</a><a class="btn btn-outline-light" href="{rel(cur,"treatments/")}">{L("Explore Treatments", "استكشف العلاجات")}</a>{vid}</div>
-<dl class="hero-stats"><div><dt>{L("Medical categories", "فئات طبية")}</dt><dd>8</dd></div><div><dt>{L("Languages", "اللغات")}</dt><dd class="dd-langs">{L('<span aria-hidden="true">EN · AR · TR</span><span class="sr-only">English, Arabic, Turkish</span>', '<span class="nw">عربي ·</span> <span class="nw">إنجليزي ·</span> <span class="nw">تركي</span>')}</dd></div><div><dt>{L("Coordination", "تنسيق شخصي")}</dt><dd>1:1</dd></div></dl>
+<p class="eyebrow eyebrow-on-dark">{L("AUSTRALIA · UAE · TÜRKİYE", "أستراليا · الإمارات · تركيا", "AVUSTRALYA · BAE · TÜRKİYE")}</p>
+<h1>{L("Your Health Journey, <span>Beyond Borders.</span>", "رحلتك الصحية، <span>بلا حدود.</span>", "Sağlık Yolculuğunuz, <span>Sınırların Ötesinde.</span>")}</h1>
+<p class="hero-sub">{L("Personalised medical travel coordination connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye.", "تنسيق شخصي للسفر العلاجي يربط المرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى بمقدّمي رعاية صحية مستقلين في تركيا.", "Avustralya, BAE ve diğer uluslararası pazarlardaki hastaları Türkiye'deki bağımsız sağlık kuruluşlarıyla buluşturan kişiye özel tıbbi seyahat koordinasyonu.")}</p>
+<p class="hero-line">{L("Precisely coordinated. Transparently guided.", "تنسيق دقيق. وإرشاد بشفافية.", "Titizlikle koordine edilir. Şeffaflıkla yönlendirilir.")}</p>
+<div class="btn-row"><a class="btn btn-gold" href="{rel(cur,"contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك", "Talep Gönderin")}</a><a class="btn btn-outline-light" href="{rel(cur,"treatments/")}">{L("Explore Treatments", "استكشف العلاجات", "Tedavileri Keşfedin")}</a>{vid}</div>
+<dl class="hero-stats"><div><dt>{L("Medical categories", "فئات طبية", "Tıbbi kategoriler")}</dt><dd>8</dd></div><div><dt>{L("Languages", "اللغات", "Diller")}</dt><dd class="dd-langs">{L('<span aria-hidden="true">EN · AR · TR</span><span class="sr-only">English, Arabic, Turkish</span>', '<span class="nw">عربي ·</span> <span class="nw">إنجليزي ·</span> <span class="nw">تركي</span>', '<span aria-hidden="true">EN · AR · TR</span><span class="sr-only">İngilizce, Arapça, Türkçe</span>')}</dd></div><div><dt>{L("Coordination", "تنسيق شخصي", "Koordinasyon")}</dt><dd>1:1</dd></div></dl>
 </div></div><div class="hero-media">{hero_img}</div></section>
 <section class="boundary"><div class="container"><p>{L("<strong>threeeight35° is a coordination service, not a healthcare provider.</strong> We do not diagnose, prescribe or recommend treatment. All clinical assessment and medical care are provided independently by licensed healthcare professionals in Türkiye.",
-                                                        "<strong>threeeight35° خدمة تنسيق، وليست مقدّم رعاية صحية.</strong> نحن لا نشخّص ولا نصف ولا نوصي بأي علاج. ويُقدَّم كل تقييم سريري وكل رعاية طبية بشكل مستقل من قِبل أخصائيي رعاية صحية مرخّصين في تركيا.")}</p></div></section>'''
-    main += section(L("MEDICAL CATEGORIES", "الفئات الطبية"), L("Explore Medical Categories", "استكشف الفئات الطبية"),
+                                                        "<strong>threeeight35° خدمة تنسيق، وليست مقدّم رعاية صحية.</strong> نحن لا نشخّص ولا نصف ولا نوصي بأي علاج. ويُقدَّم كل تقييم سريري وكل رعاية طبية بشكل مستقل من قِبل أخصائيي رعاية صحية مرخّصين في تركيا.", "<strong>threeeight35° bir koordinasyon hizmetidir, sağlık hizmeti sağlayıcısı değildir.</strong> Teşhis koymaz, reçete yazmaz ve tedavi önermeyiz. Tüm klinik değerlendirme ve tıbbi bakım, Türkiye'deki lisanslı sağlık profesyonelleri tarafından bağımsız olarak sağlanır.")}</p></div></section>'''
+    main += section(L("MEDICAL CATEGORIES", "الفئات الطبية", "TIBBİ KATEGORİLER"), L("Explore Medical Categories", "استكشف الفئات الطبية", "Tıbbi Kategorileri Keşfedin"),
                     L("Eight medical categories, each with its own treatment pages. Treatment pages explain how to plan and what to confirm; clinical decisions stay with your treating provider.",
-                      "ثماني فئات طبية، لكل منها صفحاتها العلاجية. تشرح صفحات العلاج كيفية التخطيط وما يجب التأكد منه، بينما تبقى القرارات السريرية لمقدّم الرعاية المعالج."),
-                    categories_grid(cur) + f'<p class="center" style="margin-top:2rem"><a class="btn btn-navy" href="{rel(cur,"treatments/")}">{L("View the full treatments catalogue", "عرض دليل العلاجات الكامل")}</a></p>', hid="categories")
-    main += section(L("PATIENT-CENTRED COORDINATION", "تنسيق يتمحور حول المريض"), L("Why Coordinated Medical Travel?", "لماذا السفر العلاجي المنسَّق؟"),
+                      "ثماني فئات طبية، لكل منها صفحاتها العلاجية. تشرح صفحات العلاج كيفية التخطيط وما يجب التأكد منه، بينما تبقى القرارات السريرية لمقدّم الرعاية المعالج.", "Her birinin kendi tedavi sayfaları olan sekiz tıbbi kategori. Tedavi sayfaları nasıl planlama yapacağınızı ve neyi teyit etmeniz gerektiğini açıklar; klinik kararlar tedaviyi yürüten sağlık kuruluşunuza aittir."),
+                    categories_grid(cur) + f'<p class="center" style="margin-top:2rem"><a class="btn btn-navy" href="{rel(cur,"treatments/")}">{L("View the full treatments catalogue", "عرض دليل العلاجات الكامل", "Tüm tedavi kataloğunu görüntüleyin")}</a></p>', hid="categories")
+    main += section(L("PATIENT-CENTRED COORDINATION", "تنسيق يتمحور حول المريض", "HASTA ODAKLI KOORDİNASYON"), L("Why Coordinated Medical Travel?", "لماذا السفر العلاجي المنسَّق؟", "Neden Koordineli Tıbbi Seyahat?"),
                     L("Medical travel requires thoughtful planning, direct communication with treating healthcare professionals, and transparent arrangements.",
-                      "يتطلب السفر العلاجي تخطيطاً مدروساً، وتواصلاً مباشراً مع أخصائيي الرعاية الصحية المعالجين، وترتيبات تتسم بالشفافية."), why_cards(), tone="tone-cream")
+                      "يتطلب السفر العلاجي تخطيطاً مدروساً، وتواصلاً مباشراً مع أخصائيي الرعاية الصحية المعالجين، وترتيبات تتسم بالشفافية.", "Tıbbi seyahat; özenli planlama, tedaviyi yürüten sağlık profesyonelleriyle doğrudan iletişim ve şeffaf düzenlemeler gerektirir."), why_cards(), tone="tone-cream")
     main += accommodation_section(cur)
-    main += section(L("PACKAGES", "الباقات"), L("Medical Travel Coordination Packages", "باقات تنسيق السفر العلاجي"),
+    main += section(L("PACKAGES", "الباقات", "PAKETLER"), L("Medical Travel Coordination Packages", "باقات تنسيق السفر العلاجي", "Tıbbi Seyahat Koordinasyon Paketleri"),
                     L("threeeight35° package prices include our non-clinical coordination, your accommodation and private transfers in Istanbul. Medical treatment and flights are paid separately.",
-                      "تشمل أسعار باقات threeeight35° خدمات التنسيق غير السريرية وإقامتك وتنقلاتك الخاصة في إسطنبول. ويُدفع العلاج الطبي وتذاكر الطيران بشكل منفصل."),
-                    package_cards(cur) + f'<p class="center"><a class="more" href="{rel(cur,"patient-packages/")}">{L("How package, treatment and flight costs fit together", "كيف تتوزع تكاليف الباقة والعلاج والطيران")} <span aria-hidden="true">{arrow()}</span></a></p>', hid="packages")
-    main += section(L("THE PATIENT JOURNEY", "رحلة المريض"), L("How It Works", "كيف نعمل"), L("From first enquiry to follow-up coordination after you return home.", "من الاستفسار الأول حتى تنسيق المتابعة بعد عودتك."),
-                    journey_list(cur) + f'<p class="center"><a class="more" href="{rel(cur,"how-it-works/")}">{L("Read the full journey", "اقرأ تفاصيل الرحلة كاملة")} <span aria-hidden="true">{arrow()}</span></a></p>', tone="tone-cream")
-    main += section(L("ABOUT", "من نحن"), L("About threeeight35°", "عن threeeight35°"), "", f'<p class="prose-lead">{esc(L("threeeight35° Medical Travel Agency is an independent medical travel coordination service for patients from Australia, the UAE and other international markets who are exploring treatment in Türkiye. We manage the practical side of the journey and leave every clinical decision to independent, licensed clinicians.", "وكالة threeeight35° للسفر العلاجي هي خدمة مستقلة لتنسيق السفر العلاجي للمرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى الذين يستكشفون العلاج في تركيا. نتولى الجانب العملي من الرحلة، ونترك كل قرار سريري لأطباء مستقلين ومرخّصين."))}</p>' + founder_block(cur, full=False))
+                      "تشمل أسعار باقات threeeight35° خدمات التنسيق غير السريرية وإقامتك وتنقلاتك الخاصة في إسطنبول. ويُدفع العلاج الطبي وتذاكر الطيران بشكل منفصل.", "threeeight35° paket fiyatları, klinik dışı koordinasyonumuzu, konaklamanızı ve İstanbul'daki özel transferlerinizi kapsar. Tıbbi tedavi ve uçuşlar ayrıca ödenir."),
+                    package_cards(cur) + f'<p class="center"><a class="more" href="{rel(cur,"patient-packages/")}">{L("How package, treatment and flight costs fit together", "كيف تتوزع تكاليف الباقة والعلاج والطيران", "Paket, tedavi ve uçuş maliyetlerinin nasıl ayrıldığı")} <span aria-hidden="true">{arrow()}</span></a></p>', hid="packages")
+    main += section(L("THE PATIENT JOURNEY", "رحلة المريض", "HASTA YOLCULUĞU"), L("How It Works", "كيف نعمل", "Nasıl Çalışır"), L("From first enquiry to follow-up coordination after you return home.", "من الاستفسار الأول حتى تنسيق المتابعة بعد عودتك.", "İlk talepten eve dönüşünüzden sonraki takip koordinasyonuna kadar."),
+                    journey_list(cur) + f'<p class="center"><a class="more" href="{rel(cur,"how-it-works/")}">{L("Read the full journey", "اقرأ تفاصيل الرحلة كاملة", "Yolculuğun tamamını okuyun")} <span aria-hidden="true">{arrow()}</span></a></p>', tone="tone-cream")
+    main += section(L("ABOUT", "من نحن", "HAKKIMIZDA"), L("About threeeight35°", "عن threeeight35°", "threeeight35° Hakkında"), "", f'<p class="prose-lead">{esc(L("threeeight35° Medical Travel Agency is an independent medical travel coordination service for patients from Australia, the UAE and other international markets who are exploring treatment in Türkiye. We manage the practical side of the journey and leave every clinical decision to independent, licensed clinicians.", "وكالة threeeight35° للسفر العلاجي هي خدمة مستقلة لتنسيق السفر العلاجي للمرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى الذين يستكشفون العلاج في تركيا. نتولى الجانب العملي من الرحلة، ونترك كل قرار سريري لأطباء مستقلين ومرخّصين.", "threeeight35° Tıbbi Seyahat Acentesi, Türkiye'de tedavi seçeneklerini araştıran Avustralya, BAE ve diğer uluslararası pazarlardaki hastalar için bağımsız bir tıbbi seyahat koordinasyon hizmetidir. Yolculuğun pratik tarafını üstlenir, her klinik kararı bağımsız ve lisanslı hekimlere bırakırız."))}</p>' + founder_block(cur, full=False))
     main += contact_cards(cur)
     main += enquiry_cta(cur)
     org = dict(ORG_LD)
     site = {"@context": "https://schema.org", "@type": "WebSite", "@id": BASE + "#website", "name": SITE, "url": BASE, "inLanguage": "en-AU", "publisher": {"@id": BASE + "#organization"}}
-    add(p, main, "home", crumbs=[(L("Home", "الرئيسية"), "")], hero=True, extra_ld=[org, site])
+    add(p, main, "home", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), "")], hero=True, extra_ld=[org, site])
 
 # ======================= TREATMENT DIRECTORY =======================
 def tag(t):
-    if t["hub"]: return f'<span class="tag">{L("Guide", "دليل")}</span>'
+    if t["hub"]: return f'<span class="tag">{L("Guide", "دليل", "Rehber")}</span>'
     return ""
 
-def treat_label(sid): return L(TREAT[sid]["label"], TREAT_AR[sid])
+def treat_label(sid): return L(TREAT[sid]["label"], TREAT_AR[sid], TREAT_TR[sid])
 def treat_link_attrs(): return ""
 EN_ONLY_NOTE_AR = ""
 
 def build_directory():
     cur = "treatments/"
-    p = dict(path=cur, id="SUP-02", kind="Treatments directory", title=L("Treatments Catalogue | threeeight35° Medical Travel Agency", "دليل العلاجات | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-02", kind="Treatments directory", title=L("Treatments Catalogue | threeeight35° Medical Travel Agency", "دليل العلاجات | وكالة threeeight35° للسفر العلاجي", "Tedavi Kataloğu | threeeight35° Tıbbi Seyahat Acentesi"),
              desc=L("Browse 8 medical categories and 70 treatment pages for planning treatment in Türkiye. Coordination by threeeight35°; care by independent providers.",
-                    "تصفّح 8 فئات طبية و70 صفحة علاجية للتخطيط للعلاج في تركيا. التنسيق من threeeight35°، والرعاية من مقدّمي رعاية صحية مستقلين."),
+                    "تصفّح 8 فئات طبية و70 صفحة علاجية للتخطيط للعلاج في تركيا. التنسيق من threeeight35°، والرعاية من مقدّمي رعاية صحية مستقلين.", "Türkiye'de tedavi planlamak için 8 tıbbi kategori ve 70 tedavi sayfasına göz atın. Koordinasyon threeeight35°'ten, bakım bağımsız sağlık kuruluşlarından."),
              indexable=True, status="Technical QA pending")
     blocks = []
     for cid, slug, name, stem, alt, intro in CATS:
         n = sum(len(i) for _, i in GROUPS[cid])
         en_name = name
-        if is_ar(): name, intro, alt = CAT_AR[cid][0], CAT_AR[cid][1], CAT_AR[cid][2]
+        if lang() != "en": name, intro, alt = cat_tx(cid)[:3]
         gh = []
         for g, ids in GROUPS[cid]:
-            gname = L(g, GROUP_AR.get(g)) if g else None
-            lis = "".join(f'<li data-search="{att((TREAT[s]["label"]+" "+en_name+" "+(g or "")+L("", " "+TREAT_AR[s]+" "+name+" "+(gname or ""))).lower())}"><a href="{rel(cur, TREAT[s]["dir"])}"{treat_link_attrs()}>{esc(treat_label(s))}</a>{tag(TREAT[s])}</li>' for s in ids)
+            gname = L(g, GROUP_AR.get(g), GROUP_TR.get(g)) if g else None
+            lis = "".join(f'<li data-search="{att((TREAT[s]["label"]+" "+en_name+" "+(g or "")+L("", " "+TREAT_AR[s]+" "+name+" "+(gname or ""), " "+TREAT_TR[s]+" "+name+" "+(gname or ""))).lower())}"><a href="{rel(cur, TREAT[s]["dir"])}"{treat_link_attrs()}>{esc(treat_label(s))}</a>{tag(TREAT[s])}</li>' for s in ids)
             gh.append((f'<h4 class="grp">{esc(gname)}</h4>' if gname else "") + f'<ul class="tlist">{lis}</ul>')
         blocks.append(f'''<section class="dir-cat" id="{slug}" aria-labelledby="h-{slug}"><div class="dir-media">{img(cur, stem, alt, "(min-width: 900px) 28vw, 92vw", cls="dir-img")}</div>
 <div class="dir-body"><p class="cat-count">{treatment_pages(n)}</p><h3 id="h-{slug}"><a href="{rel(cur, cat_dir(cid))}">{esc(name)}</a></h3><p>{esc(intro)}</p>{"".join(gh)}</div></section>''')
-    search = f'''<div class="search"><label for="tsearch">{L("Search treatments", "ابحث عن علاج")}</label><input id="tsearch" type="search" placeholder="{L("For example: dental implants, IVF, hernia", "مثال: زراعة الأسنان، أطفال الأنابيب، الفتق")}" autocomplete="off" data-dir-search>
-<p id="tsearch-status" class="small" role="status" aria-live="polite">{L("Showing all treatments", "عرض جميع العلاجات")}</p><button type="button" class="btn btn-outline-navy" data-dir-reset hidden>{L("Reset search", "إعادة ضبط البحث")}</button></div>'''
-    main = pagehead(L("AUTHORITATIVE DIRECTORY", "الدليل الشامل"), L("Treatments Catalogue", "دليل العلاجات"),
+    search = f'''<div class="search"><label for="tsearch">{L("Search treatments", "ابحث عن علاج", "Tedavi arayın")}</label><input id="tsearch" type="search" placeholder="{L("For example: dental implants, IVF, hernia", "مثال: زراعة الأسنان، أطفال الأنابيب، الفتق", "Örneğin: diş implantı, tüp bebek, fıtık")}" autocomplete="off" data-dir-search>
+<p id="tsearch-status" class="small" role="status" aria-live="polite">{L("Showing all treatments", "عرض جميع العلاجات", "Tüm tedaviler gösteriliyor")}</p><button type="button" class="btn btn-outline-navy" data-dir-reset hidden>{L("Reset search", "إعادة ضبط البحث", "Aramayı sıfırla")}</button></div>'''
+    main = pagehead(L("AUTHORITATIVE DIRECTORY", "الدليل الشامل", "KAPSAMLI REHBER"), L("Treatments Catalogue", "دليل العلاجات", "Tedavi Kataloğu"),
                     L("8 medical categories and 70 treatment pages. Group headings are for navigation only. Treatment prices are not published by threeeight35°: treatment is quoted by and paid directly to the independent clinic or hospital.",
-                      "8 فئات طبية و70 صفحة علاجية. العناوين الفرعية للتصفّح فقط. لا تنشر threeeight35° أسعار العلاج، إذ يُسعَّر العلاج ويُدفع مباشرةً إلى العيادة أو المستشفى المستقل."))
-    main += f'<section class="section"><div class="container">{search}{L("", EN_ONLY_NOTE_AR)}<div class="dir-list">{"".join(blocks)}</div></div></section>'
+                      "8 فئات طبية و70 صفحة علاجية. العناوين الفرعية للتصفّح فقط. لا تنشر threeeight35° أسعار العلاج، إذ يُسعَّر العلاج ويُدفع مباشرةً إلى العيادة أو المستشفى المستقل.", "8 tıbbi kategori ve 70 tedavi sayfası. Grup başlıkları yalnızca gezinme içindir. threeeight35° tedavi fiyatlarını yayınlamaz: tedavi, bağımsız klinik veya hastane tarafından fiyatlandırılır ve doğrudan onlara ödenir."))
+    main += f'<section class="section"><div class="container">{search}{L("", EN_ONLY_NOTE_AR, "")}<div class="dir-list">{"".join(blocks)}</div></div></section>'
     main += enquiry_cta(cur)
-    add(p, main, "treatments", crumbs=[(L("Home", "الرئيسية"), ""), (L("Treatments", "العلاجات"), "treatments/")])
+    add(p, main, "treatments", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Treatments", "العلاجات", "Tedaviler"), "treatments/")])
 
 # ======================= CATEGORY PAGES =======================
 def build_category(c):
@@ -150,7 +151,7 @@ def build_category(c):
      "CAT-08": "Research general surgery in Türkiye — hernia, gallbladder and other procedures — and plan travel and follow-up from Australia with threeeight35°.",
     }[cid]
     h1 = f"{name} in Türkiye"
-    if is_ar(): name, intro, alt, h1, title, desc = CAT_AR[cid]
+    if lang() != "en": name, intro, alt, h1, title, desc = cat_tx(cid)
     p = dict(path=cur, id=cid, kind="Category landing page", title=title, desc=desc, indexable=True,
              status="Editorial remediation complete; clinical review pending; technical QA pending")
     groups_html = []
@@ -160,33 +161,38 @@ def build_category(c):
             t = TREAT[s]
             focus = ""
             m = re.search(r"should be researched in the context of (.*?)\. The final clinical plan", t["rec"]["pre"])
-            if m and not t["held"]: focus = L(m.group(1), FOCUS_AR.get(s, ""))
-            if t["held"]: focus = L("Coordination enquiries only", "استفسارات التنسيق فقط")
-            elif t["hub"]: focus = L("Guide to the specific options under this broader term", "دليل للخيارات المحددة ضمن هذا المصطلح العام")
-            elif focus: focus = focus[0].upper() + focus[1:]
+            if m and not t["held"]: focus = L(m.group(1), FOCUS_AR.get(s, ""), FOCUS_TR.get(s, ""))
+            if t["held"]: focus = L("Coordination enquiries only", "استفسارات التنسيق فقط", "Yalnızca koordinasyon talepleri")
+            elif t["hub"]: focus = L("Guide to the specific options under this broader term", "دليل للخيارات المحددة ضمن هذا المصطلح العام", "Bu genel terim altındaki belirli seçeneklere yönelik rehber")
+            elif focus: focus = upper(focus[0]) + focus[1:]
             cards.append(f'<li class="tcard"><a href="{rel(cur, t["dir"])}"{treat_link_attrs()}><span class="tcard-t">{esc(treat_label(s))}</span><span class="tcard-d">{esc(focus)}</span></a>{tag(t)}</li>')
-        gname = L(g, GROUP_AR.get(g)) if g else None
+        gname = L(g, GROUP_AR.get(g), GROUP_TR.get(g)) if g else None
         groups_html.append((f'<h3 class="grp">{esc(gname)}</h3>' if gname else "") + f'<ul class="tgrid">{"".join(cards)}</ul>')
     media = img(cur, stem, alt, "(min-width: 900px) 40vw, 92vw", cls="cat-hero-img", eager=True, fetch=True)
-    au_btn = L(f'<a class="btn btn-outline-navy" href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical travel from Australia</a>', "")
-    meta = L(f"{n} treatment pages in this category", ar_count(n, "صفحات علاجية", "صفحة علاجية") + " في هذه الفئة")
-    main = f'''<section class="page-head cat-head"><div class="container cat-head-grid"><div><p class="eyebrow">{esc(name.upper())}</p><h1>{esc(h1)}</h1>
+    au_btn = L(f'<a class="btn btn-outline-navy" href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical travel from Australia</a>', "", "")
+    meta = L(f"{n} treatment pages in this category", ar_count(n, "صفحات علاجية", "صفحة علاجية") + " في هذه الفئة", f"Bu kategoride {n} tedavi sayfası")
+    main = f'''<section class="page-head cat-head"><div class="container cat-head-grid"><div><p class="eyebrow">{esc(upper(name))}</p><h1>{esc(h1)}</h1>
 <p class="lead">{esc(intro)}</p><p class="cat-meta">{meta}</p>
-<div class="btn-row"><a class="btn btn-navy" href="{rel(cur,"contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك")}</a>{au_btn}</div></div>
+<div class="btn-row"><a class="btn btn-navy" href="{rel(cur,"contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك", "Talep Gönderin")}</a>{au_btn}</div></div>
 <div class="cat-head-media">{media}</div></div></section>'''
-    main += f'<section class="section"><div class="container"><h2 class="sec-h">{L("Treatments in this category", "العلاجات في هذه الفئة")}</h2>{L("", EN_ONLY_NOTE_AR)}{"".join(groups_html)}</div></section>'
-    if not is_ar():
+    main += f'<section class="section"><div class="container"><h2 class="sec-h">{L("Treatments in this category", "العلاجات في هذه الفئة", "Bu kategorideki tedaviler")}</h2>{L("", EN_ONLY_NOTE_AR, "")}{"".join(groups_html)}</div></section>'
+    if lang() == "en":
         main += section("COSTS", f"How is {name.split(' &')[0].lower() if cid!='CAT-06' else 'health check-up'} cost handled?", "",
             f'<div class="prose"><p>There is no category-wide price. Treatment prices are not published by threeeight35°: medical treatment and clinical fees are quoted by and paid directly to the independent clinic or hospital, in writing, after assessment. threeeight35° coordination package fees are separate — see <a href="{rel(cur,"patient-packages/")}">Patient Packages</a>.</p></div>', tone="tone-cream")
         main += section("TRAVEL FROM AUSTRALIA", "Planning travel, insurance and follow-up", "",
             f'<div class="prose"><p>Questions about travelling from Australia, insurance, flying home, records and privacy are answered in our guide <a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical Travel to Türkiye from Australia</a>. Travel timing is always set by your treating clinician, not by a generic website timeframe.</p></div>')
+    elif lang() == "tr":
+        main += section("MALİYETLER", "Bu kategoride tedavi maliyetleri nasıl belirlenir?", "",
+            f'<div class="prose"><p>Kategori genelinde tek bir fiyat yoktur. threeeight35° tedavi fiyatlarını yayınlamaz: tıbbi tedavi ve klinik ücretleri, değerlendirmeden sonra bağımsız klinik veya hastane tarafından yazılı olarak fiyatlandırılır ve doğrudan onlara ödenir. threeeight35° koordinasyon paketi ücretleri ayrıdır; bkz. <a href="{rel(cur,"patient-packages/")}">Paketler</a>.</p></div>', tone="tone-cream")
+        main += section("SEYAHAT PLANLAMASI", "Seyahat, sigorta ve takip planlaması", "",
+            f'<div class="prose"><p>Seyahat zamanınızı her zaman tedaviyi yürüten hekiminiz belirler; bir web sitesindeki genel bir süre değil. Seyahat sigortanızın komplikasyonları ve tıbbi tahliyeyi kapsadığını kontrol edin; seyahatten önce yanınızda götüreceğiniz kayıtları ve takip planını teyit edin. Pratik sorularınız için <a href="{rel(cur,"contact/#enquiry")}">bizimle iletişime geçin</a>.</p></div>')
     else:
         main += section("التكاليف", "كيف تُحدَّد تكاليف العلاج في هذه الفئة؟", "",
             f'<div class="prose"><p>لا يوجد سعر موحّد للفئة. لا تنشر threeeight35° أسعار العلاج، إذ تُسعِّر العيادة أو المستشفى المستقل العلاج الطبي والرسوم السريرية كتابياً بعد التقييم، وتُدفع مباشرةً إلى الجهة نفسها. أما رسوم باقات التنسيق من threeeight35° فهي منفصلة، اطّلع على <a href="{rel(cur,"patient-packages/")}">الباقات</a>.</p></div>', tone="tone-cream")
         main += section("التخطيط للسفر", "التخطيط للسفر والتأمين والمتابعة", "",
             f'<div class="prose"><p>يحدّد طبيبك المعالج توقيت سفرك دائماً، وليس إطاراً زمنياً عاماً منشوراً على موقع إلكتروني. تحقّق من أن تأمين سفرك يغطي المضاعفات والإخلاء الطبي، وتأكّد قبل السفر من السجلات التي ستعود بها ومن خطة المتابعة. لأي أسئلة عملية، <a href="{rel(cur,"contact/#enquiry")}">تواصل معنا</a>.</p></div>')
     main += enquiry_cta(cur)
-    add(p, main, "treatments", crumbs=[(L("Home", "الرئيسية"), ""), (L("Treatments", "العلاجات"), "treatments/"), (name, cur)])
+    add(p, main, "treatments", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Treatments", "العلاجات", "Tedaviler"), "treatments/"), (name, cur)])
 
 # ======================= TREATMENT PAGES =======================
 def fix_understand(sid, body):
@@ -232,6 +238,7 @@ def treatment_meta(t, v11):
 
 def build_treatment(sid):
     if is_ar(): return build_treatment_ar(sid)
+    if is_tr(): return build_treatment_tr(sid)
     t = TREAT[sid]; r = t["rec"]; f = r["fields"]; secs = dict(r["secs"]); cid = t["cid"]; cat = CATMAP[cid]
     cur = t["dir"]
     title = f["SEO title"].replace("│", "|")
@@ -366,5 +373,70 @@ def build_treatment_ar(sid):
 <div class="container tlayout"><article class="tmain">{"".join(blocks)}</article>{aside}</div>'''
     main += enquiry_cta(cur)
     add(p, main, "treatments", crumbs=[("الرئيسية", ""), ("العلاجات", "treatments/"), (cat_ar, cat_dir(cid)), (name, cur)])
+
+def build_treatment_tr(sid):
+    """Turkish treatment page: same structure as build_treatment, with text from treatments_tr.py."""
+    t = TREAT[sid]; r = t["rec"]; f = r["fields"]; secs = dict(r["secs"]); cid = t["cid"]
+    cur = t["dir"]; name = TREAT_TR[sid]; cat_tr = cat_name(cid); focus = FOCUS_TR.get(sid, "")
+    if t["held"]:
+        desc = f"Türkiye'de {name}: tıbbi seyahat koordinasyonu için threeeight35°'e danışın. threeeight35° tıbbi seyahati koordine eder, klinik bakım sağlamaz."
+        lead = f"Web sitemizde {name} hakkında tedavi bilgisi yayınlamıyoruz. Yine de bu tedavi için tıbbi seyahat koordinasyonu hakkında bilgi alabilirsiniz."
+    else:
+        desc = GUIDE_META_TR.get(sid) or next(d for d in (f"Türkiye'de {name}: {focus}. Seyahatten önce teyit edilmesi gerekenler ve threeeight35°'in yolculuğunuzu nasıl koordine ettiği.",
+                                                         f"Türkiye'de {name}: {focus}. Seyahatten önce teyit edilmesi gerekenler.", f"Türkiye'de {name}: seyahatten önce teyit edilmesi gerekenler.") if len(d) <= 160)
+        lead = (f"{name} tek ve standart bir işlem değil, genel bir başlıktır. Bu sayfa, bu başlık altındaki belirli seçenekleri ayırt etmenize yardımcı olur." if t["hub"] else
+                f"Türkiye'de {name} seçeneklerini araştırırken şu konuyu anlamak önemlidir: {focus}. Nihai klinik plan, tedaviyi yürüten sağlık profesyonelinin bireysel değerlendirmesine dayanmalıdır.")
+    p = dict(path=cur, id=r["id"], kind=f["Page type"], title=f"Türkiye'de {name} | threeeight35°", desc=desc, indexable=True,
+             status=f["Publication status"], notes="Turkish version")
+    rows = [("Kategori", f'<a href="{rel(cur, cat_dir(cid))}">{esc(cat_tr)}</a>'),
+            ("Sayfanın rolü", "Daha geniş bir konu için rehber" if t["hub"] else ("Yalnızca koordinasyon talepleri" if t["held"] else "Planlama ve koordinasyona genel bakış")),
+            ("Tedavi ücretleri", "threeeight35° tarafından yayınlanmaz. Bağımsız klinik veya hastane tarafından fiyatlandırılır ve doğrudan onlara ödenir."),
+            ("Klinik kararlar", "Bireysel değerlendirmeden sonra tedaviyi yürüten sağlık profesyoneli tarafından verilir."),
+            ("threeeight35°'in rolü", "Seyahat ve iletişimin klinik dışı koordinasyonu.")]
+    sec = lambda h, body: f'<section class="tsec"><h2>{h}</h2>{body}</section>'
+    blocks = [sec("Kısa bakış", '<dl class="glance">' + "".join(f"<div><dt>{a}</dt><dd>{b}</dd></div>" for a, b in rows) + "</dl>")]
+    if not t["held"]:
+        u = secs.get("What should this page help a patient understand?", "")
+        kind = ("dental" if "staged care" in u else "eye" if "ophthalmic" in u or "eye procedure" in u else "fertility" if "fertility pathway" in u
+                else "checkup" if "abnormal findings" in u else "surgical")
+        blocks.append(sec("Karar vermeden önce anlamanız gerekenler", f"<p>Karar vermeden önce şunları anlamak faydalıdır: {focus}{UND_END_TR[kind]}</p>"))
+        if "What legal or regulatory issues need review?" in secs:
+            blocks.append(sec("Yasal ve etik konular", "<p>Doğurganlık, embriyolar, gametler ve genetik testlerle ilgili konular ülkeden ülkeye değişen yasal, etik ve onam gerekliliklerini içerebilir. Seyahatten önce bu gereklilikleri tedaviyi yürüten sağlık kuruluşuyla teyit edin.</p>"))
+        c = secs.get("What should be confirmed before travelling?", "")
+        ck = ("dental" if c.startswith("Confirm the diagnosis") else "eye" if c.startswith("Confirm what examinations") else
+              "fertility" if c.startswith("Confirm required records") else "surgical" if c else None)
+        if ck: blocks.append(sec("Seyahatten önce teyit edilmesi gerekenler", f"<p>{CONFIRM_TR[ck]}</p>"))
+        if "When can a patient fly home?" in secs:
+            blocks.append(sec("Ülkeme ne zaman uçabilirim?", "<p>Herkes için geçerli güvenli bir süre yoktur. Seyahat zamanını; işleme, kişisel iyileşmenize ve tedavi sonrası gereken kontrollere göre tedaviyi yürüten hekim belirlemelidir.</p>"))
+        if "When can a patient travel home?" in secs:
+            blocks.append(sec("Ne zaman dönebilirim?", "<p>Seyahat zamanı, tedaviyi yürüten göz hekiminin önerisine ve bireysel muayene sonuçlarına göre belirlenmelidir. Tedaviye özgü klinik destek olmadan seyahat edebilirlik için genel bir süre belirlenemez.</p>"))
+        if "What happens after the results?" in secs:
+            blocks.append(sec("Sonuçlardan sonra ne olur?", "<p>Sağlık kuruluşu, sonuçların nasıl teslim edileceğini, hangi bulguların ek değerlendirme gerektirdiğini ve ülkenizdeki doktorunuza veya ilgili uzmana hangi kayıtları götürmeniz gerektiğini açıklamalıdır. Hiçbir tarama bir teşhis veya hastalıkların kapsamlı biçimde dışlanmasını vaat edemez.</p>"))
+        if "Does this page need recovery or fitness-to-fly advice?" in secs:
+            blocks.append(sec("Seyahat kısıtlamalarına göre plan yapmam gerekir mi?", "<p>Seyahat kısıtlamaları yalnızca belirli bir tetkik veya işlem bunu gerektirdiğinde ele alınır. Sizin için geçerli kısıtlamalar konusunda tedaviyi yürüten sağlık kuruluşu sizi bilgilendirir.</p>"))
+        for h, body in GUIDES_TR.get(sid, []):
+            blocks.append(sec(esc(h), f"<p>{esc(body)}</p>" if isinstance(body, str) else '<ul class="plain-list">' + "".join(f"<li>{esc(b)}</li>" for b in body) + "</ul>"))
+        if "What affects the cost?" in secs:
+            cost_h, cost_p = "Maliyeti neler etkiler?", ("Maliyet; tedavinin kapsamına, teşhis amaçlı tetkiklere, malzemelere, laboratuvar çalışmasına, diş veya tedavi bölgesi sayısına ve aşama sayısına göre değişebilir. "
+                              "Tıbbi tedavinin fiyat teklifini doğrudan sağlık kuruluşu verir; threeeight35° tedavi ücretlerini yayınlamaz ve tahsil etmez. Sağlık kuruluşu fiyat teklifini değerlendirmeden sonra yazılı olarak sunar.")
+        else:
+            cost_h, cost_p = "Tedavi nasıl fiyatlandırılır?", ("threeeight35° tedavi fiyatlarını yayınlamaz. Tıbbi tedavi ve klinik ücretleri bağımsız klinik veya hastane tarafından fiyatlandırılır ve doğrudan onlara ödenir; "
+                              "değerlendirmeden sonra sağlık kuruluşundan yazılı bir fiyat teklifi almalısınız. Teklifi etkileyen etkenler, bireysel planınıza göre sağlık kuruluşuyla teyit edilir.")
+        blocks.append(sec(cost_h, f'<p>{cost_p}</p><p>threeeight35° koordinasyon paketleri ayrıca fiyatlandırılır; bkz. <a href="{rel(cur,"patient-packages/")}">Paketler</a>.</p>'))
+    else:
+        blocks.append(sec("Şimdi neler yapabilirsiniz", f'<p><a href="{rel(cur,"how-it-works/")}">Tıbbi seyahat koordinasyonunun nasıl işlediğini</a> okuyabilir veya koordinasyonla ilgili genel bir soru sorabilirsiniz. Klinik tavsiye vermeyiz; klinik sorular bağımsız ve tedaviyi yürüten bir uzmana yönlendirilir.</p>'))
+    blocks.append(sec("threeeight35° yolculuğunuzda nerede yer alır?", f'<p>threeeight35°, bağımsız sağlık kuruluşlarının sunduğu bakım etrafında iletişimi, seyahat planlamasını ve yolculuğun teyit edilmiş bölümlerini koordine eder. Teşhis, uygunluk, aydınlatılmış onam, tedavi ve klinik takip kararları tedaviyi yürüten sağlık profesyonellerinin sorumluluğundadır. <a href="{rel(cur,"about/")}">threeeight35° hakkında</a> ve <a href="{rel(cur,"how-it-works/")}">yolculuğun nasıl işlediği</a> hakkında daha fazlasını okuyun.</p>'))
+    rel_ids, _ = related_ids(sid)
+    rl = "".join(f'<li><a href="{rel(cur, TREAT[s]["dir"])}">{esc(TREAT_TR[s])}</a></li>' for s in rel_ids)
+    blocks.append(sec("İlgili sayfalar", f'<ul class="linklist">{rl}<li><a href="{rel(cur, cat_dir(cid))}">Tüm {esc(cat_tr)} sayfaları</a></li></ul>'))
+    blocks.append(f'<p class="disclaimer-small">Bu sayfa yalnızca tıbbi seyahat koordinasyonu hakkında genel bilgi sunar. Herhangi bir rahatsızlığa teşhis koymaz, bir kişiye tedavi önermez ve uygun nitelikli bir sağlık profesyonelinin tavsiyesinin yerini tutmaz. <a href="{rel(cur,"medical-disclaimer/")}">Tıbbi Bilgilendirme ve Sorumluluk Reddi</a></p>')
+    aside = f'''<aside class="tside" aria-label="Sonraki adımlar"><div class="side-card"><h2>Koordinasyon hakkında bilgi alın</h2><p>Ne araştırdığınızı bize anlatın; yolculuğun pratik tarafında size yardımcı olalım.</p>
+<a class="btn btn-navy btn-block" href="{rel(cur,"contact/#enquiry")}">Talep Gönderin</a>
+<p class="small">Lütfen talep formu üzerinden tıbbi kayıt göndermeyin.</p>
+<ul class="linklist"><li><a href="{rel(cur, cat_dir(cid))}">{esc(cat_tr)}</a></li><li><a href="{rel(cur,"patient-packages/")}">Paketler</a></li></ul></div></aside>'''
+    main = f'''<section class="page-head tpage-head"><div class="container"><p class="eyebrow">{esc(cat_tr)}</p><h1>Türkiye'de {esc(name)}</h1><p class="lead">{esc(lead)}</p></div></section>
+<div class="container tlayout"><article class="tmain">{"".join(blocks)}</article>{aside}</div>'''
+    main += enquiry_cta(cur)
+    add(p, main, "treatments", crumbs=[("Ana Sayfa", ""), ("Tedaviler", "treatments/"), (cat_tr, cat_dir(cid)), (name, cur)])
 
 INDEX_TREATMENTS = False   # clinical gate: flip to True only when Clinical Review Passed (see README)

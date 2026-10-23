@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Privacy Policy and Terms & Conditions (English and Arabic). Each document is a list of (heading, HTML body).
+# Privacy Policy and Terms & Conditions (English, Arabic and Turkish). Each document is a list of (heading, HTML body).
 # Placeholders filled at build time: {EMAIL} {ABN} {OVERSEAS} {PACKAGES} {CONTACT} {PRIVACY}
 # Have a lawyer check any change to these documents before publishing it.
 
-LEGAL_UPDATED = ("22 October 2026", "22 أكتوبر 2026")
+LEGAL_UPDATED = ("22 October 2026", "22 أكتوبر 2026", "22 Ekim 2026")
 
 PRIVACY_EN = [
  ("About this policy",
@@ -165,4 +165,90 @@ TERMS_AR = [
  ("الشكاوى والقانون الحاكم والتغييرات",
   "<p>إذا كان لديك أي ملاحظة، راسلنا على <a href=\"mailto:{EMAIL}\">{EMAIL}</a> وسنعمل معك على حلّها. وتخضع هذه الشروط لقوانين ولاية فيكتوريا في أستراليا. "
   "وقد نحدّث هذه الشروط، والنسخة التي تنطبق على حجزك هي النسخة السارية عند قبولك عرضك المكتوب. وفي حال وجود أي اختلاف بين النسختين، تُعتمد النسخة الإنجليزية.</p>"),
+]
+
+PRIVACY_TR = [
+ ("Bu politika hakkında",
+  "<p>Bu Gizlilik Politikası, ABN {ABN} numaralı işletmenin tescilli ticari adı olan threeeight35° Tıbbi Seyahat Acentesi'nin (“threeeight35°”, “biz”) sağlık bilgileri dahil "
+  "kişisel bilgileri nasıl topladığını, kullandığını, paylaştığını ve koruduğunu açıklar. Kişisel bilgileri Avustralya'nın 1988 tarihli Gizlilik Yasası'ndaki "
+  "(<em>Privacy Act 1988</em>) Avustralya Gizlilik İlkelerine uygun olarak işleriz.</p>"),
+ ("Topladığımız bilgiler",
+  "<p>Web sitesindeki talep formu aracılığıyla yalnızca ilk talep için gerekenleri toplarız: adınız, e-posta adresiniz, yaşadığınız ülke, tercih ettiğiniz iletişim yöntemi, "
+  "WhatsApp, SMS veya telefon görüşmesini seçerseniz telefon numaranız, araştırdığınız tedavi kategorisi (ve isteğe bağlı olarak işlem) ve isteğe bağlı bir mesaj. "
+  "Form, tıbbi kayıt, test sonucu, pasaport veya ödeme bilgisi eklememenizi ister.</p>"
+  "<p>İlerlemeye karar verirseniz, yolculuğunuzu koordine etmek için gereken bilgileri de toplayabiliriz; örneğin seyahat tarihleri, rezervasyonlar için pasaport bilgileri, misafir "
+  "bilgileri ve izninizle, bağımsız bir sağlık kuruluşunun ön değerlendirme için ihtiyaç duyduğu sağlık bilgileri.</p>"),
+ ("Sağlık bilgileri",
+  "<p>Sağlık bilgileri hassas bilgilerdir. Bunları yalnızca izninizle, yalnızca bakımınızı koordine etmek için gerektiğinde toplarız ve asla herkese açık web formu üzerinden "
+  "toplamayız. Bu bilgiler ayrı ve özel bir süreçle işlenir ve yalnızca danışmayı seçtiğiniz bağımsız sağlık kuruluşlarıyla paylaşılır. Bkz. "
+  "<a href=\"{OVERSEAS}\" hreflang=\"en-AU\">Gizlilik ve Sağlık Bilgilerinin Yurt Dışına Aktarımı (İngilizce)</a>.</p>"),
+ ("Bilgilerinizi nasıl kullanırız",
+  "<ul><li>Talebinize yanıt vermek ve tercih ettiğiniz yöntemle sizinle iletişim kurmak için.</li>"
+  "<li>Sizi bağımsız sağlık kuruluşlarıyla tanıştırmak, konsültasyonları ve fiyat tekliflerini ayarlamak için.</li>"
+  "<li>Konaklamanızı, özel transferlerinizi ve Türkiye'deki desteği ayarlamak için.</li>"
+  "<li>Yazılı teklifinizi, faturalarınızı ve kayıtlarınızı hazırlamak ve yasal ve vergisel yükümlülüklerimizi yerine getirmek için.</li></ul>"
+  "<p>Kişisel bilgilerinizi satmayız ve hizmetinizle ilgisi olmayan pazarlama amaçlarıyla kullanmayız.</p>"),
+ ("Kimlerle paylaşırız",
+  "<ul><li>İzninizle, Türkiye'de danışmayı seçtiğiniz bağımsız klinikler, hastaneler ve sağlık profesyonelleri.</li>"
+  "<li>Rezervasyonlarınız için ihtiyaç duydukları bilgilerle sınırlı olarak oteller ve ulaşım sağlayıcıları.</li>"
+  "<li>İşletmemizi yürütmemize yardımcı olan hizmet sağlayıcılar: e-posta sağlayıcımız (Google), web sitesi taleplerini işleyen hizmetler (Vercel ve Resend), "
+  "web sitesi barındırıcımız (GitHub Pages) ve seçtiğinizde WhatsApp gibi mesajlaşma hizmetleri.</li>"
+  "<li>Yasanın gerektirdiği durumlarda resmi makamlar.</li></ul>"),
+ ("Yurt dışına aktarım",
+  "<p>Türkiye'de tedavi koordine ettiğimiz ve Avustralya ile Birleşik Arap Emirlikleri için iletişim hatlarımız bulunduğu için bilgileriniz Türkiye ve Birleşik Arap Emirlikleri'ndeki "
+  "alıcılarla paylaşılabilir. Hizmet sağlayıcılarımız bilgileri Amerika Birleşik Devletleri dahil başka ülkelerde saklayabilir. "
+  "Sağlık bilgileri yurt dışına gönderilmeden önce kimin alacağını size açıklar ve izninizi isteriz.</p>"),
+ ("Çerezler ve analiz",
+  "<p>Bu web sitesi reklam veya analiz çerezleri kullanmaz ve sizi başka web sitelerinde izlemez. Web sitesi barındırıcımız, güvenlik ve güvenilirlik için IP adresleri gibi "
+  "standart teknik kayıtlar tutar.</p>"),
+ ("Saklama, güvenlik ve saklama süresi",
+  "<p>Kişisel bilgileri güvenli hesaplarda saklar, erişimi yetkili kişilerle sınırlar ve şifreli bağlantılar kullanırız. İlerlemeyen talepler 2 yıl içinde silinir. "
+  "Rezervasyon ve ödeme kayıtları, Avustralya'nın kayıt saklama gerekliliklerini karşılamak için 7 yıl saklanır ve ardından silinir.</p>"),
+ ("Erişim, düzeltme ve şikâyetler",
+  "<p>Hakkınızda tuttuğumuz kişisel bilgileri görmek veya düzeltmek ya da gizlilikle ilgili bir şikâyette bulunmak için <a href=\"mailto:{EMAIL}\">{EMAIL}</a> adresine e-posta gönderebilirsiniz. "
+  "30 gün içinde yanıt vermeyi hedefleriz. Yanıtımızdan memnun kalmazsanız Avustralya Bilgi Komiserliği Ofisi (Office of the Australian Information Commissioner) ile iletişime geçebilirsiniz "
+  "(<a href=\"https://www.oaic.gov.au\" rel=\"noopener\">oaic.gov.au</a>).</p>"),
+ ("Bu politikadaki değişiklikler",
+  "<p>Bu politikayı güncelleyebiliriz. Güncel sürüm her zaman tarihiyle birlikte bu sayfada yayınlanır. Sürümler arasında herhangi bir farklılık olması durumunda İngilizce sürüm esas alınır.</p>"),
+]
+
+TERMS_TR = [
+ ("Bu şartlar hakkında",
+  "<p>Bu Şartlar ve Koşullar, ABN {ABN} numaralı işletmenin tescilli ticari adı olan threeeight35° Tıbbi Seyahat Acentesi'nin (“threeeight35°”, “biz”) sunduğu tıbbi seyahat "
+  "koordinasyon hizmetleri için geçerlidir. Rezervasyonunuz, tarafımızdan sunulan yazılı bir teklifi kabul ettiğinizde yapılmış olur. Yazılı teklifiniz bu şartlardan farklı "
+  "bir hüküm içeriyorsa yazılı teklif geçerlidir.</p>"),
+ ("Rolümüz",
+  "<p>threeeight35° bir tıbbi seyahat koordinasyon hizmetidir, sağlık hizmeti sağlayıcısı değildir. Teşhis koymaz, reçete yazmaz ve tedavi önermeyiz. Tüm tıbbi değerlendirme ve "
+  "tedaviyi Türkiye'deki bağımsız klinikler, hastaneler ve lisanslı sağlık profesyonelleri sağlar ve bundan onlar sorumludur. "
+  "Hiçbir tedavi sonucunu, iyileşme süresini veya seyahat zamanını garanti etmeyiz.</p>"),
+ ("Paketler ve kapsamı",
+  "<p>Her koordinasyon paketi, <a href=\"{PACKAGES}\">Paketler</a> sayfamızda o paket için belirtilen gece ve misafir sayısında tıbbi seyahat koordinasyonunu, konaklamayı ve "
+  "İstanbul'daki özel transferleri içerir. Yazılı teklifiniz, rezervasyonunuza neyin dahil olup neyin olmadığını teyit eder.</p>"
+  "<p>Paketler tıbbi tedaviyi, klinik ücretlerini veya uluslararası uçuşları içermez. Sizin eklemeyi seçtiğiniz ekstra geceler doğrudan otele ödenir. "
+  "Tedaviyi yürüten hekiminiz daha uzun bir konaklama önerirse ek maliyet ayrıca fiyatlandırılır. Konaklamanızı veya ulaşımınızı kendiniz ayarlamayı tercih ederseniz "
+  "size nihai bir paket ücreti bildiririz.</p>"),
+ ("Fiyatlar ve ödeme",
+  "<ul><li>Paket fiyatları Avustralya doları (AUD) cinsindendir.</li>"
+  "<li>Yazılı teklifinizi kabul ettiğinizde paket ücretinin %50'si kapora olarak ödenir.</li>"
+  "<li>Kalan tutar seyahat tarihinizden 14 gün önce ödenir.</li>"
+  "<li>Tıbbi tedavi bağımsız klinik veya hastane tarafından fiyatlandırılır ve asla threeeight35°'e değil, doğrudan onlara ödenir.</li></ul>"),
+ ("İptal ve iadeler",
+  "<p>Rezervasyonunuz için geçerli iptal ve iade politikası yazılı teklifinizde yer alır ve teklifinizle birlikte size sunulur.</p>"),
+ ("Sorumluluklarınız",
+  "<ul><li>Bize doğru ve eksiksiz bilgi verin ve herhangi bir değişikliği derhal bildirin.</li>"
+  "<li>Geçerli bir pasaportunuz ve ihtiyaç duyduğunuz vize veya giriş belgeleriniz olsun; uçuşlarınızı kendiniz ayırtın.</li>"
+  "<li>Seyahat sigortası yaptırın. Standart seyahat sigortası yurt dışındaki tıbbi tedaviyi nadiren kapsar; bu nedenle poliçenizin komplikasyonları ve tıbbi tahliyeyi kapsadığını kontrol edin.</li>"
+  "<li>Ne zaman seyahat etmenin güvenli olduğu dahil, tedaviyi yürüten hekiminizin önerilerine uyun.</li></ul>"),
+ ("Üçüncü taraf hizmetler",
+  "<p>Konaklama ve ulaşımı sizin adınıza üçüncü taraf tedarikçilerle ayarlarız. Bu tedarikçilerin kendi şartları da geçerli olabilir; sizi etkileyenler hakkında sizi bilgilendiririz.</p>"),
+ ("Sorumluluk ve tüketici haklarınız",
+  "<p>Hizmetlerimiz, Avustralya Tüketici Yasası (Australian Consumer Law) kapsamında hariç tutulamayan güvencelerle birlikte sunulur ve bu şartlardaki hiçbir hüküm bu hakları sınırlamaz. "
+  "Yasanın izin verdiği ölçüde, bağımsız sağlık kuruluşlarının tıbbi hizmetlerinden veya uçuş değişiklikleri, hastalık ya da doğal olaylar gibi makul kontrolümüz dışındaki "
+  "olaylardan sorumlu değiliz.</p>"),
+ ("Gizlilik",
+  "<p>Kişisel bilgilerinizi <a href=\"{PRIVACY}\">Gizlilik Politikamızda</a> açıklandığı şekilde işleriz.</p>"),
+ ("Şikâyetler, uygulanacak hukuk ve değişiklikler",
+  "<p>Bir endişeniz varsa <a href=\"mailto:{EMAIL}\">{EMAIL}</a> adresine e-posta gönderin; sorunu çözmek için sizinle birlikte çalışırız. Bu şartlar Avustralya'nın Victoria eyaleti "
+  "yasalarına tabidir. Bu şartları güncelleyebiliriz; rezervasyonunuz için geçerli olan sürüm, yazılı teklifinizi kabul ettiğiniz tarihte yürürlükte olan sürümdür. "
+  "Sürümler arasında herhangi bir farklılık olması durumunda İngilizce sürüm esas alınır.</p>"),
 ]

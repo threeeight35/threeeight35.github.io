@@ -2,54 +2,56 @@
 from pages import *
 from legal import *
 
-def pending(msg): return f'<div class="banner banner-hold" role="note"><strong>{L("Status:", "ملاحظة:")}</strong> {esc(msg)}</div>'
+def pending(msg): return f'<div class="banner banner-hold" role="note"><strong>{L("Status:", "ملاحظة:", "Not:")}</strong> {esc(msg)}</div>'
 
 def qa(h, body_html): return f'<section class="qa"><h2>{esc(h)}</h2>{body_html}</section>'
 
 # ---------------- Packages ----------------
 def build_packages():
     cur = "patient-packages/"
-    p = dict(path=cur, id="SUP-09", kind="Packages & pricing", title=L("Medical Travel Coordination Packages | threeeight35°", "باقات تنسيق السفر العلاجي | threeeight35°"),
+    p = dict(path=cur, id="SUP-09", kind="Packages & pricing", title=L("Medical Travel Coordination Packages | threeeight35°", "باقات تنسيق السفر العلاجي | threeeight35°", "Tıbbi Seyahat Koordinasyon Paketleri | threeeight35°"),
              desc=L("Essential Care A$4,950, Executive Wellness & Recovery A$9,900, VIP from A$14,900. Includes accommodation and Istanbul transfers; treatment and flights extra.",
-                    "الرعاية الأساسية A$4,950، والعافية والتعافي التنفيذية A$9,900، والرحلة المخصصة VIP ابتداءً من A$14,900. تشمل الإقامة والتنقلات؛ العلاج والطيران منفصلان."),
+                    "الرعاية الأساسية A$4,950، والعافية والتعافي التنفيذية A$9,900، والرحلة المخصصة VIP ابتداءً من A$14,900. تشمل الإقامة والتنقلات؛ العلاج والطيران منفصلان.", "Temel Bakım A$4,950, Executive Sağlık ve İyileşme A$9,900, VIP A$14,900'den başlayan fiyatlarla. Konaklama ve İstanbul transferleri dahil; tedavi ve uçuşlar hariç."),
              indexable=True, status="Business-confirmed package pricing; legal/consumer-law review recommended; payment/cancellation/refund terms withheld pending legal review")
     three = L('''<div class="cards3"><article class="card"><span class="card-num" aria-hidden="true">1</span><h3>Your treatment</h3><p>Quoted by and paid directly to the independent clinic or hospital. threeeight35° does not publish, determine or collect medical treatment fees.</p></article>
 <article class="card"><span class="card-num" aria-hidden="true">2</span><h3>Your threeeight35° package</h3><p>Paid to threeeight35°. The fixed package price covers coordination, accommodation and private transfers in Istanbul for the nights and guests shown for your package.</p></article>
 <article class="card"><span class="card-num" aria-hidden="true">3</span><h3>Your flights and any extras</h3><p>You book and pay for your own flights. Extra nights you choose to add are paid directly to the hotel; a longer stay advised by your treating clinician is quoted separately.</p></article></div>''',
 '''<div class="cards3"><article class="card"><span class="card-num" aria-hidden="true">1</span><h3>علاجك</h3><p>يُسعَّر ويُدفع مباشرةً إلى العيادة أو المستشفى المستقل. ولا تنشر threeeight35° أسعار العلاج الطبي ولا تحدّدها ولا تتقاضاها.</p></article>
 <article class="card"><span class="card-num" aria-hidden="true">2</span><h3>باقتك من threeeight35°</h3><p>تُدفع إلى threeeight35°. ويغطي السعر الثابت للباقة التنسيق والإقامة والتنقلات الخاصة في إسطنبول لعدد الليالي والضيوف الموضّح لباقتك.</p></article>
-<article class="card"><span class="card-num" aria-hidden="true">3</span><h3>رحلات الطيران وأي إضافات</h3><p>تحجز رحلات الطيران وتدفع ثمنها بنفسك. تُدفع الليالي الإضافية التي تختارها مباشرةً إلى الفندق، أما الإقامة الأطول التي ينصح بها طبيبك المعالج فتُسعَّر بشكل منفصل.</p></article></div>''')
-    main = pagehead(L("TAILORED COORDINATION PACKAGES", "باقات تنسيق مصمّمة لك"), L("Medical Travel Coordination Packages", "باقات تنسيق السفر العلاجي"),
+<article class="card"><span class="card-num" aria-hidden="true">3</span><h3>رحلات الطيران وأي إضافات</h3><p>تحجز رحلات الطيران وتدفع ثمنها بنفسك. تُدفع الليالي الإضافية التي تختارها مباشرةً إلى الفندق، أما الإقامة الأطول التي ينصح بها طبيبك المعالج فتُسعَّر بشكل منفصل.</p></article></div>''', '''<div class="cards3"><article class="card"><span class="card-num" aria-hidden="true">1</span><h3>Tedaviniz</h3><p>Bağımsız klinik veya hastane tarafından fiyatlandırılır ve doğrudan onlara ödenir. threeeight35° tıbbi tedavi ücretlerini yayınlamaz, belirlemez ve tahsil etmez.</p></article>
+<article class="card"><span class="card-num" aria-hidden="true">2</span><h3>threeeight35° paketiniz</h3><p>threeeight35°'e ödenir. Sabit paket fiyatı, paketiniz için belirtilen gece ve misafir sayısında koordinasyonu, konaklamayı ve İstanbul'daki özel transferleri kapsar.</p></article>
+<article class="card"><span class="card-num" aria-hidden="true">3</span><h3>Uçuşlarınız ve ekstralar</h3><p>Uçuşlarınızı kendiniz ayırtır ve ödersiniz. Sizin eklemeyi seçtiğiniz ekstra geceler doğrudan otele ödenir; tedaviyi yürüten hekiminizin önerdiği daha uzun bir konaklama ise ayrıca fiyatlandırılır.</p></article></div>''')
+    main = pagehead(L("TAILORED COORDINATION PACKAGES", "باقات تنسيق مصمّمة لك", "SİZE ÖZEL KOORDİNASYON PAKETLERİ"), L("Medical Travel Coordination Packages", "باقات تنسيق السفر العلاجي", "Tıbbi Seyahat Koordinasyon Paketleri"),
                     L("Choose the level of coordination that fits your journey. threeeight35° package prices include our non-clinical coordination, your accommodation and private transfers in Istanbul. Medical treatment and flights are paid separately.",
-                      "اختر مستوى التنسيق الذي يناسب رحلتك. تشمل أسعار باقات threeeight35° خدمات التنسيق غير السريرية وإقامتك وتنقلاتك الخاصة في إسطنبول. ويُدفع العلاج الطبي وتذاكر الطيران بشكل منفصل."))
-    main += section(L("WHO YOU PAY, AND FOR WHAT", "لمن تدفع، ومقابل ماذا"), L("Three separate parts of your journey cost", "ثلاثة أجزاء منفصلة من تكلفة رحلتك"), "", three, tone="tone-cream")
-    main += section(L("PACKAGES", "الباقات"), L("Choose your coordination package", "اختر باقة التنسيق"), L("All prices are in Australian dollars (AUD).", "جميع الأسعار بالدولار الأسترالي (AUD)."), package_cards(cur) +
+                      "اختر مستوى التنسيق الذي يناسب رحلتك. تشمل أسعار باقات threeeight35° خدمات التنسيق غير السريرية وإقامتك وتنقلاتك الخاصة في إسطنبول. ويُدفع العلاج الطبي وتذاكر الطيران بشكل منفصل.", "Yolculuğunuza uygun koordinasyon düzeyini seçin. threeeight35° paket fiyatları, klinik dışı koordinasyonumuzu, konaklamanızı ve İstanbul'daki özel transferlerinizi kapsar. Tıbbi tedavi ve uçuşlar ayrıca ödenir."))
+    main += section(L("WHO YOU PAY, AND FOR WHAT", "لمن تدفع، ومقابل ماذا", "KİME, NE İÇİN ÖDERSİNİZ"), L("Three separate parts of your journey cost", "ثلاثة أجزاء منفصلة من تكلفة رحلتك", "Yolculuk maliyetinizin üç ayrı kalemi"), "", three, tone="tone-cream")
+    main += section(L("PACKAGES", "الباقات", "PAKETLER"), L("Choose your coordination package", "اختر باقة التنسيق", "Koordinasyon paketinizi seçin"), L("All prices are in Australian dollars (AUD).", "جميع الأسعار بالدولار الأسترالي (AUD).", "Tüm fiyatlar Avustralya doları (AUD) cinsindendir."), package_cards(cur) +
         L('<div class="prose narrow"><p>Before you proceed you receive a written, itemised proposal showing your selected coordination package, confirmed inclusions and exclusions, any extras quoted separately and the independent provider\'s treatment quotation. A treatment fee is never combined with a threeeight35° package price into a single advertised treatment price.</p></div>',
-          '<div class="prose narrow"><p>قبل المتابعة، تستلم عرضاً مكتوباً ومفصّلاً يوضّح باقة التنسيق التي اخترتها، وما هو مشمول وغير مشمول، وأي إضافات مسعّرة بشكل منفصل، وعرض سعر العلاج من مقدّم الرعاية المستقل. ولا تُدمج رسوم العلاج أبداً مع سعر باقة threeeight35° في سعر علاج واحد معلَن.</p></div>'))
+          '<div class="prose narrow"><p>قبل المتابعة، تستلم عرضاً مكتوباً ومفصّلاً يوضّح باقة التنسيق التي اخترتها، وما هو مشمول وغير مشمول، وأي إضافات مسعّرة بشكل منفصل، وعرض سعر العلاج من مقدّم الرعاية المستقل. ولا تُدمج رسوم العلاج أبداً مع سعر باقة threeeight35° في سعر علاج واحد معلَن.</p></div>', '<div class="prose narrow"><p>İlerlemeden önce; seçtiğiniz koordinasyon paketini, teyit edilmiş dahil olan ve olmayan hizmetleri, ayrıca fiyatlandırılan ekstraları ve bağımsız sağlık kuruluşunun tedavi fiyat teklifini gösteren kalem kalem yazılı bir teklif alırsınız. Tedavi ücreti, threeeight35° paket fiyatıyla asla tek bir ilan edilmiş tedavi fiyatında birleştirilmez.</p></div>'))
     main += accommodation_section(cur)
-    main += section("", L("Questions about packages", "أسئلة حول الباقات"), "",
+    main += section("", L("Questions about packages", "أسئلة حول الباقات", "Paketlerle ilgili sorular"), "",
         L(f'<div class="prose"><p>See our <a href="{rel(cur,"faqs/")}">FAQs</a>, read how <a href="{rel(cur,"how-it-works/")}">the journey works</a> or <a href="{rel(cur,"contact/#enquiry")}">make an enquiry</a>. Full payment, cancellation and refund terms are being finalised and will be published in the <a href="{rel(cur,"terms/")}">Terms &amp; Conditions</a>.</p></div>',
-          f'<div class="prose"><p>اطّلع على <a href="{rel(cur,"faqs/")}">الأسئلة الشائعة</a>، واقرأ <a href="{rel(cur,"how-it-works/")}">كيف تسير الرحلة</a>، أو <a href="{rel(cur,"contact/#enquiry")}">أرسل استفسارك</a>. يجري حالياً إعداد الشروط الكاملة للدفع والإلغاء والاسترداد، وستُنشر في <a href="{rel(cur,"terms/")}">الشروط والأحكام</a>.</p></div>'))
+          f'<div class="prose"><p>اطّلع على <a href="{rel(cur,"faqs/")}">الأسئلة الشائعة</a>، واقرأ <a href="{rel(cur,"how-it-works/")}">كيف تسير الرحلة</a>، أو <a href="{rel(cur,"contact/#enquiry")}">أرسل استفسارك</a>. يجري حالياً إعداد الشروط الكاملة للدفع والإلغاء والاسترداد، وستُنشر في <a href="{rel(cur,"terms/")}">الشروط والأحكام</a>.</p></div>', f'<div class="prose"><p><a href="{rel(cur,"faqs/")}">SSS</a> sayfamıza göz atın, <a href="{rel(cur,"how-it-works/")}">yolculuğun nasıl işlediğini</a> okuyun veya <a href="{rel(cur,"contact/#enquiry")}">talebinizi iletin</a>. Ödeme, iptal ve iade koşullarının tamamı hazırlanmaktadır ve <a href="{rel(cur,"terms/")}">Şartlar ve Koşullar</a> sayfasında yayınlanacaktır.</p></div>'))
     main += enquiry_cta(cur)
-    add(p, main, "packages", crumbs=[(L("Home", "الرئيسية"), ""), (L("Patient Packages", "الباقات"), cur)], extra_ld=[service_ld(cur)])
+    add(p, main, "packages", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Patient Packages", "الباقات", "Paketler"), cur)], extra_ld=[service_ld(cur)])
 
 def service_ld(cur):
     offers = []
     for pk in PACKAGES:
         amount = "".join(c for c in pk["price"] if c.isdigit())
         ar = PKG_AR[pk["key"]]
-        o = {"@type": "Offer", "name": L(pk["name"], ar["name"]), "url": page_url(cur), "priceCurrency": "AUD",
+        o = {"@type": "Offer", "name": L(pk["name"], ar["name"], PKG_TR[pk["key"]]["name"]), "url": page_url(cur), "priceCurrency": "AUD",
              "description": L(f"Medical travel coordination, accommodation for {pk['nights']} for {pk['guests']}, and private transfers in Istanbul. Medical treatment and flights are not included.",
-                              f"تنسيق السفر العلاجي، وإقامة لمدة {ar['nights']} {ar['guests']}، وتنقلات خاصة في إسطنبول. العلاج الطبي وتذاكر الطيران غير مشمولة.")}
+                              f"تنسيق السفر العلاجي، وإقامة لمدة {ar['nights']} {ar['guests']}، وتنقلات خاصة في إسطنبول. العلاج الطبي وتذاكر الطيران غير مشمولة.", f"Tıbbi seyahat koordinasyonu, {PKG_TR[pk['key']]['nights']} konaklama ({PKG_TR[pk['key']]['guests']}) ve İstanbul'da özel transferler. Tıbbi tedavi ve uçuşlar dahil değildir.")}
         if pk["price"].startswith("From"):
             o["priceSpecification"] = {"@type": "PriceSpecification", "minPrice": amount, "priceCurrency": "AUD"}
         else:
             o["price"] = amount
         offers.append(o)
     return {"@context": "https://schema.org", "@type": "Service", "@id": page_url(cur) + "#service",
-            "name": L("Medical travel coordination", "تنسيق السفر العلاجي"), "serviceType": "Medical travel coordination",
+            "name": L("Medical travel coordination", "تنسيق السفر العلاجي", "Tıbbi seyahat koordinasyonu"), "serviceType": "Medical travel coordination",
             "description": L("Non-clinical coordination of medical travel to Türkiye, including accommodation and private transfers in Istanbul. threeeight35° is not a healthcare provider; treatment is provided and charged by independent clinics and hospitals.",
-                             "تنسيق غير سريري للسفر العلاجي إلى تركيا، يشمل الإقامة والتنقلات الخاصة في إسطنبول. threeeight35° ليست مقدّم رعاية صحية، إذ تقدّم العيادات والمستشفيات المستقلة العلاج وتتقاضى رسومه."),
+                             "تنسيق غير سريري للسفر العلاجي إلى تركيا، يشمل الإقامة والتنقلات الخاصة في إسطنبول. threeeight35° ليست مقدّم رعاية صحية، إذ تقدّم العيادات والمستشفيات المستقلة العلاج وتتقاضى رسومه.", "İstanbul'da konaklama ve özel transferler dahil, Türkiye'ye tıbbi seyahatin klinik dışı koordinasyonu. threeeight35° bir sağlık hizmeti sağlayıcısı değildir; tedavi, bağımsız klinikler ve hastaneler tarafından sağlanır ve ücretlendirilir."),
             "provider": {"@id": BASE + "#organization"},
             "areaServed": [{"@type": "Country", "name": "Australia"}, {"@type": "Country", "name": "United Arab Emirates"}],
             "offers": offers}
@@ -57,26 +59,26 @@ def service_ld(cur):
 # ---------------- How it works ----------------
 def build_how():
     cur = "how-it-works/"
-    p = dict(path=cur, id="SUP-HOW", kind="How it works (derived from v11 statements)", title=L("How Medical Travel Coordination Works | threeeight35°", "كيف يعمل تنسيق السفر العلاجي | threeeight35°"),
+    p = dict(path=cur, id="SUP-HOW", kind="How it works (derived from v11 statements)", title=L("How Medical Travel Coordination Works | threeeight35°", "كيف يعمل تنسيق السفر العلاجي | threeeight35°", "Tıbbi Seyahat Koordinasyonu Nasıl İşler | threeeight35°"),
              desc=L("How threeeight35° coordinates the practical side of medical travel to Türkiye, from first enquiry to follow-up after you return to Australia.",
-                    "كيف تنسّق threeeight35° الجانب العملي من السفر العلاجي إلى تركيا، من الاستفسار الأول حتى المتابعة بعد عودتك."),
+                    "كيف تنسّق threeeight35° الجانب العملي من السفر العلاجي إلى تركيا، من الاستفسار الأول حتى المتابعة بعد عودتك.", "threeeight35°'in Türkiye'ye tıbbi seyahatin pratik tarafını ilk talepten dönüşünüzden sonraki takibe kadar nasıl koordine ettiği."),
              indexable=True, status="Derived from Version 11 statements; editorial approval required (v11 has no dedicated How It Works record)")
-    main = pagehead(L("THE PATIENT JOURNEY", "رحلة المريض"), L("How It Works", "كيف نعمل"),
+    main = pagehead(L("THE PATIENT JOURNEY", "رحلة المريض", "HASTA YOLCULUĞU"), L("How It Works", "كيف نعمل", "Nasıl Çalışır"),
                     L("A clear pathway for the practical side of medical travel, with a firm boundary: we coordinate, and independent licensed clinicians make every medical decision.",
-                      "مسار واضح للجانب العملي من السفر العلاجي، مع حدّ فاصل ثابت: نحن ننسّق، والأطباء المستقلون المرخّصون يتخذون كل قرار طبي."))
-    main += section("", L("Your coordination journey", "رحلة التنسيق خطوة بخطوة"), "", journey_list(cur))
-    links = L(f'<p><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Read more about medical travel from Australia</a> · <a href="{rel(cur,"privacy-overseas-health-information-disclosure/")}">Privacy and overseas health-information disclosure</a></p>', "")
-    main += f'''<section class="section tone-cream"><div class="container"><div class="notice-card"><h2>{L("Important coordination notice", "تنويه مهم بشأن التنسيق")}</h2><p>{L(esc(NOTICE.replace("Important Medical Coordination Notice: ","")), NOTICE_AR_BODY)}</p>
+                      "مسار واضح للجانب العملي من السفر العلاجي، مع حدّ فاصل ثابت: نحن ننسّق، والأطباء المستقلون المرخّصون يتخذون كل قرار طبي.", "Tıbbi seyahatin pratik tarafı için net bir yol, kesin bir sınırla: biz koordine ederiz, her tıbbi kararı bağımsız ve lisanslı hekimler verir."))
+    main += section("", L("Your coordination journey", "رحلة التنسيق خطوة بخطوة", "Koordinasyon yolculuğunuz"), "", journey_list(cur))
+    links = L(f'<p><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Read more about medical travel from Australia</a> · <a href="{rel(cur,"privacy-overseas-health-information-disclosure/")}">Privacy and overseas health-information disclosure</a></p>', "", "")
+    main += f'''<section class="section tone-cream"><div class="container"><div class="notice-card"><h2>{L("Important coordination notice", "تنويه مهم بشأن التنسيق", "Önemli koordinasyon bildirimi")}</h2><p>{L(esc(NOTICE.replace("Important Medical Coordination Notice: ","")), NOTICE_AR_BODY, NOTICE_TR_BODY)}</p>
 {links}</div></div></section>'''
     main += enquiry_cta(cur)
-    add(p, main, "how", crumbs=[(L("Home", "الرئيسية"), ""), (L("How It Works", "كيف نعمل"), cur)])
+    add(p, main, "how", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("How It Works", "كيف نعمل", "Nasıl Çalışır"), cur)])
 
 # ---------------- About ----------------
 def build_about():
     cur = "about/"
-    p = dict(path=cur, id="SUP-03", kind="About / Organisation", title=L("About threeeight35° Medical Travel Agency", "عن وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-03", kind="About / Organisation", title=L("About threeeight35° Medical Travel Agency", "عن وكالة threeeight35° للسفر العلاجي", "threeeight35° Tıbbi Seyahat Acentesi Hakkında"),
              desc=L("Learn about threeeight35° Medical Travel Agency, our coordination role, mission, values and founder, Hommam Azizieh.",
-                    "تعرّف على وكالة threeeight35° للسفر العلاجي ودورنا في التنسيق ورسالتنا وقيمنا ومؤسسنا همام عزيزية."),
+                    "تعرّف على وكالة threeeight35° للسفر العلاجي ودورنا في التنسيق ورسالتنا وقيمنا ومؤسسنا همام عزيزية.", "threeeight35° Tıbbi Seyahat Acentesi'ni, koordinasyon rolümüzü, misyonumuzu, değerlerimizi ve kurucumuz Hommam Azizieh'i tanıyın."),
              indexable=True, status="Editorially ready after factual/business verification and technical QA")
     values = L([("Patient-Centred Coordination", "We listen to each patient's needs, preferences and circumstances and, where the patient wishes, include companions or family members in appropriate parts of the planning process."),
                 ("Transparency", "We provide itemised written quotations, confirm inclusions in writing and never promise medical outcomes or risk-free procedures."),
@@ -89,9 +91,14 @@ def build_about():
                 ("الخصوصية والتكتّم", "نتعامل مع المعلومات الشخصية والصحية بعناية، ونقصر الوصول إليها على الموظفين المخوّلين، ولا نطلب من المرضى إرسال سجلات طبية أو صور سريرية عبر نماذج الموقع العامة."),
                 ("حدود واضحة", "نحن ننسّق، والأطباء المستقلون المرخّصون يتخذون كل قرار طبي."),
                 ("الدقة", "نسعى إلى تنسيق موثوق يهتم بالتفاصيل في كل مرحلة من مراحل الرحلة."),
-                ("الرعاية والكرامة", "نعامل كل مريض ومرافق باهتمام واحترام.")])
+                ("الرعاية والكرامة", "نعامل كل مريض ومرافق باهتمام واحترام.")], [("Hasta Odaklı Koordinasyon", "Her hastanın ihtiyaçlarını, tercihlerini ve koşullarını dinler; hasta isterse refakatçilerini veya aile üyelerini planlama sürecinin uygun aşamalarına dahil ederiz."),
+                ("Şeffaflık", "Kalem kalem yazılı fiyat teklifleri sunar, dahil olan hizmetleri yazılı olarak teyit eder ve asla tıbbi sonuç ya da risksiz işlem vaat etmeyiz."),
+                ("Gizlilik ve Özen", "Kişisel ve sağlık bilgilerini özenle işler, erişimi yetkili personelle sınırlar ve hastalardan herkese açık web formları aracılığıyla tıbbi kayıt veya klinik fotoğraf göndermelerini istemeyiz."),
+                ("Net Sınırlar", "Biz koordine ederiz. Her tıbbi kararı bağımsız, lisanslı hekimler verir."),
+                ("Titizlik", "Yolculuğun her aşamasında güvenilir ve ayrıntılara özen gösteren bir koordinasyon hedefleriz."),
+                ("Özen ve Saygı", "Her hastaya ve refakatçiye ilgi ve saygıyla yaklaşırız.")])
     vh = '<div class="cards3 values">' + "".join(f'<article class="card"><h3>{esc(a)}</h3><p>{esc(b)}</p></article>' for a, b in values) + "</div>"
-    main = pagehead(L("AGENCY PHILOSOPHY", "فلسفة الوكالة"), L("About threeeight35° Medical Travel Agency", "عن وكالة threeeight35° للسفر العلاجي"))
+    main = pagehead(L("AGENCY PHILOSOPHY", "فلسفة الوكالة", "ACENTE FELSEFESİ"), L("About threeeight35° Medical Travel Agency", "عن وكالة threeeight35° للسفر العلاجي", "threeeight35° Tıbbi Seyahat Acentesi Hakkında"))
     main += L(f'''<section class="section"><div class="container prose"><h2>About Us</h2>
 <p>threeeight35° Medical Travel Agency is an independent medical travel coordination service for patients from Australia, the UAE and other international markets who are exploring treatment in Türkiye. We manage the practical side of the journey. We connect patients with independent healthcare providers and hospitals in Istanbul, arrange consultations and quotations, and coordinate accommodation, private transfers and support in English, Arabic and Turkish during the stay.</p>
 <p>Our name reflects how we work. Like a coordinate, we aim to be precise, dependable and clear about where you stand at every step. From the first enquiry through our Australia &amp; International or UAE &amp; GCC contact line to follow-up coordination after returning home, patients work with a dedicated coordinator and receive written, itemised proposals before committing.</p>
@@ -101,19 +108,23 @@ f'''<section class="section"><div class="container prose"><h2>من نحن</h2>
 <p>وكالة threeeight35° للسفر العلاجي هي خدمة مستقلة لتنسيق السفر العلاجي للمرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى الذين يستكشفون العلاج في تركيا. نتولى الجانب العملي من الرحلة: نربط المرضى بمقدّمي رعاية صحية ومستشفيات مستقلة في إسطنبول، ونرتّب الاستشارات وعروض الأسعار، وننسّق الإقامة والتنقلات الخاصة والدعم باللغات العربية والإنجليزية والتركية خلال الإقامة.</p>
 <p>يعكس اسمنا طريقة عملنا. فكما تحدّد الإحداثيات موقعاً بدقة، نسعى إلى أن نكون دقيقين وموثوقين وواضحين بشأن موقعك في كل خطوة. ومن الاستفسار الأول عبر خط التواصل لأستراليا والدول الأخرى أو خط الإمارات ودول الخليج حتى تنسيق المتابعة بعد العودة، يعمل المرضى مع منسّق مخصّص ويستلمون عروضاً مكتوبة ومفصّلة قبل الالتزام.</p>
 <p><strong>لسنا مقدّم رعاية صحية.</strong> نحن لا نشخّص ولا نصف ولا نوصي بأي علاج. ويُقدَّم كل تقييم سريري وكل رعاية طبية بشكل مستقل من قِبل أخصائيي رعاية صحية مرخّصين في تركيا. ونشجّع المرضى على مناقشة العلاج في الخارج مع طبيبهم المعتاد أو مع أخصائي رعاية صحية مناسب عند الاقتضاء.</p>
-<p class="small">رقم الأعمال الأسترالي (ABN): {ABN}</p></div></section>''')
-    main += section("", L("Our Mission", "رسالتنا"), "", L('<div class="prose"><p>To make international medical travel clearer and better organised for patients and their families through transparent information, personalised coordination and practical support, while respecting privacy and leaving every clinical decision to independent medical professionals.</p></div>',
-                                                         '<div class="prose"><p>أن نجعل السفر العلاجي الدولي أوضح وأفضل تنظيماً للمرضى وعائلاتهم، من خلال معلومات شفافة وتنسيق شخصي ودعم عملي، مع احترام الخصوصية وترك كل قرار سريري لأخصائيين طبيين مستقلين.</p></div>'), tone="tone-cream")
-    main += section("", L("Our Vision", "رؤيتنا"), "", L('<div class="prose"><p>To be a respected name in international medical travel coordination, known for a standard of transparency and care that lets patients cross borders for treatment with well-informed confidence.</p></div>',
-                                                       '<div class="prose"><p>أن نكون اسماً محترماً في تنسيق السفر العلاجي الدولي، معروفاً بمستوى من الشفافية والرعاية يتيح للمرضى عبور الحدود لتلقي العلاج بثقة مبنية على معرفة واضحة.</p></div>'))
-    main += section("", L("Our Core Values", "قيمنا الأساسية"), "", vh, tone="tone-cream")
+<p class="small">رقم الأعمال الأسترالي (ABN): {ABN}</p></div></section>''', f'''<section class="section"><div class="container prose"><h2>Hakkımızda</h2>
+<p>threeeight35° Tıbbi Seyahat Acentesi, Türkiye'de tedavi seçeneklerini araştıran Avustralya, BAE ve diğer uluslararası pazarlardaki hastalar için bağımsız bir tıbbi seyahat koordinasyon hizmetidir. Yolculuğun pratik tarafını üstleniriz. Hastaları İstanbul'daki bağımsız sağlık kuruluşları ve hastanelerle buluşturur, konsültasyonları ve fiyat tekliflerini ayarlar; konaklamayı, özel transferleri ve konaklama süresince İngilizce, Arapça ve Türkçe desteği koordine ederiz.</p>
+<p>Adımız çalışma şeklimizi yansıtır. Bir koordinat gibi, her adımda nerede olduğunuz konusunda kesin, güvenilir ve net olmayı hedefleriz. Avustralya ve Uluslararası ya da BAE ve Körfez iletişim hattımız üzerinden yapılan ilk talepten eve dönüşten sonraki takip koordinasyonuna kadar, hastalar kendilerine özel bir koordinatörle çalışır ve taahhütte bulunmadan önce kalem kalem yazılı teklifler alır.</p>
+<p><strong>Sağlık hizmeti sağlayıcısı değiliz.</strong> Teşhis koymaz, reçete yazmaz ve tedavi önermeyiz. Her klinik değerlendirme ve tüm tıbbi bakım, Türkiye'deki lisanslı sağlık profesyonelleri tarafından bağımsız olarak sağlanır. Hastaları, gerektiğinde yurt dışında tedaviyi kendi doktorları veya uygun bir sağlık profesyoneliyle görüşmeye teşvik ederiz.</p>
+<p class="small">Avustralya İşletme Numarası (ABN): {ABN}</p></div></section>''')
+    main += section("", L("Our Mission", "رسالتنا", "Misyonumuz"), "", L('<div class="prose"><p>To make international medical travel clearer and better organised for patients and their families through transparent information, personalised coordination and practical support, while respecting privacy and leaving every clinical decision to independent medical professionals.</p></div>',
+                                                         '<div class="prose"><p>أن نجعل السفر العلاجي الدولي أوضح وأفضل تنظيماً للمرضى وعائلاتهم، من خلال معلومات شفافة وتنسيق شخصي ودعم عملي، مع احترام الخصوصية وترك كل قرار سريري لأخصائيين طبيين مستقلين.</p></div>', '<div class="prose"><p>Şeffaf bilgi, kişiye özel koordinasyon ve pratik destekle, gizliliğe saygı göstererek ve her klinik kararı bağımsız tıp profesyonellerine bırakarak, uluslararası tıbbi seyahati hastalar ve aileleri için daha anlaşılır ve daha düzenli hale getirmek.</p></div>'), tone="tone-cream")
+    main += section("", L("Our Vision", "رؤيتنا", "Vizyonumuz"), "", L('<div class="prose"><p>To be a respected name in international medical travel coordination, known for a standard of transparency and care that lets patients cross borders for treatment with well-informed confidence.</p></div>',
+                                                       '<div class="prose"><p>أن نكون اسماً محترماً في تنسيق السفر العلاجي الدولي، معروفاً بمستوى من الشفافية والرعاية يتيح للمرضى عبور الحدود لتلقي العلاج بثقة مبنية على معرفة واضحة.</p></div>', '<div class="prose"><p>Hastaların tedavi için sınırları bilinçli bir güvenle aşmasını sağlayan şeffaflık ve özen standardıyla tanınan, uluslararası tıbbi seyahat koordinasyonunda saygın bir isim olmak.</p></div>'))
+    main += section("", L("Our Core Values", "قيمنا الأساسية", "Temel Değerlerimiz"), "", vh, tone="tone-cream")
     main += f'<section class="section" id="founder"><div class="container">{founder_block(cur)}</div></section>'
     main += L(f'''<section class="section tone-cream"><div class="container prose"><h2>Where to go next</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">Contact / Confidential Enquiry</a></li><li><a href="{rel(cur,"treatments/")}">Treatments Catalogue</a></li><li><a href="{rel(cur,"medical-travel-turkiye-from-australia/")}">Medical Travel to Türkiye from Australia</a></li><li><a href="{rel(cur,"privacy/")}">Privacy Policy</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">Medical Information Disclaimer</a></li><li><a href="{rel(cur,"editorial-policy/")}">Editorial Policy</a></li></ul></div></section>''',
-              f'''<section class="section tone-cream"><div class="container prose"><h2>إلى أين بعد ذلك؟</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">التواصل والاستفسار السرّي</a></li><li><a href="{rel(cur,"treatments/")}">دليل العلاجات</a></li><li><a href="{rel(cur,"patient-packages/")}">الباقات</a></li><li><a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">إخلاء المسؤولية الطبية</a></li><li><a href="{rel(cur,"editorial-policy/")}">السياسة التحريرية</a></li></ul></div></section>''')
+              f'''<section class="section tone-cream"><div class="container prose"><h2>إلى أين بعد ذلك؟</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">التواصل والاستفسار السرّي</a></li><li><a href="{rel(cur,"treatments/")}">دليل العلاجات</a></li><li><a href="{rel(cur,"patient-packages/")}">الباقات</a></li><li><a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">إخلاء المسؤولية الطبية</a></li><li><a href="{rel(cur,"editorial-policy/")}">السياسة التحريرية</a></li></ul></div></section>''', f'''<section class="section tone-cream"><div class="container prose"><h2>Sonraki adımlar</h2><ul class="linklist"><li><a href="{rel(cur,"contact/#enquiry")}">İletişim ve Gizli Talep</a></li><li><a href="{rel(cur,"treatments/")}">Tedavi Kataloğu</a></li><li><a href="{rel(cur,"patient-packages/")}">Paketler</a></li><li><a href="{rel(cur,"privacy/")}">Gizlilik Politikası</a></li><li><a href="{rel(cur,"medical-disclaimer/")}">Tıbbi Bilgilendirme ve Sorumluluk Reddi</a></li><li><a href="{rel(cur,"editorial-policy/")}">Yayın İlkeleri</a></li></ul></div></section>''')
     fnd = {"@context": "https://schema.org", "@type": "Person", "@id": BASE + "about/#founder", "name": "Hommam Azizieh", "jobTitle": "Founder",
            "image": abs_url("assets/img/founder-hommam-azizieh-843.jpg"), "knowsLanguage": ["English", "Arabic", "Turkish"], "knowsAbout": ["Marketing", "Production", "Photography", "Medical travel coordination"],
            "worksFor": {"@id": BASE + "#organization"}}
-    add(p, main, "about", crumbs=[(L("Home", "الرئيسية"), ""), (L("About Us", "من نحن"), cur)], extra_ld=[dict(ORG_LD), fnd])
+    add(p, main, "about", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("About Us", "من نحن", "Hakkımızda"), cur)], extra_ld=[dict(ORG_LD), fnd])
 
 # ---------------- FAQs ----------------
 FAQS = [
@@ -132,126 +143,137 @@ FAQS = [
 ]
 def build_faqs():
     cur = "faqs/"
-    p = dict(path=cur, id="SUP-FAQ", kind="FAQs (derived from v11 statements)", title=L("Frequently Asked Questions | threeeight35° Medical Travel Agency", "الأسئلة الشائعة | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-FAQ", kind="FAQs (derived from v11 statements)", title=L("Frequently Asked Questions | threeeight35° Medical Travel Agency", "الأسئلة الشائعة | وكالة threeeight35° للسفر العلاجي", "Sıkça Sorulan Sorular | threeeight35° Tıbbi Seyahat Acentesi"),
              desc=L("Answers about threeeight35°'s coordination role, package prices, treatment costs, travel from Australia and privacy when planning treatment in Türkiye.",
-                    "إجابات عن دور threeeight35° في التنسيق وأسعار الباقات وتكاليف العلاج والسفر والخصوصية عند التخطيط للعلاج في تركيا."),
+                    "إجابات عن دور threeeight35° في التنسيق وأسعار الباقات وتكاليف العلاج والسفر والخصوصية عند التخطيط للعلاج في تركيا.", "Türkiye'de tedavi planlarken threeeight35°'in koordinasyon rolü, paket fiyatları, tedavi maliyetleri, seyahat ve gizlilik hakkında yanıtlar."),
              indexable=True, status="Derived from Version 11 statements; editorial approval required (v11 has no dedicated FAQ record)")
-    body = "".join(f'<details class="faq"><summary>{esc(q)}</summary><div class="faq-a"><p>{esc(a)}</p></div></details>' for q, a in L(FAQS, FAQS_AR))
-    main = pagehead(L("PATIENT GUIDANCE", "إرشادات للمرضى"), L("Frequently Asked Questions", "الأسئلة الشائعة"),
-                    L("Answers about our coordination role, package prices, costs and travel from Australia.", "إجابات عن دورنا في التنسيق وأسعار الباقات والتكاليف والسفر."))
-    main += f'<section class="section"><div class="container prose">{body}<p class="small">{L("Still have a question?", "هل لديك سؤال آخر؟")} <a href="{rel(cur,"contact/#enquiry")}">{L("Make an enquiry", "أرسل استفسارك")}</a>.</p></div></section>'
+    body = "".join(f'<details class="faq"><summary>{esc(q)}</summary><div class="faq-a"><p>{esc(a)}</p></div></details>' for q, a in L(FAQS, FAQS_AR, FAQS_TR))
+    main = pagehead(L("PATIENT GUIDANCE", "إرشادات للمرضى", "HASTA REHBERİ"), L("Frequently Asked Questions", "الأسئلة الشائعة", "Sıkça Sorulan Sorular"),
+                    L("Answers about our coordination role, package prices, costs and travel from Australia.", "إجابات عن دورنا في التنسيق وأسعار الباقات والتكاليف والسفر.", "Koordinasyon rolümüz, paket fiyatları, maliyetler ve seyahat hakkında yanıtlar."))
+    main += f'<section class="section"><div class="container prose">{body}<p class="small">{L("Still have a question?", "هل لديك سؤال آخر؟", "Başka bir sorunuz mu var?")} <a href="{rel(cur,"contact/#enquiry")}">{L("Make an enquiry", "أرسل استفسارك", "Talebinizi iletin")}</a>.</p></div></section>'
     main += enquiry_cta(cur)
-    add(p, main, "faqs", crumbs=[(L("Home", "الرئيسية"), ""), (L("FAQs", "الأسئلة الشائعة"), cur)])
+    add(p, main, "faqs", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("FAQs", "الأسئلة الشائعة", "SSS"), cur)])
 
 # ---------------- Contact ----------------
 FORM_CONSENT = "I understand that threeeight35° is a medical travel coordination service and not a healthcare provider, and I have read the Privacy Policy. I have not included medical records, test results, passport or payment details in this form."
 def build_contact():
     cur = "contact/"
-    p = dict(path=cur, id="SUP-04", kind="Contact / Enquiry", title=L("Contact & Confidential Enquiry | threeeight35°", "التواصل والاستفسار السرّي | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-04", kind="Contact / Enquiry", title=L("Contact & Confidential Enquiry | threeeight35°", "التواصل والاستفسار السرّي | وكالة threeeight35° للسفر العلاجي", "İletişim ve Gizli Talep | threeeight35°"),
              desc=L("Call or WhatsApp threeeight35° on our Australia & International or UAE & GCC line, or send a confidential medical travel enquiry. No medical records, please.",
-                    "اتصل بـ threeeight35° أو راسلها عبر واتساب على خط الإمارات ودول الخليج أو خط أستراليا والدول الأخرى، أو أرسل استفساراً سرّياً. دون إرسال سجلات طبية."),
+                    "اتصل بـ threeeight35° أو راسلها عبر واتساب على خط الإمارات ودول الخليج أو خط أستراليا والدول الأخرى، أو أرسل استفساراً سرّياً. دون إرسال سجلات طبية.", "threeeight35°'i Avustralya ve Uluslararası ya da BAE ve Körfez hattından arayın veya WhatsApp'tan yazın ya da gizli bir talep gönderin. Lütfen tıbbi kayıt göndermeyin."),
              indexable=True, status="Form delivery: endpoint configured, live test pending; consent wording: LEGAL INPUT REQUIRED")
     # Option values stay in English on both versions: the form back-end checks them and the enquiry email is read in English.
     cats = "".join(f'<option value="{att(c[2])}">{esc(cat_name(c[0]))}</option>' for c in CATS)
     procs = "".join(f'<optgroup label="{att(cat_name(cid))}">' + "".join(f'<option value="{att(TREAT[s]["label"])}" data-cat="{att(CATMAP[cid][2])}">{esc(treat_label(s))}</option>' for _, ids in GROUPS[cid] for s in ids) + "</optgroup>" for cid in [c[0] for c in CATS])
     contacts = L('<option>Email</option><option>WhatsApp</option><option>SMS</option><option>Phone call</option>',
-                 '<option value="Email">البريد الإلكتروني</option><option value="WhatsApp">واتساب</option><option value="SMS">رسالة نصية (SMS)</option><option value="Phone call">مكالمة هاتفية</option>')
-    not_sure = L('<option>Not sure yet</option>', '<option value="Not sure yet">لم أحدّد بعد</option>')
-    req = L(" *", " *")
+                 '<option value="Email">البريد الإلكتروني</option><option value="WhatsApp">واتساب</option><option value="SMS">رسالة نصية (SMS)</option><option value="Phone call">مكالمة هاتفية</option>', '<option value="Email">E-posta</option><option value="WhatsApp">WhatsApp</option><option value="SMS">SMS</option><option value="Phone call">Telefon görüşmesi</option>')
+    not_sure = L('<option>Not sure yet</option>', '<option value="Not sure yet">لم أحدّد بعد</option>', '<option value="Not sure yet">Henüz karar vermedim</option>')
+    req = L(" *", " *", " *")
     consent = L(esc(FORM_CONSENT).replace("Privacy Policy", f'<a href="{rel(cur,"privacy/")}">Privacy Policy</a>'),
-                FORM_CONSENT_AR.replace("سياسة الخصوصية", f'<a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a>'))
-    opt = L('<span class="opt">(optional)</span>', '<span class="opt">(اختياري)</span>')
-    form = f'''<section class="section" id="enquiry"><div class="container form-wrap"><div class="form-intro"><p class="eyebrow">{L("MEDICAL TRAVEL ENQUIRY", "استفسار عن السفر العلاجي")}</p><h2>{L("Send a confidential enquiry", "أرسل استفساراً سرّياً")}</h2>
-<p>{L("Please provide your details below. We practise data minimisation — no diagnostic records, passport or payment details are requested here.", "يُرجى تقديم بياناتك أدناه. نلتزم بتقليل البيانات إلى الحد الأدنى، فلا نطلب هنا أي سجلات تشخيصية أو بيانات جواز سفر أو دفع.")}</p>
-<p>{L("After the initial enquiry, any health information required for preliminary provider review must follow the approved private health-information and overseas-disclosure workflow, not the public web form.", "بعد الاستفسار الأولي، يجب أن تمرّ أي معلومات صحية مطلوبة للتقييم الأولي من مقدّم الرعاية عبر الإجراءات الخاصة المعتمدة لحماية المعلومات الصحية والإفصاح عنها خارج البلاد، وليس عبر نموذج الموقع العام.")}</p>
-<p class="small">{L("Fields marked * are required.", "الحقول المميّزة بعلامة * مطلوبة.")}</p></div>
+                FORM_CONSENT_AR.replace("سياسة الخصوصية", f'<a href="{rel(cur,"privacy/")}">سياسة الخصوصية</a>'), esc(FORM_CONSENT_TR).replace("Gizlilik Politikası", f'<a href="{rel(cur,"privacy/")}">Gizlilik Politikası</a>'))
+    opt = L('<span class="opt">(optional)</span>', '<span class="opt">(اختياري)</span>', '<span class="opt">(isteğe bağlı)</span>')
+    form = f'''<section class="section" id="enquiry"><div class="container form-wrap"><div class="form-intro"><p class="eyebrow">{L("MEDICAL TRAVEL ENQUIRY", "استفسار عن السفر العلاجي", "TIBBİ SEYAHAT TALEBİ")}</p><h2>{L("Send a confidential enquiry", "أرسل استفساراً سرّياً", "Gizli bir talep gönderin")}</h2>
+<p>{L("Please provide your details below. We practise data minimisation — no diagnostic records, passport or payment details are requested here.", "يُرجى تقديم بياناتك أدناه. نلتزم بتقليل البيانات إلى الحد الأدنى، فلا نطلب هنا أي سجلات تشخيصية أو بيانات جواز سفر أو دفع.", "Lütfen bilgilerinizi aşağıya girin. Veri minimizasyonu ilkesini uygularız; burada tanı kayıtları, pasaport veya ödeme bilgisi istenmez.")}</p>
+<p>{L("After the initial enquiry, any health information required for preliminary provider review must follow the approved private health-information and overseas-disclosure workflow, not the public web form.", "بعد الاستفسار الأولي، يجب أن تمرّ أي معلومات صحية مطلوبة للتقييم الأولي من مقدّم الرعاية عبر الإجراءات الخاصة المعتمدة لحماية المعلومات الصحية والإفصاح عنها خارج البلاد، وليس عبر نموذج الموقع العام.", "İlk talepten sonra, sağlık kuruluşunun ön değerlendirmesi için gereken sağlık bilgileri, herkese açık web formu yerine sağlık bilgilerinin korunmasına ve yurt dışına aktarılmasına yönelik onaylı özel süreçle iletilmelidir.")}</p>
+<p class="small">{L("Fields marked * are required.", "الحقول المميّزة بعلامة * مطلوبة.", "* ile işaretli alanlar zorunludur.")}</p></div>
 <form class="form" id="enquiry-form" method="post" novalidate data-endpoint-config="T35_FORM">
 <div id="form-status" class="form-status" role="status" aria-live="polite" tabindex="-1" hidden></div>
-<div class="field"><label for="f-name">{L("Full name", "الاسم الكامل")}{req}</label><input id="f-name" name="full_name" type="text" autocomplete="name" required maxlength="120"><p class="err" id="e-f-name" hidden></p></div>
-<div class="field"><label for="f-email">{L("Email address", "البريد الإلكتروني")}{req}</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160"{L("", ' dir="ltr"')}><p class="err" id="e-f-email" hidden></p></div>
-<div class="field"><label for="f-country">{L("Country of residence", "بلد الإقامة")}{req}</label><input id="f-country" name="country" type="text" autocomplete="country-name" required maxlength="80"><p class="err" id="e-f-country" hidden></p></div>
-<div class="field"><label for="f-contact">{L("Preferred contact method", "وسيلة التواصل المفضّلة")}{req}</label><select id="f-contact" name="preferred_contact" required><option value="">{L("Select…", "اختر…")}</option>{contacts}</select><p class="err" id="e-f-contact" hidden></p></div>
-<div class="field" id="phone-field" hidden><label for="f-phone">{L("Phone number", "رقم الهاتف")}{req}</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" disabled data-describedby="phone-help" aria-describedby="phone-help"{L("", ' dir="ltr"')}><p id="phone-help" class="help">{L("Include your country code, for example +61 4XX XXX XXX or +971 5X XXX XXXX.", 'أدرج رمز الدولة، مثل <span dir="ltr">+971 5X XXX XXXX</span> أو <span dir="ltr">+61 4XX XXX XXX</span>.')}</p><p class="err" id="e-f-phone" hidden></p></div>
-<div class="field"><label for="f-cat">{L("Treatment category", "فئة العلاج")}{req}</label><select id="f-cat" name="treatment_category" required><option value="">{L("Select…", "اختر…")}</option>{cats}{not_sure}</select><p class="err" id="e-f-cat" hidden></p></div>
-<div class="field"><label for="f-proc">{L("Specific procedure", "الإجراء المحدد")} {opt}</label><select id="f-proc" name="specific_procedure"><option value="">{L("Not sure yet / not listed", "لم أحدّد بعد / غير مدرج")}</option>{procs}</select></div>
-<div class="field field-wide"><label for="f-msg">{L("Message", "الرسالة")} {opt}</label><textarea id="f-msg" name="message" rows="5" maxlength="1500" aria-describedby="msg-help"></textarea>
-<p id="msg-help" class="help">{L("Please share only your general goals or ideal travel timing. Please don't include medical records, test results or payment details here.", "يُرجى مشاركة أهدافك العامة أو التوقيت المفضّل لسفرك فقط، ودون إدراج سجلات طبية أو نتائج فحوصات أو بيانات دفع هنا.")}</p></div>
-<div class="hp" aria-hidden="true"><label for="f-hp">{L("Leave this field empty", "اترك هذا الحقل فارغاً")}</label><input id="f-hp" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
+<div class="field"><label for="f-name">{L("Full name", "الاسم الكامل", "Ad soyad")}{req}</label><input id="f-name" name="full_name" type="text" autocomplete="name" required maxlength="120"><p class="err" id="e-f-name" hidden></p></div>
+<div class="field"><label for="f-email">{L("Email address", "البريد الإلكتروني", "E-posta adresi")}{req}</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160"{L("", ' dir="ltr"', "")}><p class="err" id="e-f-email" hidden></p></div>
+<div class="field"><label for="f-country">{L("Country of residence", "بلد الإقامة", "Yaşadığınız ülke")}{req}</label><input id="f-country" name="country" type="text" autocomplete="country-name" required maxlength="80"><p class="err" id="e-f-country" hidden></p></div>
+<div class="field"><label for="f-contact">{L("Preferred contact method", "وسيلة التواصل المفضّلة", "Tercih ettiğiniz iletişim yöntemi")}{req}</label><select id="f-contact" name="preferred_contact" required><option value="">{L("Select…", "اختر…", "Seçin…")}</option>{contacts}</select><p class="err" id="e-f-contact" hidden></p></div>
+<div class="field" id="phone-field" hidden><label for="f-phone">{L("Phone number", "رقم الهاتف", "Telefon numarası")}{req}</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" disabled data-describedby="phone-help" aria-describedby="phone-help"{L("", ' dir="ltr"', "")}><p id="phone-help" class="help">{L("Include your country code, for example +61 4XX XXX XXX or +971 5X XXX XXXX.", 'أدرج رمز الدولة، مثل <span dir="ltr">+971 5X XXX XXXX</span> أو <span dir="ltr">+61 4XX XXX XXX</span>.', "Ülke kodunu ekleyin, örneğin +61 4XX XXX XXX veya +971 5X XXX XXXX.")}</p><p class="err" id="e-f-phone" hidden></p></div>
+<div class="field"><label for="f-cat">{L("Treatment category", "فئة العلاج", "Tedavi kategorisi")}{req}</label><select id="f-cat" name="treatment_category" required><option value="">{L("Select…", "اختر…", "Seçin…")}</option>{cats}{not_sure}</select><p class="err" id="e-f-cat" hidden></p></div>
+<div class="field"><label for="f-proc">{L("Specific procedure", "الإجراء المحدد", "Belirli işlem")} {opt}</label><select id="f-proc" name="specific_procedure"><option value="">{L("Not sure yet / not listed", "لم أحدّد بعد / غير مدرج", "Henüz karar vermedim / listede yok")}</option>{procs}</select></div>
+<div class="field field-wide"><label for="f-msg">{L("Message", "الرسالة", "Mesaj")} {opt}</label><textarea id="f-msg" name="message" rows="5" maxlength="1500" aria-describedby="msg-help"></textarea>
+<p id="msg-help" class="help">{L("Please share only your general goals or ideal travel timing. Please don't include medical records, test results or payment details here.", "يُرجى مشاركة أهدافك العامة أو التوقيت المفضّل لسفرك فقط، ودون إدراج سجلات طبية أو نتائج فحوصات أو بيانات دفع هنا.", "Lütfen yalnızca genel hedeflerinizi veya ideal seyahat zamanınızı paylaşın. Buraya tıbbi kayıt, test sonucu veya ödeme bilgisi eklemeyin.")}</p></div>
+<div class="hp" aria-hidden="true"><label for="f-hp">{L("Leave this field empty", "اترك هذا الحقل فارغاً", "Bu alanı boş bırakın")}</label><input id="f-hp" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
 <div class="field field-wide consent"><input id="f-consent" name="privacy_consent" type="checkbox" value="yes" required><label for="f-consent">{consent}</label><p class="err" id="e-f-consent" hidden></p></div>
 <div id="captcha-slot" class="field-wide"></div>
 <input type="hidden" name="_subject" value="New medical travel enquiry — threeeight35° website"><input type="hidden" name="_page" value="{page_url(cur)}">
-<div class="field-wide"><button class="btn btn-navy btn-lg" type="submit" id="f-submit">{L("Send enquiry", "إرسال الاستفسار")}</button></div>
+<div class="field-wide"><button class="btn btn-navy btn-lg" type="submit" id="f-submit">{L("Send enquiry", "إرسال الاستفسار", "Talebi gönder")}</button></div>
 </form></div></section>'''
-    main = pagehead(L("PATIENT CONCIERGE", "خدمة المرضى"), L("Contact & Confidential Enquiry", "التواصل والاستفسار السرّي"),
-                    L("Reach our Australian, UAE or Türkiye coordination contacts directly or submit an enquiry below.", "تواصل مباشرةً مع مكاتب التنسيق في أستراليا أو الإمارات أو تركيا، أو أرسل استفسارك أدناه."))
+    main = pagehead(L("PATIENT CONCIERGE", "خدمة المرضى", "HASTA HİZMETLERİ"), L("Contact & Confidential Enquiry", "التواصل والاستفسار السرّي", "İletişim ve Gizli Talep"),
+                    L("Reach our Australian, UAE or Türkiye coordination contacts directly or submit an enquiry below.", "تواصل مباشرةً مع مكاتب التنسيق في أستراليا أو الإمارات أو تركيا، أو أرسل استفسارك أدناه.", "Avustralya, BAE veya Türkiye koordinasyon hatlarımıza doğrudan ulaşın ya da aşağıdan talebinizi gönderin."))
     main += contact_cards(cur, with_h=False).join(['<section class="section tone-cream"><div class="container">', '</div></section>'])
     main += form
-    add(p, main, "contact", crumbs=[(L("Home", "الرئيسية"), ""), (L("Contact & Enquiries", "التواصل والاستفسارات"), cur)])
+    add(p, main, "contact", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Contact & Enquiries", "التواصل والاستفسارات", "İletişim ve Talepler"), cur)])
 
 # ---------------- Legal & trust ----------------
-def legal_page(cur, doc_en, doc_ar):
+def legal_page(cur, doc_en, doc_ar, doc_tr):
     """Render a legal document (list of (heading, html)) with its last-updated date and links resolved for this page."""
     links = dict(EMAIL=EMAIL, ABN=ABN, OVERSEAS=rel(cur, "privacy-overseas-health-information-disclosure/"),
                  PACKAGES=rel(cur, "patient-packages/"), CONTACT=rel(cur, "contact/"), PRIVACY=rel(cur, "privacy/"))
-    body = "".join(qa(h, html_.format(**links)) for h, html_ in L(doc_en, doc_ar))
-    return f'<p class="small">{L("Last updated", "آخر تحديث")}: {L(*LEGAL_UPDATED)}</p>' + body
+    body = "".join(qa(h, html_.format(**links)) for h, html_ in L(doc_en, doc_ar, doc_tr))
+    return f'<p class="small">{L("Last updated", "آخر تحديث", "Son güncelleme")}: {L(*LEGAL_UPDATED)}</p>' + body
 
 def build_privacy():
     cur = "privacy/"
-    p = dict(path=cur, id="SUP-05", kind="Privacy", title=L("Privacy Policy | threeeight35° Medical Travel Agency", "سياسة الخصوصية | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-05", kind="Privacy", title=L("Privacy Policy | threeeight35° Medical Travel Agency", "سياسة الخصوصية | وكالة threeeight35° للسفر العلاجي", "Gizlilik Politikası | threeeight35° Tıbbi Seyahat Acentesi"),
              desc=L("How threeeight35° collects, uses, discloses and protects personal and health information, including overseas disclosure, retention and your rights.",
-                    "كيف تجمع threeeight35° المعلومات الشخصية والصحية وتستخدمها وتفصح عنها وتحميها، بما في ذلك الإفصاح خارج البلاد ومدة الاحتفاظ وحقوقك."),
+                    "كيف تجمع threeeight35° المعلومات الشخصية والصحية وتستخدمها وتفصح عنها وتحميها، بما في ذلك الإفصاح خارج البلاد ومدة الاحتفاظ وحقوقك.", "threeeight35°'in kişisel ve sağlık bilgilerini nasıl topladığı, kullandığı, paylaştığı ve koruduğu; yurt dışına aktarım, saklama süreleri ve haklarınız."),
              indexable=True, status="Full policy drafted 22 Oct 2026 (Australian Privacy Principles); lawyer check recommended")
-    main = pagehead("", L("Privacy Policy", "سياسة الخصوصية")) + f'<section class="section"><div class="container prose">{legal_page(cur, PRIVACY_EN, PRIVACY_AR)}</div></section>'
-    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Privacy Policy", "سياسة الخصوصية"), cur)])
+    main = pagehead("", L("Privacy Policy", "سياسة الخصوصية", "Gizlilik Politikası")) + f'<section class="section"><div class="container prose">{legal_page(cur, PRIVACY_EN, PRIVACY_AR, PRIVACY_TR)}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Privacy Policy", "سياسة الخصوصية", "Gizlilik Politikası"), cur)])
 
 def build_terms():
     cur = "terms/"
-    p = dict(path=cur, id="SUP-08", kind="Terms", title=L("Terms & Conditions | threeeight35° Medical Travel Agency", "الشروط والأحكام | وكالة threeeight35° للسفر العلاجي"),
+    p = dict(path=cur, id="SUP-08", kind="Terms", title=L("Terms & Conditions | threeeight35° Medical Travel Agency", "الشروط والأحكام | وكالة threeeight35° للسفر العلاجي", "Şartlar ve Koşullar | threeeight35° Tıbbi Seyahat Acentesi"),
              desc=L("Terms for threeeight35° medical travel coordination: our role, package inclusions, 50% deposit and payment timing, your responsibilities and consumer rights.",
-                    "شروط خدمات تنسيق السفر العلاجي من threeeight35°: دورنا وما تشمله الباقات والعربون ومواعيد الدفع ومسؤولياتك وحقوقك كمستهلك."),
+                    "شروط خدمات تنسيق السفر العلاجي من threeeight35°: دورنا وما تشمله الباقات والعربون ومواعيد الدفع ومسؤولياتك وحقوقك كمستهلك.", "threeeight35° tıbbi seyahat koordinasyonu şartları: rolümüz, pakete dahil hizmetler, %50 kapora ve ödeme zamanı, sorumluluklarınız ve tüketici haklarınız."),
              indexable=True, status="Full terms drafted 22 Oct 2026; refund policy provided with each written proposal; lawyer check recommended")
-    main = pagehead("", L("Terms & Conditions", "الشروط والأحكام")) + f'<section class="section"><div class="container prose">{legal_page(cur, TERMS_EN, TERMS_AR)}</div></section>'
-    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Terms & Conditions", "الشروط والأحكام"), cur)])
+    main = pagehead("", L("Terms & Conditions", "الشروط والأحكام", "Şartlar ve Koşullar")) + f'<section class="section"><div class="container prose">{legal_page(cur, TERMS_EN, TERMS_AR, TERMS_TR)}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Terms & Conditions", "الشروط والأحكام", "Şartlar ve Koşullar"), cur)])
 
 def build_disclaimer():
     cur = "medical-disclaimer/"
-    p = dict(path=cur, id="SUP-06", kind="Medical disclaimer", title=L("Medical Information Disclaimer | threeeight35°", "إخلاء المسؤولية الطبية | threeeight35°"),
+    p = dict(path=cur, id="SUP-06", kind="Medical disclaimer", title=L("Medical Information Disclaimer | threeeight35°", "إخلاء المسؤولية الطبية | threeeight35°", "Tıbbi Bilgilendirme ve Sorumluluk Reddi | threeeight35°"),
              desc=L("threeeight35° is a medical travel coordination service, not a healthcare provider. Read how our information differs from medical advice.",
-                    "threeeight35° خدمة لتنسيق السفر العلاجي وليست مقدّم رعاية صحية. تعرّف على الفرق بين معلوماتنا والاستشارة الطبية."),
+                    "threeeight35° خدمة لتنسيق السفر العلاجي وليست مقدّم رعاية صحية. تعرّف على الفرق بين معلوماتنا والاستشارة الطبية.", "threeeight35° bir tıbbi seyahat koordinasyon hizmetidir, sağlık hizmeti sağlayıcısı değildir. Bilgilerimizin tıbbi tavsiyeden nasıl farklı olduğunu okuyun."),
              indexable=True, status="Uses Version 11 approved coordination notice; legal review recommended")
-    if not is_ar():
+    if lang() == "en":
         body = f'''{qa("What threeeight35° is and is not", f"<p>{esc(NOTICE.replace('Important Medical Coordination Notice: ',''))}</p>")}
 {qa("What this website provides", "<p>General information about planning medical travel and coordination. It does not diagnose a condition, recommend a treatment for an individual or replace advice from a suitably qualified healthcare professional. Suitability, risks, alternatives, recovery and fitness to travel must be determined by the treating clinician.</p>")}
 {qa("Results and costs", "<p>No treatment result, recovery time or travel timeframe is guaranteed. Treatment prices are quoted by and paid directly to the independent clinic or hospital.</p>")}
 {qa("In an emergency", "<p>In a medical emergency in Türkiye, call 112. This is separate from threeeight35° contact details.</p>")}
 {qa("Discuss your plans", "<p>Patients are encouraged to discuss overseas treatment with their usual doctor or an appropriate healthcare professional where relevant.</p>")}'''
+    elif lang() == "tr":
+        body = f'''{qa("threeeight35° nedir, ne değildir", f"<p>{NOTICE_TR_BODY}</p>")}
+{qa("Bu web sitesi ne sunar", "<p>Tıbbi seyahat planlaması ve koordinasyonu hakkında genel bilgiler. Site bir rahatsızlığa teşhis koymaz, bir kişiye tedavi önermez ve uygun nitelikli bir sağlık profesyonelinin tavsiyesinin yerini tutmaz. Uygunluk, riskler, alternatifler, iyileşme ve seyahat edebilirlik tedaviyi yürüten hekim tarafından belirlenmelidir.</p>")}
+{qa("Sonuçlar ve maliyetler", "<p>Hiçbir tedavi sonucu, iyileşme süresi veya seyahat zamanı garanti edilmez. Tedavi, bağımsız klinik veya hastane tarafından fiyatlandırılır ve doğrudan onlara ödenir.</p>")}
+{qa("Acil bir durumda", "<p>Türkiye'de tıbbi bir acil durumda 112'yi arayın. Bu numara threeeight35° iletişim bilgilerinden ayrıdır.</p>")}
+{qa("Planlarınızı görüşün", "<p>Hastaları, gerektiğinde yurt dışında tedaviyi kendi doktorları veya uygun bir sağlık profesyoneliyle görüşmeye teşvik ederiz.</p>")}'''
     else:
         body = f'''{qa("ما هي threeeight35° وما ليست هي", f"<p>{NOTICE_AR_BODY}</p>")}
 {qa("ما يقدّمه هذا الموقع", "<p>معلومات عامة عن التخطيط للسفر العلاجي وتنسيقه. ولا يشخّص الموقع أي حالة، ولا يوصي بعلاج لشخص بعينه، ولا يغني عن استشارة أخصائي رعاية صحية مؤهّل. ويجب أن يحدّد الطبيب المعالج مدى ملاءمة العلاج ومخاطره وبدائله ومدة التعافي والقدرة على السفر.</p>")}
 {qa("النتائج والتكاليف", "<p>لا نضمن أي نتيجة علاجية أو مدة تعافٍ أو إطار زمني للسفر. ويُسعَّر العلاج ويُدفع مباشرةً إلى العيادة أو المستشفى المستقل.</p>")}
 {qa("في حالات الطوارئ", "<p>في حالة الطوارئ الطبية في تركيا، اتصل على الرقم 112. وهذا الرقم منفصل عن أرقام التواصل مع threeeight35°.</p>")}
 {qa("ناقش خططك", "<p>نشجّع المرضى على مناقشة العلاج في الخارج مع طبيبهم المعتاد أو مع أخصائي رعاية صحية مناسب عند الاقتضاء.</p>")}'''
-    main = pagehead("", L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية")) + f'<section class="section"><div class="container prose">{body}</div></section>'
-    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية"), cur)])
+    main = pagehead("", L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية", "Tıbbi Bilgilendirme ve Sorumluluk Reddi")) + f'<section class="section"><div class="container prose">{body}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Medical Information Disclaimer", "إخلاء المسؤولية الطبية", "Tıbbi Bilgilendirme ve Sorumluluk Reddi"), cur)])
 
 def build_editorial():
     cur = "editorial-policy/"
-    p = dict(path=cur, id="SUP-07", kind="Editorial policy", title=L("Editorial Policy | threeeight35°", "السياسة التحريرية | threeeight35°"),
+    p = dict(path=cur, id="SUP-07", kind="Editorial policy", title=L("Editorial Policy | threeeight35°", "السياسة التحريرية | threeeight35°", "Yayın İlkeleri | threeeight35°"),
              desc=L("How threeeight35° prepares its medical-travel content: publishing rules, sources, and how provider and package facts are confirmed.",
-                    "كيف تُعدّ threeeight35° محتوى السفر العلاجي: قواعد النشر والمصادر وكيفية التحقق من معلومات مقدّمي الرعاية والباقات."),
+                    "كيف تُعدّ threeeight35° محتوى السفر العلاجي: قواعد النشر والمصادر وكيفية التحقق من معلومات مقدّمي الرعاية والباقات.", "threeeight35°'in tıbbi seyahat içeriğini nasıl hazırladığı: yayın kuralları, kaynaklar ve sağlık kuruluşu ile paket bilgilerinin nasıl teyit edildiği."),
              indexable=True, status="Derived from Version 11 publishing rules; editorial approval required")
     body = f'''{qa("Our publishing rules", "<ul><li>threeeight35° is a medical-travel coordination agency, not the treating healthcare provider.</li><li>We do not invent prices, provider credentials, accreditation, recovery promises, minimum stays, medication, tests, hotel inclusions, transfers or outcomes.</li><li>Pages use answer-first questions, descriptive internal links and a clear path to the category, the Australia guide and contact.</li><li>Public copy uses Australian English. We use Türkiye editorially; Turkey may appear naturally as a search-language variant.</li></ul>")}
 {qa("Clinical content", "<p>threeeight35° does not publish clinical advice. Our treatment pages cover planning and coordination only. Diagnosis, suitability, risks, recovery and treatment decisions come from your treating healthcare professional after an individual assessment.</p>")}
 {qa("Sources", "<p>Authoritative sources are mapped to substantive medical claims at claim level. A category bibliography is not treated as a substitute for claim-level support.</p>")}
 {qa("Provider and package facts", "<p>Provider-specific facts, prices, inclusions, accommodation, transfers, tests, medicines, stay durations and follow-up promises are verified in writing before publication.</p>")}'''
+    if lang() == "tr":
+        body = f'''{qa("Yayın kurallarımız", "<ul><li>threeeight35° bir tıbbi seyahat koordinasyon acentesidir; tedaviyi yürüten sağlık hizmeti sağlayıcısı değildir.</li><li>Fiyat, sağlık kuruluşu yeterlilikleri, akreditasyon, iyileşme vaatleri, asgari konaklama süreleri, ilaçlar, testler, otel olanakları, transferler veya sonuçlar uydurmayız.</li><li>Sayfalar soruya doğrudan yanıtla başlar, açıklayıcı iç bağlantılar kullanır ve ilgili kategoriye ve iletişim sayfasına net bir yol sunar.</li><li>İngilizce içerikte Avustralya İngilizcesi, Arapça içerikte Modern Standart Arapça, Türkçe içerikte standart Türkçe kullanılır.</li></ul>")}
+{qa("Klinik içerik", "<p>threeeight35° klinik tavsiye yayınlamaz. Tedavi sayfalarımız yalnızca planlama ve koordinasyonu kapsar. Teşhis, uygunluk, riskler, iyileşme ve tedavi kararları, bireysel değerlendirmeden sonra tedaviyi yürüten sağlık profesyonelinizden gelir.</p>")}
+{qa("Kaynaklar", "<p>Güvenilir kaynaklar, her önemli tıbbi bilgiyle ayrı ayrı eşleştirilir. Kategori genelindeki bir kaynakça, her bilginin ayrıca desteklenmesinin yerine geçmez.</p>")}
+{qa("Sağlık kuruluşu ve paket bilgileri", "<p>Sağlık kuruluşuna özgü bilgiler, fiyatlar, dahil olan hizmetler, konaklama, transferler, testler, ilaçlar, konaklama süreleri ve takip taahhütleri yayından önce yazılı olarak doğrulanır.</p>")}'''
     if is_ar():
         body = f'''{qa("قواعد النشر لدينا", "<ul><li>threeeight35° وكالة لتنسيق السفر العلاجي، وليست مقدّم الرعاية الصحية المعالج.</li><li>لا نختلق الأسعار أو مؤهلات مقدّمي الرعاية أو الاعتمادات أو وعود التعافي أو الحد الأدنى لمدة الإقامة أو الأدوية أو الفحوصات أو ما تشمله الإقامة الفندقية أو التنقلات أو النتائج.</li><li>تبدأ الصفحات بالإجابة عن السؤال مباشرةً، وتستخدم روابط داخلية واضحة، وتوفّر مساراً واضحاً إلى الفئة المعنية وصفحة التواصل.</li><li>يستخدم المحتوى الإنجليزي الإنجليزية الأسترالية، ويستخدم المحتوى العربي اللغة العربية الفصحى المعاصرة واسم «تركيا».</li></ul>")}
 {qa("المحتوى السريري", "<p>لا تنشر threeeight35° أي استشارات سريرية. وتقتصر صفحات العلاج لدينا على التخطيط والتنسيق. أما التشخيص وتحديد الملاءمة والمخاطر والتعافي وقرارات العلاج فتأتي من أخصائي الرعاية الصحية المعالج بعد تقييم فردي.</p>")}
 {qa("المصادر", "<p>تُربط المصادر الموثوقة بكل معلومة طبية جوهرية على حدة. ولا تُعدّ قائمة المراجع العامة للفئة بديلاً عن توثيق كل معلومة.</p>")}
 {qa("معلومات مقدّمي الرعاية والباقات", "<p>نتحقق كتابياً قبل النشر من المعلومات الخاصة بمقدّمي الرعاية، والأسعار، وما تشمله الخدمات، والإقامة، والتنقلات، والفحوصات، والأدوية، ومدد الإقامة، ووعود المتابعة.</p>")}'''
-    main = pagehead("", L("Editorial Policy", "السياسة التحريرية")) + f'<section class="section"><div class="container prose">{body}</div></section>'
-    add(p, main, "", crumbs=[(L("Home", "الرئيسية"), ""), (L("Editorial Policy", "السياسة التحريرية"), cur)])
+    main = pagehead("", L("Editorial Policy", "السياسة التحريرية", "Yayın İlkeleri")) + f'<section class="section"><div class="container prose">{body}</div></section>'
+    add(p, main, "", crumbs=[(L("Home", "الرئيسية", "Ana Sayfa"), ""), (L("Editorial Policy", "السياسة التحريرية", "Yayın İlkeleri"), cur)])
 
 # ---------------- GEO hub + spokes ----------------
 SMART = "https://www.smartraveller.gov.au/travel-essentials/travel-health/medical-tourism"

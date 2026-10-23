@@ -39,3 +39,6 @@ Not included in any package: medical treatment and international flights. Extra 
 
 ## العربية (Arabic)
 - [threeeight35° بالعربية](https://threeeight35.com/ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms, medical disclaimer and editorial policy
+
+## Türkçe (Turkish)
+- [threeeight35° Türkçe](https://threeeight35.com/tr/): Turkish versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms, medical disclaimer and editorial policy

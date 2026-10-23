@@ -8,7 +8,7 @@ from lib import *
 out = ROOT
 OLD_PREFIX = "medical-travel-agency/"   # the site's address before it moved to the domain root
 # clear generated html (keep assets, _build)
-for d in ["treatments","patient-packages","how-it-works","about","faqs","contact","privacy","terms","medical-disclaimer","editorial-policy","medical-travel-turkiye-from-australia",OLD_PREFIX.strip("/"),"ar"]+[s[1].strip("/") for s in SPOKES]:
+for d in ["treatments","patient-packages","how-it-works","about","faqs","contact","privacy","terms","medical-disclaimer","editorial-policy","medical-travel-turkiye-from-australia",OLD_PREFIX.strip("/"),"ar","tr"]+[s[1].strip("/") for s in SPOKES]:
     shutil.rmtree(os.path.join(out, d), ignore_errors=True)
 for f in ("index.html","404.html","sitemap.xml","robots.txt","llms.txt"):
     if os.path.exists(os.path.join(out, f)): os.remove(os.path.join(out, f))
@@ -19,15 +19,17 @@ for sid in TREAT: build_treatment(sid)
 build_packages(); build_how(); build_about(); build_faqs(); build_contact()
 build_privacy(); build_terms(); build_disclaimer(); build_editorial(); build_geo()
 
-# Arabic versions of the core pages (lib.AR_PAGES), written under ar/
-set_lang("ar")
-build_home(); build_directory()
-for c in CATS: build_category(c)
-for sid in TREAT: build_treatment(sid)
-build_packages(); build_how(); build_about(); build_faqs(); build_contact()
-build_privacy(); build_terms(); build_disclaimer(); build_editorial()
+# Arabic and Turkish versions of the translated pages (lib.TRANSLATED_PAGES), written under ar/ and tr/
+for code in LANGS[1:]:
+    set_lang(code)
+    build_home(); build_directory()
+    for c in CATS: build_category(c)
+    for sid in TREAT: build_treatment(sid)
+    build_packages(); build_how(); build_about(); build_faqs(); build_contact()
+    build_privacy(); build_terms(); build_disclaimer(); build_editorial()
+    assert {p["en_path"] for p in PAGES if p["path"].startswith(code + "/")} == TRANSLATED_PAGES, code
 set_lang("en")
-assert {p["en_path"] for p in PAGES if p["path"].startswith("ar/")} == AR_PAGES
+assert not MISSING_TR, "English text on Turkish pages (add a Turkish L() argument):\n" + "\n".join(sorted(set(MISSING_TR)))
 
 paths = set()
 for p in PAGES:
@@ -57,7 +59,7 @@ open(os.path.join(out, ".nojekyll"), "w").write("")
 # Redirects from the site's former address (https://threeeight35.com/medical-travel-agency/...) to the same page at the domain root.
 # GitHub Pages has no server-side redirects; an instant refresh plus canonical is treated by search engines as a permanent redirect.
 for p in PAGES:
-    if p["path"].startswith("ar/"): continue   # Arabic pages are new; they never had an old address
+    if p["path"].split("/")[0] in LANGS: continue   # Arabic and Turkish pages are new; they never had an old address
     new = BASE + p["path"]
     d = os.path.join(out, OLD_PREFIX.strip("/"), p["path"]); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(
@@ -101,6 +103,9 @@ llms += [f"- [{name}]({BASE}{path}): {note}" for path, name, note in KEY_PAGES i
 if "ar/" in cleared:
     llms += ["", "## العربية (Arabic)",
              f"- [threeeight35° بالعربية]({BASE}ar/): Arabic versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms, medical disclaimer and editorial policy"]
+if "tr/" in cleared:
+    llms += ["", "## Türkçe (Turkish)",
+             f"- [threeeight35° Türkçe]({BASE}tr/): Turkish versions of the home, packages, how it works, about, FAQs, contact, treatments catalogue, category and treatment pages, privacy, terms, medical disclaimer and editorial policy"]
 open(os.path.join(out, "llms.txt"), "w", encoding="utf-8").write("\n".join(llms) + "\n")
 
 # register
@@ -111,5 +116,5 @@ with open(os.path.join(out, "_build", "pages-register.csv"), "w", newline="", en
 # self-check: robots meta in generated HTML must equal register and sitemap
 for p in PAGES:
     assert ('content="index,follow' in p["html"]) == p["indexable"], p["path"]
-assert len(PAGES) - len(urls) == sum(p["id"].removesuffix("-AR") in HELD_FROM_INDEX for p in PAGES)   # held pages, in both languages
+assert len(PAGES) - len(urls) == sum(p["id"].removesuffix("-AR").removesuffix("-TR") in HELD_FROM_INDEX for p in PAGES)   # held pages, in every language
 print("pages:", len(PAGES), "indexable:", len(urls))
