@@ -210,17 +210,42 @@ def header(cur, active):
 </nav>
 </header>'''
 
+def _star(cx, cy, r, points=7, inner=0.4):
+    """Points of a star polygon (flag stars), first point straight up."""
+    import math
+    pts = []
+    for i in range(points * 2):
+        a = math.pi * i / points - math.pi / 2
+        rr = r if i % 2 == 0 else r * inner
+        pts.append(f"{cx + rr * math.cos(a):.2f},{cy + rr * math.sin(a):.2f}")
+    return " ".join(pts)
+
+# Flags for the WhatsApp menu, drawn inline (flag emoji show as plain letters on Windows).
+# Australia: Union Jack canton, Commonwealth Star and Southern Cross at official positions (10080x5040 spec scaled to 60x30).
+FLAG_AU = ('<svg class="wa-flag" viewBox="0 0 60 30" width="30" height="15" aria-hidden="true"><clipPath id="wa-au-c"><path d="M0,0h30v15H0z"/></clipPath>'
+           '<clipPath id="wa-au-t"><path d="M15,7.5h15v7.5zv7.5H0zH0V0zV0h15z"/></clipPath><rect width="60" height="30" fill="#012169"/>'
+           '<g clip-path="url(#wa-au-c)"><path d="M0,0L30,15M30,0L0,15" stroke="#fff" stroke-width="3"/><path d="M0,0L30,15M30,0L0,15" clip-path="url(#wa-au-t)" stroke="#C8102E" stroke-width="2"/>'
+           '<path d="M15,0v15M0,7.5h30" stroke="#fff" stroke-width="5"/><path d="M15,0v15M0,7.5h30" stroke="#C8102E" stroke-width="3"/></g><g fill="#fff">'
+           + "".join(f'<polygon points="{_star(x, y, r, p, i)}"/>' for x, y, r, p, i in
+                     [(15, 22.5, 6.4, 7, 0.44), (45, 25, 2.9, 7, 0.44), (37.5, 13.1, 2.9, 7, 0.44), (45, 5, 2.9, 7, 0.44), (52.6, 10.7, 2.9, 7, 0.44), (48, 16.3, 1.3, 5, 0.4)])
+           + '</g></svg>')
+FLAG_AE = ('<svg class="wa-flag" viewBox="0 0 12 6" width="30" height="15" aria-hidden="true"><rect width="12" height="2" fill="#00732F"/>'
+           '<rect y="2" width="12" height="2" fill="#fff"/><rect y="4" width="12" height="2" fill="#000"/><rect width="3" height="6" fill="#FF0000"/></svg>')
+WA_ICON = ('<svg aria-hidden="true" width="{s}" height="{s}" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/>'
+           '<path fill="currentColor" d="M16.6 14.2c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3z"/></svg>')
+
 def wa_float():
     """Floating WhatsApp button (every page): opens a small menu so the visitor picks the Australia & International or UAE & GCC line.
     Built on <details>, so it opens and closes without JavaScript; main.js only adds close-on-outside-tap."""
     greet = quote(L("Hello threeeight35°, I'd like to ask about medical travel coordination.", "مرحباً threeeight35°، أودّ الاستفسار عن تنسيق السفر العلاجي."))
-    desks = [(L("Australia & International", "أستراليا والدول الأخرى"), PHONE_AU), (L("UAE & GCC", "الإمارات ودول الخليج"), PHONE_UAE)]
-    links = "".join(f'<a class="wa-link" href="https://wa.me/{n.replace("+", "").replace(" ", "")}?text={greet}" rel="noopener noreferrer" target="_blank">'
-                    f'<span class="wa-desk">{esc(d)}</span><span class="wa-num" dir="ltr">{n}</span><span class="sr-only">{L(" (opens WhatsApp in a new tab)", " (يفتح واتساب في علامة تبويب جديدة)")}</span></a>' for d, n in desks)
-    icon = ('<svg class="wa-icon" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/>'
-            '<path fill="currentColor" d="M16.6 14.2c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3z"/></svg>')
-    return (f'<details class="wa-float"><summary class="wa-btn" aria-label="{L("Chat with us on WhatsApp", "تواصل معنا عبر واتساب")}">{icon}<span class="wa-label">WhatsApp</span></summary>'
-            f'<div class="wa-menu"><p class="wa-title">{L("Chat with us on WhatsApp", "تواصل معنا عبر واتساب")}</p>{links}</div></details>')
+    desks = [(FLAG_AU, L("Australia & International", "أستراليا والدول الأخرى"), PHONE_AU), (FLAG_AE, L("UAE & GCC", "الإمارات ودول الخليج"), PHONE_UAE)]
+    links = "".join(f'<a class="wa-link" href="https://wa.me/{n.replace("+", "").replace(" ", "")}?text={greet}" rel="noopener noreferrer" target="_blank">{flag}'
+                    f'<span class="wa-text"><span class="wa-desk">{esc(d)}</span><span class="wa-num" dir="ltr">{n}</span></span>'
+                    f'<span class="wa-go">{WA_ICON.format(s=18)}</span><span class="sr-only">{L(" (opens WhatsApp in a new tab)", " (يفتح واتساب في علامة تبويب جديدة)")}</span></a>' for flag, d, n in desks)
+    title = L("Chat with us on WhatsApp", "تواصل معنا عبر واتساب")
+    return (f'<details class="wa-float"><summary class="wa-btn" aria-label="{title}"><span class="wa-badge">{WA_ICON.format(s=24)}</span>'
+            f'<span class="wa-label"><strong>WhatsApp</strong><small>{L("Chat with us", "تحدّث معنا")}</small></span></summary>'
+            f'<div class="wa-menu"><div class="wa-head"><p class="wa-title">{title}</p><p class="wa-sub">{L("Choose a contact line", "اختر خط التواصل")}</p></div>{links}</div></details>')
 
 def footer(cur):
     soc = "".join(f'<li><a href="{u}" rel="noopener noreferrer" target="_blank" aria-label="{att(SITE.split(" ")[0])} {L("on", "على")} {n} {L("(opens in a new tab)", "(يفتح في علامة تبويب جديدة)")}">{n}</a></li>' for n, u in SOCIAL)
