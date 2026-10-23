@@ -135,21 +135,19 @@ def founder_block(cur, full=True):
     alt = L("Hommam Azizieh, Founder of threeeight35° Medical Travel Agency", "همام عزيزية، مؤسس وكالة threeeight35° للسفر العلاجي")
     pic = (f'<picture><source type="image/webp" srcset="{rel(cur,"assets/img/founder-hommam-azizieh-360.webp")} 360w, {rel(cur,"assets/img/founder-hommam-azizieh-600.webp")} 600w, {rel(cur,"assets/img/founder-hommam-azizieh-843.webp")} 843w" sizes="(min-width: 800px) 36vw, 80vw">'
            f'<img src="{rel(cur,"assets/img/founder-hommam-azizieh-843.jpg")}" width="843" height="1197" alt="{alt}" class="founder-img" loading="lazy" decoding="async"></picture>')
-    # Founder bio in Hommam's own voice on every page (owner decision 2026-10-23). The home page shows the first and last
-    # paragraphs; the About page (full=True) also shows why he started threeeight35°.
-    intro = L("<p>I've been based in Abu Dhabi for more than 15 years and speak English, Arabic and Turkish. I specialise in Marketing &amp; Production, with expertise in Photography. "
-              "Before founding threeeight35° Medical Travel Agency, I spent two years working in medical tourism in Istanbul, where I gained experience in patient relations and business development.</p>",
-              "<p>أقيم في أبوظبي منذ أكثر من 15 عاماً، وأتحدث الإنجليزية والعربية والتركية. أتخصص في التسويق والإنتاج، ولديّ خبرة في التصوير الفوتوغرافي. "
-              "وقبل تأسيس وكالة threeeight35° للسفر العلاجي، عملت لمدة عامين في مجال السياحة العلاجية في إسطنبول، حيث اكتسبت خبرة في علاقات المرضى وتطوير الأعمال.</p>")
-    why = L("<p>That experience showed me how difficult it can be for international patients to navigate treatment information, quotations, travel arrangements and communication across borders. "
-            "I created threeeight35° to provide a clearer and better-coordinated experience.</p>",
-            "<p>كشفت لي تلك التجربة مدى صعوبة تعامل المرضى الدوليين مع معلومات العلاج وعروض الأسعار وترتيبات السفر والتواصل عبر الحدود. ولهذا أسست threeeight35° لتقديم تجربة أوضح وأفضل تنسيقاً.</p>")
-    role_p = L("<p>I'm not a clinician, and I don't provide medical advice or recommend treatments. My role is to make your medical travel journey clear, organised and carefully coordinated from beginning to end. "
-               "I take care of the practical details around your journey, while all clinical decisions remain with your treating healthcare professionals.</p>",
-               "<p>لست طبيباً، ولا أقدّم استشارات طبية ولا أوصي بأي علاج. يتمثل دوري في جعل رحلتك العلاجية واضحة ومنظّمة ومنسّقة بعناية من البداية إلى النهاية. "
-               "أتولى التفاصيل العملية لرحلتك، بينما تبقى جميع القرارات السريرية من مسؤولية أخصائيي الرعاية الصحية المعالجين.</p>")
-    bio = intro + (why if full else "") + role_p
-    role = L("Founder, threeeight35° Medical Travel Agency | Abu Dhabi", "مؤسس وكالة threeeight35° للسفر العلاجي | أبوظبي")
+    # Founder bio: owner's script (2026-10-23), the same three paragraphs on the home and About pages, in the first person.
+    bio = L("<p>I have been based in Abu Dhabi for more than 15 years and speak English, Arabic and Turkish. I specialise in Marketing &amp; Production with expertise in Photography. "
+            "Before founding threeeight35° Medical Travel Agency, I had two years of experience working in medical tourism in Istanbul across patient relations and business development.</p>"
+            "<p>That experience highlighted how difficult it can be for international patients to navigate treatment information, quotations, travel arrangements and communication across borders. "
+            "threeeight35° was created to provide a clearer and better-coordinated experience.</p>"
+            "<p>I am not a clinician and do not provide medical advice or recommend treatment. My role is to help ensure each patient's medical travel journey is clearly explained, "
+            "carefully organised and practically coordinated, while all clinical decisions remain with the treating healthcare professionals.</p>",
+            "<p>أقيم في أبوظبي منذ أكثر من 15 عاماً، وأتحدث الإنجليزية والعربية والتركية. أتخصص في التسويق والإنتاج، ولديّ خبرة في التصوير الفوتوغرافي. "
+            "وقبل تأسيس وكالة threeeight35° للسفر العلاجي، اكتسبت خبرة عامين في مجال السياحة العلاجية في إسطنبول في علاقات المرضى وتطوير الأعمال.</p>"
+            "<p>كشفت تلك التجربة مدى صعوبة تعامل المرضى الدوليين مع معلومات العلاج وعروض الأسعار وترتيبات السفر والتواصل عبر الحدود. ومن هنا تأسست threeeight35° لتقديم تجربة أوضح وأفضل تنسيقاً.</p>"
+            "<p>لست طبيباً، ولا أقدّم استشارات طبية ولا أوصي بأي علاج. ويتمثل دوري في المساعدة على أن تكون رحلة كل مريض العلاجية مشروحة بوضوح ومنظّمة بعناية ومنسّقة عملياً، "
+            "بينما تبقى جميع القرارات السريرية من مسؤولية أخصائيي الرعاية الصحية المعالجين.</p>")
+    role = L("Founder, threeeight35° Medical Travel Agency", "مؤسس وكالة threeeight35° للسفر العلاجي")
     more = "" if full else f'<a class="more" href="{rel(cur, "about/")}">{L("About threeeight35°", "عن threeeight35°")} <span aria-hidden="true">{arrow()}</span></a>'
     return f'''<div class="founder"><figure class="founder-fig">{pic}<figcaption>{L("Hommam Azizieh — Founder, threeeight35° Medical Travel Agency", "همام عزيزية — مؤسس وكالة threeeight35° للسفر العلاجي")}</figcaption></figure>
 <div class="founder-text"><p class="eyebrow">{L("MEET THE FOUNDER", "تعرّف على المؤسس")}</p><h3>{L("Hommam Azizieh", "همام عزيزية")}</h3><p class="role">{role}</p>{esc_html_p(bio)}{more}</div></div>'''
