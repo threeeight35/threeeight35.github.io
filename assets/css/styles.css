@@ -332,3 +332,8 @@ a:hover{color:var(--bronze-d)}
 .hero-stats dd.dd-langs{font-size:1.15rem;line-height:1.35;padding-top:.45rem}
 @media (min-width:700px){.hero-stats dd.dd-langs{font-size:1.4rem;padding-top:.35rem}}
 .hero-stats dd.dd-langs .nw{white-space:nowrap}
+
+/* home banner stats: each value centred under its own label (block shrinks to its label, contents centred) */
+.hero-stats>div{justify-self:start;text-align:center}
+/* Arabic labels are much shorter than the English ones, so equal thirds leave uneven gaps: size each stat to its content with equal spacing */
+[dir=rtl] .hero-stats{grid-template-columns:repeat(3,auto);justify-content:start;column-gap:2.5rem}
