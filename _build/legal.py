@@ -33,7 +33,7 @@ PRIVACY_EN = [
   "our website host (GitHub Pages) and messaging services such as WhatsApp when you choose them.</li>"
   "<li>Authorities, where the law requires it.</li></ul>"),
  ("Overseas disclosure",
-  "<p>Because we coordinate treatment in Türkiye and operate desks in Australia and the United Arab Emirates, your information may be disclosed to "
+  "<p>Because we coordinate treatment in Türkiye and have contact lines for Australia and the United Arab Emirates, your information may be disclosed to "
   "recipients in Türkiye and the United Arab Emirates. Our service providers may store information in other countries, including the United States. "
   "Before health information is sent overseas, we explain who will receive it and ask for your consent.</p>"),
  ("Cookies and analytics",
@@ -75,7 +75,7 @@ PRIVACY_AR = [
   "ومستضيف الموقع (GitHub Pages)، وخدمات المراسلة مثل واتساب عندما تختارها.</li>"
   "<li>الجهات الرسمية، عندما يقتضي القانون ذلك.</li></ul>"),
  ("الإفصاح خارج البلاد",
-  "<p>لأننا ننسّق العلاج في تركيا ولدينا مكتبان في أستراليا والإمارات العربية المتحدة، فقد يُفصَح عن معلوماتك لجهات في تركيا والإمارات العربية المتحدة. "
+  "<p>لأننا ننسّق العلاج في تركيا ولدينا خطّا تواصل لأستراليا والإمارات العربية المتحدة، فقد يُفصَح عن معلوماتك لجهات في تركيا والإمارات العربية المتحدة. "
   "وقد يخزّن مزوّدو خدماتنا المعلومات في دول أخرى، منها الولايات المتحدة. وقبل إرسال أي معلومات صحية إلى الخارج، نوضّح لك الجهة التي ستتلقاها ونطلب موافقتك.</p>"),
  ("ملفات تعريف الارتباط والتحليلات",
   "<p>لا يستخدم هذا الموقع ملفات تعريف ارتباط إعلانية أو تحليلية، ولا يتتبّعك عبر مواقع أخرى. ويحتفظ مستضيف موقعنا بسجلات تقنية اعتيادية، مثل عناوين IP، لأغراض الأمان والموثوقية.</p>"),

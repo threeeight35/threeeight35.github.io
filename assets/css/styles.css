@@ -327,3 +327,8 @@ a:hover{color:var(--bronze-d)}
 [dir=rtl] .wa-num{text-align:end}
 @media (min-width:760px){.wa-btn{width:auto;padding:0 1.2rem 0 1rem}.wa-label{display:inline}.wa-float{inset-inline-end:1.5rem;bottom:1.5rem}}
 @media print{.wa-float{display:none}}
+
+/* home banner: languages stat shows names rather than a number */
+.hero-stats dd.dd-langs{font-size:1.15rem;line-height:1.35;padding-top:.45rem}
+@media (min-width:700px){.hero-stats dd.dd-langs{font-size:1.4rem;padding-top:.35rem}}
+.hero-stats dd.dd-langs .nw{white-space:nowrap}

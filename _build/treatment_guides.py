@@ -204,3 +204,17 @@ GUIDES = {
    "screening works with implants, and arrange a check if anything changes."),
  ],
 }
+
+# Search descriptions for treatments that have planning content above (each under 160 characters).
+GUIDE_META = {
+ "DEN-01": "Dental implants in Türkiye: how many trips to plan, what to bring, questions on implant systems and quotes, and arranging check-ups at home.",
+ "HAI-01": "FUE hair transplant in Türkiye: planning your stay, photos to prepare, questions on grafts and who operates, and remote follow-up after you fly home.",
+ "AES-01": "Rhinoplasty in Türkiye: planning consultations and follow-up visits, what to prepare, questions for your surgeon and follow-up once you're home.",
+ "BAR-01": "Sleeve gastrectomy in Türkiye: planning tests, surgery and hospital stay, questions for the surgical team, and long-term follow-up at home.",
+ "DEN-02": "All-on-4 in Türkiye: planning two trips, scans to bring, questions on bridge materials, both jaws and failed implants, and care at home.",
+ "DEN-05": "Porcelain veneers in Türkiye: the single-trip timeline, photos to bring, questions on tooth preparation, trial smiles and repairs at home.",
+ "HAI-02": "DHI hair transplant in Türkiye: how long to stay, photos to prepare, DHI vs FUE, graft numbers and shaving questions, and follow-up from home.",
+ "BAR-02": "Gastric bypass in Türkiye: planning tests, surgery and hospital stay, lifelong supplements, questions for your team and care after you return.",
+ "IVF-01": "IVF in Türkiye: which stages happen in Istanbul, flexible travel dates, records to bring, legal eligibility, what the price covers and aftercare.",
+ "AES-07": "Breast augmentation in Türkiye: planning your trip, what to prepare, questions on implants, placement and revision policy, and checks at home.",
+}

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from components import *
-from treatment_guides import GUIDES
+from treatment_guides import GUIDES, GUIDE_META
 
 PAGES = []   # dicts: path, html, indexable, id, title, kind, status
 # ---- CENTRAL INDEXING GATE -------------------------------------------------------------
@@ -69,7 +69,7 @@ def build_home():
 <p class="hero-sub">{L("Personalised medical travel coordination connecting patients from Australia, the UAE and other international markets with independent healthcare providers in Türkiye.", "تنسيق شخصي للسفر العلاجي يربط المرضى من أستراليا والإمارات العربية المتحدة والأسواق الدولية الأخرى بمقدّمي رعاية صحية مستقلين في تركيا.")}</p>
 <p class="hero-line">{L("Precisely coordinated. Transparently guided.", "تنسيق دقيق. وإرشاد بشفافية.")}</p>
 <div class="btn-row"><a class="btn btn-gold" href="{rel(cur,"contact/#enquiry")}">{L("Make an Enquiry", "أرسل استفسارك")}</a><a class="btn btn-outline-light" href="{rel(cur,"treatments/")}">{L("Explore Treatments", "استكشف العلاجات")}</a>{vid}</div>
-<dl class="hero-stats"><div><dt>{L("Medical categories", "فئات طبية")}</dt><dd>8</dd></div><div><dt>{L("Languages", "لغات")}</dt><dd>3</dd></div><div><dt>{L("Coordination", "تنسيق شخصي")}</dt><dd>1:1</dd></div></dl>
+<dl class="hero-stats"><div><dt>{L("Medical categories", "فئات طبية")}</dt><dd>8</dd></div><div><dt>{L("Languages", "اللغات")}</dt><dd class="dd-langs">{L('<span aria-hidden="true">EN · AR · TR</span><span class="sr-only">English, Arabic, Turkish</span>', '<span class="nw">عربي ·</span> <span class="nw">إنجليزي ·</span> <span class="nw">تركي</span>')}</dd></div><div><dt>{L("Coordination", "تنسيق شخصي")}</dt><dd>1:1</dd></div></dl>
 </div></div><div class="hero-media">{hero_img}</div></section>
 <section class="boundary"><div class="container"><p>{L("<strong>threeeight35° is a coordination service, not a healthcare provider.</strong> We do not diagnose, prescribe or recommend treatment. All clinical assessment and medical care are provided independently by licensed healthcare professionals in Türkiye.",
                                                         "<strong>threeeight35° خدمة تنسيق، وليست مقدّم رعاية صحية.</strong> نحن لا نشخّص ولا نصف ولا نوصي بأي علاج. ويُقدَّم كل تقييم سريري وكل رعاية طبية بشكل مستقل من قِبل أخصائيي رعاية صحية مرخّصين في تركيا.")}</p></div></section>'''
@@ -135,7 +135,8 @@ def build_category(c):
     cid, slug, name, stem, alt, intro = c
     cur = cat_dir(cid)
     r = BYID[cid]; f = r["fields"]
-    title = f["SEO title"].replace("│", "|")
+    # Owner decision 2026-10-23: use the site's fuller category names everywhere (v11's short names, e.g. "Dental in Türkiye", read awkwardly).
+    title = f"{name} in Türkiye | threeeight35°"
     n = sum(len(i) for _, i in GROUPS[cid])
     desc = {  # v11 gives no category meta description; drafted from v11 category scope (flagged DERIVED in report)
      "CAT-01": f"Compare aesthetic and plastic surgery options in Türkiye — facial, breast and body procedures — and plan travel from Australia with threeeight35° coordination.",
@@ -147,7 +148,7 @@ def build_category(c):
      "CAT-07": "Research IVF and fertility treatment pathways in Türkiye — assessment, IVF, ICSI, embryo transfer and preservation — with coordination by threeeight35°.",
      "CAT-08": "Research general surgery in Türkiye — hernia, gallbladder and other procedures — and plan travel and follow-up from Australia with threeeight35°.",
     }[cid]
-    h1 = f["H1"]
+    h1 = f"{name} in Türkiye"
     if is_ar(): name, intro, alt, h1, title, desc = CAT_AR[cid]
     p = dict(path=cur, id=cid, kind="Category landing page", title=title, desc=desc, indexable=True,
              status="Editorial remediation complete; clinical review pending; technical QA pending")
@@ -215,6 +216,19 @@ def cost_text(sid, secs):
     return ("threeeight35° does not publish treatment prices. Medical treatment and clinical fees are quoted by and paid directly to the independent clinic or hospital, "
             "and you should obtain a written provider quotation after assessment. The factors that affect a provider's quotation are confirmed with the provider for your individual plan.")
 
+def treatment_meta(t, v11):
+    """The v11 meta descriptions all end ", costs and planning from Australia." although no costs are published and the site also serves
+    the UAE. Keep each page's topic summary and replace that ending with what the page actually offers."""
+    focus = re.sub(r",\s*costs and planning from Aus\w*\.?$", "", v11.split(":", 1)[1].strip())
+    focus = re.sub(r"^guide to |business-defined ", "", focus).rstrip(". ")
+    focus = re.sub(r"^.* (planning, alternatives and travel considerations)$", r"\1", focus)   # "facelift planning, …" repeated the name
+    focus = focus.replace("Australian follow-up", "follow-up at home").replace(
+        "premium coordination/check-up package, not clinical superiority", "premium coordination around a health check-up")
+    for tail in (" What to confirm before you travel and how threeeight35° coordinates your trip.", " What to confirm before you travel."):
+        d = f"{t['label']} in Türkiye: {focus}.{tail}"
+        if len(d) <= 160: return d
+    return f"{t['label']} in Türkiye: what to confirm before you travel and how threeeight35° coordinates your trip."
+
 def build_treatment(sid):
     t = TREAT[sid]; r = t["rec"]; f = r["fields"]; secs = dict(r["secs"]); cid = t["cid"]; cat = CATMAP[cid]
     cur = t["dir"]
@@ -227,7 +241,7 @@ def build_treatment(sid):
         desc = f"{t['label']} in Türkiye: ask threeeight35° about medical travel coordination. threeeight35° coordinates medical travel and does not provide clinical care."
         notes.append("V11 meta description contains internal review wording; neutral meta used for held page")
     else:
-        desc = f["Meta description"]
+        desc = GUIDE_META.get(sid) or treatment_meta(t, f["Meta description"])
     if len(desc) > 160: notes.append(f"meta {len(desc)} chars (v11)")
     indexable = INDEX_TREATMENTS and not t["held"]
     p = dict(path=cur, id=r["id"], kind=f["Page type"], title=title, desc=desc, indexable=indexable,

@@ -37,10 +37,10 @@ def categories_grid(cur):
 def why_cards():
     cards = L([("Personalised Coordination", "From your initial enquiry through pre-departure planning, you receive dedicated coordination support for the practical parts of your journey."),
                ("Preliminary Provider Review", "Where appropriate and with your authorisation, relevant health information may be provided to independent healthcare professionals in Türkiye for preliminary review. Clinical assessment, suitability and treatment decisions remain entirely with the treating healthcare professionals."),
-               ("Bilingual Liaison", "English-speaking coordination support can assist with practical communication and attendance arrangements around scheduled consultations and clinical appointments.")],
+               ("Support in Three Languages", "Coordination support in English, Arabic and Turkish can assist with practical communication and attendance arrangements around scheduled consultations and clinical appointments.")],
               [("تنسيق شخصي", "من استفسارك الأول وحتى التخطيط لما قبل السفر، تحصل على دعم مخصّص لتنسيق الجوانب العملية من رحلتك."),
                ("تقييم أولي من مقدّم الرعاية", "عند الاقتضاء وبموافقتك، قد تُقدَّم المعلومات الصحية ذات الصلة إلى أخصائيي رعاية صحية مستقلين في تركيا لإجراء تقييم أولي. ويبقى التقييم السريري وتحديد ملاءمة العلاج وقرارات العلاج بالكامل من مسؤولية أخصائيي الرعاية الصحية المعالجين."),
-               ("دعم باللغة العربية", "يمكن لدعم التنسيق باللغة العربية أن يساعدك في التواصل العملي وترتيبات الحضور حول الاستشارات والمواعيد الطبية المحددة.")])
+               ("دعم بثلاث لغات", "يمكن لدعم التنسيق باللغات العربية والإنجليزية والتركية أن يساعدك في التواصل العملي وترتيبات الحضور حول الاستشارات والمواعيد الطبية المحددة.")])
     return '<div class="cards3">' + "".join(f'<article class="card"><span class="card-num" aria-hidden="true">{i+1:02d}</span><h3>{esc(h)}</h3><p>{esc(b)}</p></article>' for i, (h, b) in enumerate(cards)) + "</div>"
 
 def accommodation_section(cur, h="h2"):
@@ -105,15 +105,15 @@ def contact_cards(cur, with_h=True):
     vid = f'<a class="btn btn-outline-navy" href="{VIDEO_CONSULT_URL}">{L("Schedule Video Call", "احجز مكالمة فيديو")}</a>' if VIDEO_CONSULT_URL else ""
     new_tab = L(" (opens in a new tab)", " (يفتح في علامة تبويب جديدة)")
     cards = f'''<div class="cards3 contact-cards">
-<article class="card"><p class="eyebrow">{L("AUSTRALIA DESK", "مكتب أستراليا")}</p><h3>{L("Sydney &amp; Melbourne", "سيدني وملبورن")}</h3>
+<article class="card"><p class="eyebrow">{L("CONTACT LINE", "خط التواصل")}</p><h3>{L("Australia &amp; International", "أستراليا والدول الأخرى")}</h3>
 <p><a class="big-link" href="tel:{PHONE_AU.replace(" ","")}">{ltr(PHONE_AU)}</a></p>
-<a class="btn btn-navy" href="{wa_au}" rel="noopener noreferrer" target="_blank">{L("WhatsApp Australia", "واتساب أستراليا")}<span class="sr-only">{new_tab}</span></a></article>
-<article class="card"><p class="eyebrow">{L("UAE DESK", "مكتب الإمارات")}</p><h3>{L("Dubai &amp; GCC", "دبي ودول الخليج")}</h3>
+<a class="btn btn-navy" href="{wa_au}" rel="noopener noreferrer" target="_blank">{L("WhatsApp", "واتساب")}<span class="sr-only">{L(" Australia &amp; International", " أستراليا والدول الأخرى")}{new_tab}</span></a></article>
+<article class="card"><p class="eyebrow">{L("CONTACT LINE", "خط التواصل")}</p><h3>{L("UAE &amp; GCC", "الإمارات ودول الخليج")}</h3>
 <p><a class="big-link" href="tel:{PHONE_UAE.replace(" ","")}">{ltr(PHONE_UAE)}</a></p>
-<a class="btn btn-navy" href="{wa_ae}" rel="noopener noreferrer" target="_blank">{L("WhatsApp UAE", "واتساب الإمارات")}<span class="sr-only">{new_tab}</span></a></article>
-<article class="card"><p class="eyebrow">{L("TÜRKİYE OPERATIONS", "العمليات في تركيا")}</p><h3>{L("Istanbul Hub", "مركز إسطنبول")}</h3>
-<p><a class="big-link" href="mailto:{EMAIL}">{EMAIL}</a></p>
-<p>{L("In-country coordination and liaison during your stay.", "التنسيق والتواصل داخل تركيا خلال إقامتك.")}</p>{vid}</article></div>
+<a class="btn btn-navy" href="{wa_ae}" rel="noopener noreferrer" target="_blank">{L("WhatsApp", "واتساب")}<span class="sr-only">{L(" UAE &amp; GCC", " الإمارات ودول الخليج")}{new_tab}</span></a></article>
+<article class="card"><p class="eyebrow">{L("DURING YOUR STAY", "خلال إقامتك")}</p><h3>{L("Istanbul", "إسطنبول")}</h3>
+<p>{L("A coordinator supports you during your stay in Istanbul. Reach them by email or on WhatsApp through the UAE &amp; GCC line.", "يدعمك منسّق خلال إقامتك في إسطنبول. تواصل معه عبر البريد الإلكتروني أو عبر واتساب على خط الإمارات ودول الخليج.")}</p>
+<p><a class="big-link" href="mailto:{EMAIL}">{EMAIL}</a></p>{vid}</article></div>
 <p class="emergency" role="note">{L("<strong>Emergency notice:</strong> in a medical emergency in Türkiye, call <strong>112</strong>. This is the emergency service and is separate from threeeight35° contact details.", "<strong>تنبيه للطوارئ:</strong> في حالة الطوارئ الطبية في تركيا، اتصل على الرقم <strong>112</strong>. هذا رقم خدمة الطوارئ، وهو منفصل عن أرقام التواصل مع threeeight35°.")}</p>'''
     if not with_h: return cards
     return section(L("PATIENT CONCIERGE", "خدمة المرضى"), L("Contact Our Care Team", "تواصل مع فريقنا"),
@@ -124,7 +124,7 @@ JOURNEY = [
  ("Provider introductions and quotations", "We connect you with independent healthcare providers and hospitals in Istanbul and arrange consultations and quotations."),
  ("Preliminary provider review, with your authorisation", "Where appropriate, relevant health information may be provided to independent healthcare professionals in Türkiye for preliminary review. This follows a private health-information and overseas-disclosure workflow, not the public web form."),
  ("Receive your written proposal", "Before you proceed you receive your selected coordination package, confirmed inclusions and exclusions, any extras quoted separately and the provider's treatment quotation."),
- ("Travel and stay coordination", "Your accommodation and private transfers in Istanbul are included in your package, and we coordinate English-speaking support during your stay."),
+ ("Travel and stay coordination", "Your accommodation and private transfers in Istanbul are included in your package, and we coordinate support in English, Arabic and Turkish during your stay."),
  ("Treatment by your independent provider", "Clinical assessment, suitability, informed consent and all treatment decisions, including when you are fit to fly home, remain with the treating healthcare professionals."),
  ("Returning home", "Follow-up coordination continues after you return home. Confirm in advance which records you will bring home and the plan for any concerns once you're back."),
 ]
