@@ -203,6 +203,28 @@ GUIDES = {
    "Keep your implant card and operation notes somewhere safe; any doctor treating you in future will need them. Ask your doctor at home how breast "
    "screening works with implants, and arrange a check if anything changes."),
  ],
+ "DEN-12": [
+  ("Planning your trip for root canal treatment",
+   "Root canal treatment may be completed in one appointment or spread over several, depending on the tooth and what the dentist finds once treatment "
+   "begins. Most treated teeth also need a filling or a crown afterwards, which can mean further appointments or a laboratory-made crown. Ask the provider "
+   "how many appointments your plan needs, whether the final crown or filling is done during the same stay, and how many working days that means in "
+   "Istanbul. Your coordinator then books accommodation and transfers around those appointments."),
+  ("What to prepare before your consultation", [
+   "Any recent dental X-rays of the tooth, and the date they were taken.",
+   "Notes from your dentist at home about the tooth, including any earlier treatment or temporary filling.",
+   "A list of your current medications and medical conditions, shared through the private health-information process, not the website form.",
+   "Whether you are planning other dental work on the same trip, so the provider can plan the order of treatment."]),
+  ("Questions to ask the dentist", [
+   "How many appointments do you expect, and could more be needed once treatment starts?",
+   "Will a crown or filling be needed afterwards, which material is proposed, and is it included in the quotation?",
+   "If the crown cannot be fitted during this stay, what temporary filling or crown will be placed, and how should it be looked after?",
+   "What happens, and what does it cost, if the tooth needs re-treatment later?",
+   "Which X-rays and treatment notes will you provide for my dentist at home?"]),
+  ("After you return home",
+   "Before you travel, check that a dentist at home can see you for check-ups and, if needed, complete or maintain the final restoration. Ask the provider "
+   "for the X-rays taken before and after treatment and a short treatment summary, so your dentist knows exactly what was done. Your coordinator can help "
+   "you collect these before you leave Istanbul."),
+ ],
 }
 
 # Search descriptions for treatments that have planning content above (each under 160 characters).
@@ -217,4 +239,5 @@ GUIDE_META = {
  "BAR-02": "Gastric bypass in Türkiye: planning tests, surgery and hospital stay, lifelong supplements, questions for your team and care after you return.",
  "IVF-01": "IVF in Türkiye: which stages happen in Istanbul, flexible travel dates, records to bring, legal eligibility, what the price covers and aftercare.",
  "AES-07": "Breast augmentation in Türkiye: planning your trip, what to prepare, questions on implants, placement and revision policy, and checks at home.",
+ "DEN-12": "Root canal treatment in Türkiye: how many appointments to plan, crowns and fillings afterwards, questions for your dentist, and records for home.",
 }

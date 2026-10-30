@@ -256,6 +256,26 @@ GUIDES_TR = {
   ("Döndükten sonra",
    "İmplant kartınızı ve ameliyat notlarınızı güvenli bir yerde saklayın; ileride sizi tedavi edecek her doktorun bunlara ihtiyacı olacaktır. Ülkenizdeki doktorunuza implantlarla meme kontrollerinin nasıl yapıldığını sorun ve bir değişiklik fark ederseniz muayene ayarlayın."),
  ],
+ "DEN-12": [
+  ("Kanal tedavisi seyahatini planlamak",
+   "Kanal tedavisi, dişe ve tedavi başladıktan sonra diş hekiminin karşılaştığı duruma göre tek bir randevuda ya da birkaç randevuya yayılarak tamamlanabilir. Tedavi edilen dişlerin çoğu "
+   "sonrasında bir dolgu veya kron gerektirir; bu da ek randevular ya da laboratuvarda üretilen bir kron anlamına gelebilir. Sağlık kuruluşuna planınızın kaç randevu gerektirdiğini, "
+   "kalıcı kron veya dolgunun aynı konaklama sırasında yapılıp yapılmayacağını ve bunun İstanbul'da kaç iş günü anlamına geldiğini sorun. Koordinatörünüz de konaklamayı ve transferleri bu randevulara göre ayarlar."),
+  ("Konsültasyonunuzdan önce hazırlamanız gerekenler", [
+   "Varsa dişin yakın tarihli röntgenleri ve çekim tarihi.",
+   "Ülkenizdeki diş hekiminizin, daha önceki tedaviler veya geçici dolgu dahil, dişle ilgili notları.",
+   "Kullandığınız ilaçların ve sağlık durumlarınızın listesi; web sitesi formu üzerinden değil, özel sağlık bilgisi süreci aracılığıyla gönderilir.",
+   "Aynı seyahatte başka diş tedavileri planlayıp planlamadığınız; böylece sağlık kuruluşu tedavi sırasını planlayabilir."]),
+  ("Diş hekiminize sorulacak sorular", [
+   "Kaç randevu öngörüyorsunuz ve tedavi başladıktan sonra ek randevu gerekebilir mi?",
+   "Sonrasında kron veya dolgu gerekecek mi, hangi malzeme öneriliyor ve fiyat teklifine dahil mi?",
+   "Kron bu konaklamada takılamazsa hangi geçici dolgu veya kron yapılacak ve ona nasıl bakmalıyım?",
+   "Diş ileride yeniden kanal tedavisi gerektirirse ne olur ve maliyeti nedir?",
+   "Ülkemdeki diş hekimim için hangi röntgenleri ve tedavi notlarını vereceksiniz?"]),
+  ("Döndükten sonra",
+   "Seyahatten önce ülkenizdeki bir diş hekiminin sizi kontroller için görebileceğinden ve gerekirse kalıcı restorasyonu tamamlayıp bakımını yapabileceğinden emin olun. Diş hekiminizin "
+   "tam olarak ne yapıldığını bilmesi için sağlık kuruluşundan tedavi öncesi ve sonrası röntgenleri ve kısa bir tedavi özeti isteyin. Koordinatörünüz, İstanbul'dan ayrılmadan önce bunları toplamanıza yardımcı olabilir."),
+ ],
 }
 
 GUIDE_META_TR = {
@@ -269,4 +289,5 @@ GUIDE_META_TR = {
  "BAR-02": "Türkiye'de gastrik bypass: tetkik, ameliyat ve konaklama planı, ömür boyu takviyeler, ekibe sorular ve dönüş sonrası bakım.",
  "IVF-01": "Türkiye'de tüp bebek: İstanbul'da yapılan aşamalar, tarih esnekliği, kayıtlar, yasal uygunluk ve fiyata dahil olanlar.",
  "AES-07": "Türkiye'de göğüs büyütme: seyahat planı, hazırlık, implantlar, yerleşim ve revizyon politikasıyla ilgili sorular, ülkenizdeki kontroller.",
+ "DEN-12": "Türkiye'de kanal tedavisi: randevu sayısı, tedavi sonrası kron veya dolgu, diş hekimine sorulacak sorular ve ülkenize götüreceğiniz kayıtlar.",
 }
